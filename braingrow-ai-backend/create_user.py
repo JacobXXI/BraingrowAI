@@ -7,9 +7,10 @@ def create_user_from_data(username, password, email=None, tendency=None, photoUr
     if existing_user:
         return False, "Username already exists"
 
-    existing_email = User.query.filter_by(email=email).first()
-    if existing_email:
-        return False, "Email already registered"
+    if email:
+        existing_email = User.query.filter_by(email=email).first()
+        if existing_email:
+            return False, "Email already registered"
     
     new_user = User(
         username=username,
@@ -39,14 +40,19 @@ def import_users_from_file(filename):
             if not line or line.startswith('#'):
                 continue
 
-            # Split line into fields (format: username,email,password)
+            # Split line into fields (format: username,email,password[,tendency,photoUrl])
             fields = line.split(',')
-            if len(fields) != 3:
+            if len(fields) < 3:
                 error_count += 1
-                errors.append(f"Line {line_num}: Invalid format - expected 'username,email,password'")
+                errors.append(f"Line {line_num}: Invalid format - expected at least 'username,email,password'")
                 continue
 
-            username, email, password = [field.strip() for field in fields]
+            # Unpack fields, fill missing with None
+            username = fields[0].strip()
+            email = fields[1].strip()
+            password = fields[2].strip()
+            tendency = fields[3].strip() if len(fields) > 3 else None
+            photoUrl = fields[4].strip() if len(fields) > 4 else None
 
             # Validate required fields
             if not all([username, email, password]):
@@ -55,7 +61,13 @@ def import_users_from_file(filename):
                 continue
 
             # Create the user
-            success, message = create_user_from_data(username=username, email=email, password=password)
+            success, message = create_user_from_data(
+                username=username,
+                email=email,
+                password=password,
+                tendency=tendency,
+                photoUrl=photoUrl
+            )
             if success:
                 success_count += 1
                 print(f"Line {line_num}: {message}")
@@ -67,7 +79,7 @@ def import_users_from_file(filename):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Import users from a text file')
-    parser.add_argument('filename', help='Path to text file containing user data (format: username,email,password)')
+    parser.add_argument('filename', help='Path to text file containing user data (format: username,email,password[,tendency,photoUrl])')
     args = parser.parse_args()
 
     with app.app_context():

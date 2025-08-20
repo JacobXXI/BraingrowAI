@@ -4,7 +4,7 @@ from models import db, Video
 # Create a minimal Flask app to access the database
 app = Flask(__name__)
 # Replace the database URI with an absolute path
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///c:/Users/jacob/SoftwareDevelopment/Website/braingrow-ai-backend/instance/site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///c:/Users/jacob/SoftwareDevelopment/Website/BraingrowAI/braingrow-ai-backend/instance/site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
