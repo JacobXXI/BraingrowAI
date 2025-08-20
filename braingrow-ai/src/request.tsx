@@ -41,10 +41,42 @@ export const isAuthenticated = (): boolean => {
   return !!Cookies.get('authToken');
 };
 
+export interface UserProfile {
+  user_id: number;
+  username: string;
+  email: string;
+  tendency: string;
+  photoUrl: string;
+  session_info?: {
+    login_time?: string;
+    session_permanent?: boolean;
+  };
+}
+
+export const getProfile = async (): Promise<UserProfile | null> => {
+  try {
+    const token = Cookies.get('authToken');
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`${API_BASE}/api/profile`, {
+      headers,
+      credentials: 'include'
+    });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch (error) {
+    console.error('Profile fetch error:', error);
+    return null;
+  }
+};
+
 export const getRecommandVideo = async(maxVideo: number = 10): Promise<video[]> => {
   const response = await fetch(`${API_BASE}/api/recommendations?maxVideo=${maxVideo}`);
   if (!response.ok) throw new Error('Get recommand video failed');
   const rawData = await response.json();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return rawData.map((item: any) => ({
     _id: item.id,
     title: item.title,
@@ -65,6 +97,7 @@ export const search = async (query: string, maxVideo: number = 10): Promise<vide
   if (!response.ok) throw new Error('Search failed');
   const rawData = await response.json();
   // Convert raw API response to required video format
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return rawData.map((item: any) => ({
     _id: item.id,
     title: item.title,
@@ -166,7 +199,7 @@ export const dislikeVideo = async (videoId: string): Promise<{ success: boolean;
   }
 };
 
-export const addComment = async (videoId: string, text: string): Promise<{ success: boolean; comment?: any }> => {
+export const addComment = async (videoId: string, text: string): Promise<{ success: boolean; comment?: unknown }> => {
   try {
     const token = Cookies.get('authToken');
     if (!token) return { success: false };
