@@ -47,6 +47,7 @@
 
 .like-button { background-color: #e0f7fa; }
 .dislike-button { background-color: #ffebee; }
+.chat-button { background-color: #e8f5e9; }
 
 .video-info {
   display: flex;

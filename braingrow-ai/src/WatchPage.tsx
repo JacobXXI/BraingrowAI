@@ -68,6 +68,9 @@ export default function WatchPage() {
           <button className="action-button dislike-button">
             <span>👎 {video.dislikes?.toString()}</span>
           </button>
+          <button className="action-button chat-button">
+            <span>💬</span>
+          </button>
         </div>
       </div>
       
