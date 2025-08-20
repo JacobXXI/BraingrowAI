@@ -5,6 +5,7 @@ import jwt
 import datetime
 import traceback
 from functools import wraps
+from get_yt_file import extract_yt_url
 
 # Import everything from the consolidated models file
 from models import (
@@ -136,7 +137,7 @@ def get_video(video_id):
                 'viewCount': getattr(video, 'views', 0),
                 'likeCount': getattr(video, 'likes', 0),
                 'dislikeCount': getattr(video, 'dislikes', 0),
-                'url': video.url,
+                'url': extract_yt_url(video.url),
                 'coverUrl': video.imageUrl
             })
         return jsonify({'error': 'Video not found'}), 404
