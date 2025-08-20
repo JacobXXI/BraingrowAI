@@ -1,60 +1,65 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ProfilePage.css';
+import { getProfile, UserProfile } from './request';
 
 const ProfilePage: React.FC = () => {
-  // In a real application, you would fetch user data from an API
-  const userData = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    joinDate: 'January 2023',
-    avatarUrl: 'https://via.placeholder.com/150',
-    bio: 'Learning enthusiast and AI researcher interested in neural networks and machine learning applications.',
-    preferences: {
-      notifications: true,
-      darkMode: false,
-      emailSubscriptions: true
-    }
-  };
+  const [userData, setUserData] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const data = await getProfile();
+      setUserData(data);
+      setLoading(false);
+    };
+    fetchProfile();
+  }, []);
+
+  if (loading) {
+    return <div className="profile-container">Loading...</div>;
+  }
+
+  if (!userData) {
+    return <div className="profile-container">Unable to load profile</div>;
+  }
 
   return (
     <div className="profile-container">
       <div className="profile-header">
         <div className="profile-avatar">
-          <img src={userData.avatarUrl} alt="Profile" className="avatar-image" />
+          <img
+            src={userData.photoUrl || 'https://via.placeholder.com/150'}
+            alt="Profile"
+            className="avatar-image"
+          />
         </div>
         <div className="profile-info">
-          <h1 className="profile-name">{userData.name}</h1>
+          <h1 className="profile-name">{userData.username}</h1>
           <p className="profile-email">{userData.email}</p>
-          <p className="profile-join-date">Joined {userData.joinDate}</p>
+          {userData.session_info?.login_time && (
+            <p className="profile-join-date">
+              Logged in {new Date(userData.session_info.login_time).toLocaleString()}
+            </p>
+          )}
         </div>
       </div>
 
       <div className="profile-content">
         <div className="profile-bio">
-          <h2>About</h2>
-          <p>{userData.bio}</p>
+          <h2>Learning Tendency</h2>
+          <p>{userData.tendency || 'Not specified'}</p>
         </div>
 
         <div className="profile-preferences">
-          <h2>Preferences</h2>
+          <h2>Session Info</h2>
           <div className="preference-item">
-            <span>Notifications</span>
+            <span>Persistent Session</span>
             <label className="switch">
-              <input type="checkbox" checked={userData.preferences.notifications} />
-              <span className="slider round"></span>
-            </label>
-          </div>
-          <div className="preference-item">
-            <span>Dark Mode</span>
-            <label className="switch">
-              <input type="checkbox" checked={userData.preferences.darkMode} />
-              <span className="slider round"></span>
-            </label>
-          </div>
-          <div className="preference-item">
-            <span>Email Subscriptions</span>
-            <label className="switch">
-              <input type="checkbox" checked={userData.preferences.emailSubscriptions} />
+              <input
+                type="checkbox"
+                checked={!!userData.session_info?.session_permanent}
+                readOnly
+              />
               <span className="slider round"></span>
             </label>
           </div>
