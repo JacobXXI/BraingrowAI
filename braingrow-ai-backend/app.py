@@ -277,18 +277,16 @@ def signup():
 @login_required
 def like_video(video_id):
     try:
-        # Here you would implement like functionality
-        # For now, returning mock data
         video = getVideoById(video_id)
         if not video:
             return jsonify({'error': 'Video not found'}), 404
-        
-        # Mock implementation - you'll need to add like functionality to your models
-        new_likes = getattr(video, 'likes', 0) + 1
-        
+
+        video.likes = (getattr(video, 'likes', 0) or 0) + 1
+        db.session.commit()
+
         return jsonify({
             'message': 'Video liked successfully',
-            'likes': new_likes
+            'likes': video.likes
         })
     except Exception as e:
         print(f"Error in like_video: {str(e)}")
@@ -298,17 +296,16 @@ def like_video(video_id):
 @login_required
 def dislike_video(video_id):
     try:
-        # Here you would implement dislike functionality
         video = getVideoById(video_id)
         if not video:
             return jsonify({'error': 'Video not found'}), 404
-        
-        # Mock implementation - you'll need to add dislike functionality to your models
-        new_dislikes = getattr(video, 'dislikes', 0) + 1
-        
+
+        video.dislikes = (getattr(video, 'dislikes', 0) or 0) + 1
+        db.session.commit()
+
         return jsonify({
             'message': 'Video disliked successfully',
-            'dislikes': new_dislikes
+            'dislikes': video.dislikes
         })
     except Exception as e:
         print(f"Error in dislike_video: {str(e)}")
