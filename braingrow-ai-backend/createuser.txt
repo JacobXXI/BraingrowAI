@@ -1,0 +1,3 @@
+john_doe,john@example.com,securePassword123
+jane_smith,jane@example.com,AnotherSecurePass456
+testing,testing123@gmail.com,user123

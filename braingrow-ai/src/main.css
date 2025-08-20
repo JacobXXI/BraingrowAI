@@ -1,0 +1,67 @@
+:root {
+  --color-bg: #ffffff; /* fill_UGN9VV */
+  --color-border: #e0e0e0; /* stroke_W8310A */
+  --color-active: #4a6fff; /* fill_9YION2 */
+  --color-text: #333333; /* fill_LQN596 */
+  --color-button-neutral: #f5f5f5; /* fill_B9PGGX */
+  --color-button-primary: #4a6fff; /* fill_GNF1H3 */
+  --border-radius: 8px;
+  --font-nav: 14px sans-serif; /* style_ZWE4LK */
+  --font-button: 14px sans-serif; /* style_KLYTRH */
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.nav-pill-list {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-pill {
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  font: var(--font-nav);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.nav-pill.active {
+  background-color: var(--color-active);
+  color: white;
+}
+
+.header-auth {
+  display: flex;
+  gap: 12px;
+}
+
+.button {
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  font: var(--font-button);
+  border: none;
+  cursor: pointer;
+}
+
+.button.neutral {
+  background-color: var(--color-button-neutral);
+  color: var(--color-text);
+}
+
+.button.primary {
+  background-color: var(--color-button-primary);
+  color: white;
+}
+
+.hero-actions {
+  padding: 48px 24px;
+  text-align: center;
+  background-color: var(--color-bg);
+}
