@@ -2,35 +2,35 @@
 Video 1
 title: The Future of AI Ethics
 description: Exploring ethical frameworks for artificial intelligence development and deployment in society.
-url: https://youtube.com/watch?v=7n8GqGzYt0k
+url: https://www.youtube.com/watch?v=7n8GqGzYt0k
 tags: AI, Ethics, Technology, Philosophy
 image_url: https://i.ytimg.com/vi/7n8GqGzYt0k/hqdefault.jpg
 
 Video 2
 title: Bias in AI Systems
 description: How to identify and mitigate algorithmic bias in machine learning models.
-url: https://youtube.com/watch?v=9XwazD5aRGU
+url: https://www.youtube.com/watch?v=ai_ethics_2
 tags: AI, Bias, Machine Learning, Diversity
 image_url: https://i.ytimg.com/vi/9XwazD5aRGU/hqdefault.jpg
 
 Video 3
 title: AI Privacy Concerns
 description: Examining data privacy issues in the age of artificial intelligence and surveillance.
-url: https://youtube.com/watch?v=dQw4w9WgXcQ
+url: https://www.youtube.com/watch?v=ai_ethics_3
 tags: AI, Privacy, Data, Surveillance
 image_url: https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg
 
 Video 4
 title: AI and Employment
 description: The impact of automation on jobs and the future of work.
-url: https://youtube.com/watch?v=M5QY2_8704o
+url: https://www.youtube.com/watch?v=ai_ethics_4
 tags: AI, Employment, Automation, Future
 image_url: https://i.ytimg.com/vi/M5QY2_8704o/hqdefault.jpg
 
 Video 5
 title: AI Governance Models
 description: Comparing international approaches to regulating artificial intelligence technologies.
-url: https://youtube.com/watch?v=LlXZ6x7P590
+url: https://www.youtube.com/watch?v=ai_ethics_5
 tags: AI, Governance, Regulation, Policy
 image_url: https://i.ytimg.com/vi/LlXZ6x7P590/hqdefault.jpg
 
@@ -38,35 +38,35 @@ image_url: https://i.ytimg.com/vi/LlXZ6x7P590/hqdefault.jpg
 Video 1
 title: Introduction to Neural Networks
 description: A beginner's guide to understanding artificial neural networks and their applications.
-url: https://youtube.com/watch?v=aircAruvnKk
+url: https://www.youtube.com/watch?v=ml_1
 tags: Machine Learning, Neural Networks, AI, Programming
 image_url: https://i.ytimg.com/vi/aircAruvnKk/hqdefault.jpg
 
 Video 2
 title: Deep Learning Fundamentals
 description: Exploring deep learning architectures and their practical implementations.
-url: https://youtube.com/watch?v=IHZwWFHWa-w
+url: https://www.youtube.com/watch?v=ml_2
 tags: Deep Learning, Machine Learning, AI, Neural Networks
 image_url: https://i.ytimg.com/vi/IHZwWFHWa-w/hqdefault.jpg
 
 Video 3
 title: Natural Language Processing
 description: How machines understand and generate human language through AI.
-url: https://youtube.com/watch?v=oBxN7YFbOaA
+url: https://www.youtube.com/watch?v=ml_3
 tags: NLP, Machine Learning, AI, Language
 image_url: https://i.ytimg.com/vi/oBxN7YFbOaA/hqdefault.jpg
 
 Video 4
 title: Computer Vision Applications
 description: Real-world uses of computer vision technology in various industries.
-url: https://youtube.com/watch?v=0h2b4ftbZcU
+url: https://www.youtube.com/watch?v=ml_4
 tags: Computer Vision, Machine Learning, AI, Image Processing
 image_url: https://i.ytimg.com/vi/0h2b4ftbZcU/hqdefault.jpg
 
 Video 5
 title: Reinforcement Learning
 description: How AI agents learn optimal behavior through interaction with environments.
-url: https://youtube.com/watch?v=sxXhFGOj5qQ
+url: https://www.youtube.com/watch?v=ml_5
 tags: Reinforcement Learning, Machine Learning, AI, Robotics
 image_url: https://i.ytimg.com/vi/sxXhFGOj5qQ/hqdefault.jpg
 
@@ -74,35 +74,35 @@ image_url: https://i.ytimg.com/vi/sxXhFGOj5qQ/hqdefault.jpg
 Video 1
 title: Quantum Computing Explained
 description: An introduction to the principles and potential of quantum computing.
-url: https://youtube.com/watch?v=JhHMJCUmq28
+url: https://www.youtube.com/watch?v=qc_1
 tags: Quantum Computing, Physics, Technology, Science
 image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
 
 Video 2
 title: Quantum Algorithms
 description: Exploring groundbreaking quantum algorithms that outperform classical approaches.
-url: https://youtube.com/watch?v=F_Riqjdh2oM
+url: https://www.youtube.com/watch?v=qc_2
 tags: Quantum Computing, Algorithms, Programming, Science
 image_url: https://i.ytimg.com/vi/F_Riqjdh2oM/hqdefault.jpg
 
 Video 3
 title: Quantum Cryptography
 description: How quantum technology is revolutionizing data security and encryption.
-url: https://youtube.com/watch?v=9L77QExPmI0
+url: https://www.youtube.com/watch?v=qc_3
 tags: Quantum Computing, Cryptography, Security, Privacy
 image_url: https://i.ytimg.com/vi/9L77QExPmI0/hqdefault.jpg
 
 Video 4
 title: Quantum Supremacy
 description: Understanding the milestone achievement of quantum computers surpassing classical ones.
-url: https://youtube.com/watch?v=-UrdExQW0cs
+url: https://www.youtube.com/watch?v=qc_4
 tags: Quantum Computing, Technology, Science, Innovation
 image_url: https://i.ytimg.com/vi/-UrdExQW0cs/hqdefault.jpg
 
 Video 5
 title: Future of Quantum Computing
 description: Predictions and potential applications for quantum computing in the next decade.
-url: https://youtube.com/watch?v=Z2U5qYc1E3w
+url: https://www.youtube.com/watch?v=qc_5
 tags: Quantum Computing, Future, Technology, Science
 image_url: https://i.ytimg.com/vi/Z2U5qYc1E3w/hqdefault.jpg
 
@@ -110,35 +110,35 @@ image_url: https://i.ytimg.com/vi/Z2U5qYc1E3w/hqdefault.jpg
 Video 1
 title: Renewable Energy Innovations
 description: New technologies driving the transition to sustainable energy sources.
-url: https://youtube.com/watch?v=0aKqV2KZ9wY
+url: https://www.youtube.com/watch?v=st_1
 tags: Sustainable Tech, Renewable Energy, Innovation, Environment
 image_url: https://i.ytimg.com/vi/0aKqV2KZ9wY/hqdefault.jpg
 
 Video 2
 title: Green Building Technologies
 description: How sustainable construction methods are reducing environmental impact.
-url: https://youtube.com/watch?v=8YJf6aA0s0g
+url: https://www.youtube.com/watch?v=st_2
 tags: Sustainable Tech, Green Building, Construction, Environment
 image_url: https://i.ytimg.com/vi/8YJf6aA0s0g/hqdefault.jpg
 
 Video 3
 title: Sustainable Transportation
 description: The future of electric vehicles and public transportation systems.
-url: https://youtube.com/watch?v=9Z3swdO890k
+url: https://www.youtube.com/watch?v=st_3
 tags: Sustainable Tech, Transportation, Electric Vehicles, Environment
 image_url: https://i.ytimg.com/vi/9Z3swdO890k/hqdefault.jpg
 
 Video 4
 title: Circular Economy Models
 description: How businesses are adopting circular economy principles to reduce waste.
-url: https://youtube.com/watch?v=9GorqroigqM
+url: https://www.youtube.com/watch?v=st_4
 tags: Sustainable Tech, Circular Economy, Business, Environment
 image_url: https://i.ytimg.com/vi/9GorqroigqM/hqdefault.jpg
 
 Video 5
 title: Sustainable Agriculture
 description: Technological innovations improving food production while protecting ecosystems.
-url: https://youtube.com/watch?v=UcVfVrHQsHs
+url: https://www.youtube.com/watch?v=st_5
 tags: Sustainable Tech, Agriculture, Environment, Food Security
 image_url: https://i.ytimg.com/vi/UcVfVrHQsHs/hqdefault.jpg
 
@@ -146,34 +146,34 @@ image_url: https://i.ytimg.com/vi/UcVfVrHQsHs/hqdefault.jpg
 Video 1
 title: Introduction to the Metaverse
 description: Understanding the concept and potential of virtual shared spaces.
-url: https://youtube.com/watch?v=89VNZ0J7lQo
+url: https://www.youtube.com/watch?v=meta_1
 tags: Metaverse, Virtual Reality, Technology, Social Media
 image_url: https://i.ytimg.com/vi/89VNZ0J7lQo/hqdefault.jpg
 
 Video 2
 title: Metaverse Business Opportunities
 description: How companies are leveraging the metaverse for new revenue streams.
-url: https://youtube.com/watch?v=9bZkp7q19f0
+url: https://www.youtube.com/watch?v=meta_2
 tags: Metaverse, Business, Technology, Innovation
 image_url: https://i.ytimg.com/vi/9bZkp7q19f0/hqdefault.jpg
 
 Video 3
 title: Virtual Reality in Education
 description: The metaverse's potential to transform learning experiences.
-url: https://youtube.com/watch?v=5VRVtf2hlsE
+url: https://www.youtube.com/watch?v=meta_3
 tags: Metaverse, Education, Virtual Reality, Technology
 image_url: https://i.ytimg.com/vi/5VRVtf2hlsE/hqdefault.jpg
 
 Video 4
 title: Metaverse Social Interactions
 description: How virtual spaces are changing human communication and relationships.
-url: https://youtube.com/watch?v=e2sGdD7fK2c
+url: https://www.youtube.com/watch?v=meta_4
 tags: Metaverse, Social Media, Technology, Communication
 image_url: https://i.ytimg.com/vi/e2sGdD7fK2c/hqdefault.jpg
 
 Video 5
 title: Metaverse Economy
 description: Understanding digital currencies, NFTs, and virtual asset ownership.
-url: https://youtube.com/watch?v=YQ_xWvX1n9g
+url: https://www.youtube.com/watch?v=meta_5
 tags: Metaverse, Economy, NFTs, Cryptocurrency
 image_url: https://i.ytimg.com/vi/YQ_xWvX1n9g/hqdefault.jpg
