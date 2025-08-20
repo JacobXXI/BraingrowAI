@@ -73,19 +73,7 @@ export default function WatchPage() {
       
       <div className="video-info">
         <h1 className="video-title">{video.title}</h1>
-        
-        <div className="video-meta">
-          <div className="video-stats">
-            {video.views != null && <span className="views">👁️ {video.views.toString()} views</span>}
-            <span className="upload-date">📅 {video.date.toLocaleDateString()}</span>
-          </div>
-          
-          <div className="video-author">
-            {video.author != null && <span className="author">👤 {video.author}</span>}
-            <span className="category">🏷️ {video.category}</span>
-          </div>
-        </div>
-        
+
         <div className="video-description">
           <h3>Description</h3>
           <p>{video.description}</p>
