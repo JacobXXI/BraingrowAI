@@ -1,0 +1,10 @@
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+*.bak
+*.sql
+instance/
+__pycache__/
+.env
