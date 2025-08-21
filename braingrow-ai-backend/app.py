@@ -112,8 +112,6 @@ def search():
                 'publishedAt': getattr(v, 'date', datetime.datetime.now()).isoformat(),
                 'category': getattr(v, 'category', 'General'),
                 'viewCount': getattr(v, 'views', 0),
-                'likeCount': getattr(v, 'likes', 0),
-                'dislikeCount': getattr(v, 'dislikes', 0),
                 'videoUrl': v.url,  # Frontend expects 'videoUrl'
                 'imageUrl': v.imageUrl
             }
@@ -151,8 +149,6 @@ def get_video(video_id):
                 'publishedAt': getattr(video, 'date', datetime.datetime.now()).isoformat(),
                 'category': getattr(video, 'category', 'General'),
                 'viewCount': getattr(video, 'views', 0),
-                'likeCount': getattr(video, 'likes', 0),
-                'dislikeCount': getattr(video, 'dislikes', 0),
                 'url': extract_yt_url(video.url),
                 'coverUrl': video.imageUrl
             })
@@ -286,45 +282,6 @@ def signup():
         return jsonify({'error': 'User creation failed - email may already exist'}), 400
     except Exception as e:
         print(f"Error in signup: {str(e)}")
-        return jsonify({'error': str(e)}), 500
-
-# Video interaction endpoints
-@app.route('/api/videos/<video_id>/like', methods=['POST'])
-@login_required
-def like_video(video_id):
-    try:
-        video = getVideoById(video_id)
-        if not video:
-            return jsonify({'error': 'Video not found'}), 404
-
-        video.likes = (getattr(video, 'likes', 0) or 0) + 1
-        db.session.commit()
-
-        return jsonify({
-            'message': 'Video liked successfully',
-            'likes': video.likes
-        })
-    except Exception as e:
-        print(f"Error in like_video: {str(e)}")
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/videos/<video_id>/dislike', methods=['POST'])
-@login_required
-def dislike_video(video_id):
-    try:
-        video = getVideoById(video_id)
-        if not video:
-            return jsonify({'error': 'Video not found'}), 404
-
-        video.dislikes = (getattr(video, 'dislikes', 0) or 0) + 1
-        db.session.commit()
-
-        return jsonify({
-            'message': 'Video disliked successfully',
-            'dislikes': video.dislikes
-        })
-    except Exception as e:
-        print(f"Error in dislike_video: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/videos/<video_id>/comments', methods=['POST'])
@@ -467,8 +424,6 @@ def protected_search():
                 'publishedAt': getattr(v, 'date', datetime.datetime.now()).isoformat(),
                 'category': getattr(v, 'category', 'General'),
                 'viewCount': getattr(v, 'views', 0),
-                'likeCount': getattr(v, 'likes', 0),
-                'dislikeCount': getattr(v, 'dislikes', 0),
                 'videoUrl': v.url,
                 'imageUrl': v.imageUrl
             } for v in videos] if videos else []

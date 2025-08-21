@@ -64,10 +64,10 @@ export default function WatchPage() {
     <div className="watch-container">
       <div className="video-player-container">
         <div className="video-player">
-          <video 
-            controls 
-            src={video.url} 
-            poster={video.coverUrl} 
+          <video
+            controls
+            src={video.url}
+            poster={video.coverUrl}
             onError={(e) => {
               const videoElement = e.target as HTMLVideoElement;
               const errorDetails = videoElement.error ? ` (Code: ${videoElement.error.code}, Message: ${videoElement.error.message})` : '';
@@ -77,16 +77,8 @@ export default function WatchPage() {
             }}
           />
         </div>
-        <div className="video-actions">
-          <button className="action-button like-button" onClick={handleLike}>
-            <span>👍 {video.likes?.toString()}</span>
-          </button>
-          <button className="action-button dislike-button" onClick={handleDislike}>
-            <span>👎 {video.dislikes?.toString()}</span>
-          </button>
-        </div>
       </div>
-      
+
       <div className="video-info">
         <h1 className="video-title">{video.title}</h1>
 
@@ -94,7 +86,7 @@ export default function WatchPage() {
           <h3>Description</h3>
           <p>{video.description}</p>
         </div>
-        
+
         <div className="video-comments">
           <h3>Comments</h3>
           <div className="comment-input">

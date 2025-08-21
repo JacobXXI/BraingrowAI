@@ -23,6 +23,7 @@ const Header: React.FC = () => {
       navigate(`/search?query=${encodeURIComponent(query)}`);
     }
   };
+  
   const handleLogout = () => {
     logout();
     setIsLoggedIn(false);
