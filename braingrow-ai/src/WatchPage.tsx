@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { video } from './structures/video';
-import { getVideo, likeVideo, dislikeVideo } from './request';
 import './WatchPage.css';
 
 export default function WatchPage() {
