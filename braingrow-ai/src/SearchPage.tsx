@@ -51,7 +51,6 @@ const SearchPage: React.FC = () => {
                 <div className="video-metadata">
                   <span className="video-author">👤 {video.author}</span>
                   <span className="video-views">👁️ {video.views} views</span>
-                  <span className="video-likes">❤️ {video.likes} likes</span>
                 </div>
               </div>
             </div>

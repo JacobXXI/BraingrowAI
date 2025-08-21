@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom'; // Add useLocation
-import { search, login, logout, isAuthenticated } from '../request';
+import { logout, isAuthenticated } from '../request';
 import logo from '../assets/logo.png';
 import './Header.css';
 
@@ -21,15 +21,6 @@ const Header: React.FC = () => {
     const query = searchQuery.trim();
     if (query) {
       navigate(`/search?query=${encodeURIComponent(query)}`);
-    }
-  };
-
-  const handleLogin = async () => {
-    // In a real app, you would show a login form and get credentials
-    const result = await login('user@example.com', 'password123');
-    if (result.success) {
-      setIsLoggedIn(true);
-      navigate('/');
     }
   };
 

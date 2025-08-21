@@ -38,7 +38,7 @@ const LoginPage: React.FC = () => {
         setErrorMessage('Login failed. Please check your credentials.');
         setShowErrorModal(true);
       }
-    } catch (err) {
+    } catch {
       setErrorMessage('An error occurred during login');
       setShowErrorModal(true);
     } finally {

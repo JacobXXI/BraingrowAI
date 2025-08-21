@@ -85,8 +85,6 @@ export const getRecommandVideo = async(maxVideo: number = 10): Promise<video[]> 
     date: new Date(item.publishedAt),
     category: item.category,
     views: item.viewCount,
-    likes: item.likeCount,
-    dislikes: item.dislikeCount,
     url: item.videoUrl,
     coverUrl: new URL(item.imageUrl, API_BASE).href
   }));
@@ -106,8 +104,6 @@ export const search = async (query: string, maxVideo: number = 10): Promise<vide
     date: new Date(item.publishedAt),
     category: item.category,
     views: item.viewCount,
-    likes: item.likeCount,
-    dislikes: item.dislikeCount,
     url: item.url,
     coverUrl: new URL(item.imageUrl, API_BASE).href
   }));
@@ -126,8 +122,6 @@ export const getVideo = async (id: string): Promise<video> => {
     date: new Date(rawData.publishedAt),
     category: rawData.category,
     views: rawData.viewCount,
-    likes: rawData.likeCount,
-    dislikes: rawData.dislikeCount,
     url: rawData.url.startsWith('http') ? rawData.url : new URL(rawData.url, API_BASE).href,
     coverUrl: rawData.coverUrl.startsWith('http') ? rawData.coverUrl : new URL(rawData.coverUrl, API_BASE).href
   };
@@ -157,47 +151,6 @@ export const signup = async (email: string, password: string, name: string): Pro
   }
 };
 
-export const likeVideo = async (videoId: string): Promise<{ success: boolean; likes?: number }> => {
-  try {
-    const token = Cookies.get('authToken');
-    if (!token) return { success: false };
-
-    const response = await fetch(`https://localhost:3000/api/videos/${videoId}/like`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    });
-
-    const data = await response.json();
-    return { success: response.ok, likes: data.likes };
-  } catch (error) {
-    console.error('Like error:', error);
-    return { success: false };
-  }
-};
-
-export const dislikeVideo = async (videoId: string): Promise<{ success: boolean; dislikes?: number }> => {
-  try {
-    const token = Cookies.get('authToken');
-    if (!token) return { success: false };
-
-    const response = await fetch(`https://localhost:3000/api/videos/${videoId}/dislike`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    });
-
-    const data = await response.json();
-    return { success: response.ok, dislikes: data.dislikes };
-  } catch (error) {
-    console.error('Dislike error:', error);
-    return { success: false };
-  }
-};
 
 export const addComment = async (videoId: string, text: string): Promise<{ success: boolean; comment?: unknown }> => {
   try {
