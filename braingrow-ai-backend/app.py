@@ -6,6 +6,7 @@ import datetime
 import traceback
 from functools import wraps
 from video_handler import extract_yt_url, ask_AI
+from sqlalchemy import inspect, text
 
 # Import everything from the consolidated models file
 from models import (
@@ -32,9 +33,24 @@ CORS(app, origins=[
     "https://localhost:3000"  # Added for your frontend auth endpoints
 ], supports_credentials=True)
 
-# Create database tables
+# Create database tables and ensure reaction columns exist
+def ensure_reaction_columns():
+    """Ensure legacy databases have likes/dislikes columns."""
+    inspector = inspect(db.engine)
+    columns = {col['name'] for col in inspector.get_columns('videos')}
+    added = False
+    if 'likes' not in columns:
+        db.session.execute(text('ALTER TABLE videos ADD COLUMN likes INTEGER DEFAULT 0'))
+        added = True
+    if 'dislikes' not in columns:
+        db.session.execute(text('ALTER TABLE videos ADD COLUMN dislikes INTEGER DEFAULT 0'))
+        added = True
+    if added:
+        db.session.commit()
+
 with app.app_context():
     db.create_all()
+    ensure_reaction_columns()
 
 # Decorator to check if user is logged in
 def login_required(f):
