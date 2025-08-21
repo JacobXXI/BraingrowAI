@@ -162,7 +162,7 @@ export const likeVideo = async (videoId: string): Promise<{ success: boolean; li
     const token = Cookies.get('authToken');
     if (!token) return { success: false };
 
-    const response = await fetch(`https://localhost:3000/api/videos/${videoId}/like`, {
+    const response = await fetch(`${API_BASE}/api/videos/${videoId}/like`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -183,7 +183,7 @@ export const dislikeVideo = async (videoId: string): Promise<{ success: boolean;
     const token = Cookies.get('authToken');
     if (!token) return { success: false };
 
-    const response = await fetch(`https://localhost:3000/api/videos/${videoId}/dislike`, {
+    const response = await fetch(`${API_BASE}/api/videos/${videoId}/dislike`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

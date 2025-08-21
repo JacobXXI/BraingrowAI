@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { video } from './structures/video';
-import { getVideo } from './request';
+import { getVideo, likeVideo, dislikeVideo } from './request';
 import './WatchPage.css';
 
 export default function WatchPage() {
@@ -10,6 +10,22 @@ export default function WatchPage() {
   const [video, setVideo] = useState<video | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [videoError, setVideoError] = useState<string | null>(null); // Add error state
+
+  const handleLike = async () => {
+    if (!video) return;
+    const result = await likeVideo(video._id);
+    if (result.success && typeof result.likes === 'number') {
+      setVideo({ ...video, likes: result.likes });
+    }
+  };
+
+  const handleDislike = async () => {
+    if (!video) return;
+    const result = await dislikeVideo(video._id);
+    if (result.success && typeof result.dislikes === 'number') {
+      setVideo({ ...video, dislikes: result.dislikes });
+    }
+  };
 
   useEffect(() => {
     // Reset state when component mounts or id changes
@@ -62,10 +78,10 @@ export default function WatchPage() {
           />
         </div>
         <div className="video-actions">
-          <button className="action-button like-button">
+          <button className="action-button like-button" onClick={handleLike}>
             <span>👍 {video.likes?.toString()}</span>
           </button>
-          <button className="action-button dislike-button">
+          <button className="action-button dislike-button" onClick={handleDislike}>
             <span>👎 {video.dislikes?.toString()}</span>
           </button>
         </div>
