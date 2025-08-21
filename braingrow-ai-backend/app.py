@@ -5,7 +5,7 @@ import jwt
 import datetime
 import traceback
 from functools import wraps
-from get_yt_file import extract_yt_url
+from video_handler import extract_yt_url, ask_AI
 
 # Import everything from the consolidated models file
 from models import (
@@ -338,6 +338,28 @@ def add_comment(video_id):
         })
     except Exception as e:
         print(f"Error in add_comment: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/api/videos/<video_id>/ask', methods=['POST'])
+def ask_video_question(video_id):
+    try:
+        data = request.json
+        if not data or not data.get('question'):
+            return jsonify({'error': 'Question text required'}), 400
+
+        video = getVideoById(video_id)
+        if not video:
+            return jsonify({'error': 'Video not found'}), 404
+
+        # Mock implementation - you'll need to add question functionality to your models
+        question = data['question']
+
+        return jsonify({
+            'question': question,
+            'answer': ask_AI(video.url, question)
+        })
+    except Exception as e:
+        print(f"Error in asking video question: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/check-auth')
