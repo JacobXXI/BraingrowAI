@@ -11,22 +11,6 @@ export default function WatchPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [videoError, setVideoError] = useState<string | null>(null); // Add error state
 
-  const handleLike = async () => {
-    if (!video) return;
-    const result = await likeVideo(video._id);
-    if (result.success && typeof result.likes === 'number') {
-      setVideo({ ...video, likes: result.likes });
-    }
-  };
-
-  const handleDislike = async () => {
-    if (!video) return;
-    const result = await dislikeVideo(video._id);
-    if (result.success && typeof result.dislikes === 'number') {
-      setVideo({ ...video, dislikes: result.dislikes });
-    }
-  };
-
   useEffect(() => {
     // Reset state when component mounts or id changes
     setVideo(null);
