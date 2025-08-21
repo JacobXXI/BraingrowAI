@@ -29,6 +29,8 @@ class Video(db.Model):
     url = db.Column(db.String(200), nullable=False)
     tags = db.Column(db.String(100), nullable=False)
     imageUrl = db.Column(db.String(200), nullable=False)
+    likes = db.Column(db.Integer, default=0, nullable=False)
+    dislikes = db.Column(db.Integer, default=0, nullable=False)
     
     def __repr__(self):
         return f"Video('{self.title}', '{self.description}', '{self.url}', '{self.tags}', '{self.imageUrl}')"
