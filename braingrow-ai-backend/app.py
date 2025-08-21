@@ -6,6 +6,7 @@ import datetime
 import traceback
 from functools import wraps
 from get_yt_file import extract_yt_url
+from sqlalchemy import inspect, text
 
 # Import everything from the consolidated models file
 from models import (
@@ -32,9 +33,24 @@ CORS(app, origins=[
     "https://localhost:3000"  # Added for your frontend auth endpoints
 ], supports_credentials=True)
 
-# Create database tables
+# Create database tables and ensure reaction columns exist
+def ensure_reaction_columns():
+    """Ensure legacy databases have likes/dislikes columns."""
+    inspector = inspect(db.engine)
+    columns = {col['name'] for col in inspector.get_columns('videos')}
+    added = False
+    if 'likes' not in columns:
+        db.session.execute(text('ALTER TABLE videos ADD COLUMN likes INTEGER DEFAULT 0'))
+        added = True
+    if 'dislikes' not in columns:
+        db.session.execute(text('ALTER TABLE videos ADD COLUMN dislikes INTEGER DEFAULT 0'))
+        added = True
+    if added:
+        db.session.commit()
+
 with app.app_context():
     db.create_all()
+    ensure_reaction_columns()
 
 # Decorator to check if user is logged in
 def login_required(f):
@@ -277,18 +293,16 @@ def signup():
 @login_required
 def like_video(video_id):
     try:
-        # Here you would implement like functionality
-        # For now, returning mock data
         video = getVideoById(video_id)
         if not video:
             return jsonify({'error': 'Video not found'}), 404
-        
-        # Mock implementation - you'll need to add like functionality to your models
-        new_likes = getattr(video, 'likes', 0) + 1
-        
+
+        video.likes = (getattr(video, 'likes', 0) or 0) + 1
+        db.session.commit()
+
         return jsonify({
             'message': 'Video liked successfully',
-            'likes': new_likes
+            'likes': video.likes
         })
     except Exception as e:
         print(f"Error in like_video: {str(e)}")
@@ -298,17 +312,16 @@ def like_video(video_id):
 @login_required
 def dislike_video(video_id):
     try:
-        # Here you would implement dislike functionality
         video = getVideoById(video_id)
         if not video:
             return jsonify({'error': 'Video not found'}), 404
-        
-        # Mock implementation - you'll need to add dislike functionality to your models
-        new_dislikes = getattr(video, 'dislikes', 0) + 1
-        
+
+        video.dislikes = (getattr(video, 'dislikes', 0) or 0) + 1
+        db.session.commit()
+
         return jsonify({
             'message': 'Video disliked successfully',
-            'dislikes': new_dislikes
+            'dislikes': video.dislikes
         })
     except Exception as e:
         print(f"Error in dislike_video: {str(e)}")

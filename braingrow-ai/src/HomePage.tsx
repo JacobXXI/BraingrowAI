@@ -8,7 +8,7 @@ import { video } from './structures/video';
 export function HomePage() {
   const [videos, setVideos] = useState<Array<video>>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,6 +18,7 @@ export function HomePage() {
         setVideos(recommendedVideos);
       } catch (err) {
         console.error(err);
+        setError(err instanceof Error ? err.message : String(err));
       } finally {
         setLoading(false);
       }

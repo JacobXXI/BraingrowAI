@@ -39,6 +39,7 @@ const LoginPage: React.FC = () => {
         setShowErrorModal(true);
       }
     } catch (err) {
+      console.error(err);
       setErrorMessage('An error occurred during login');
       setShowErrorModal(true);
     } finally {
