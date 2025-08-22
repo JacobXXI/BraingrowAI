@@ -85,7 +85,14 @@ export default function WatchPage() {
       </div>
 
       <div className="video-info">
-        <h1 className="video-title">{video.title}</h1>
+        <div className="video-header">
+          <h1 className="video-title">{video.title}</h1>
+          {!chatOpen && (
+            <button className="chat-button" onClick={() => setChatOpen(true)}>
+              Chat
+            </button>
+          )}
+        </div>
 
         <div className="video-description">
           <h3>Description</h3>
@@ -103,12 +110,6 @@ export default function WatchPage() {
           </div>
         </div>
       </div>
-
-      {!chatOpen && (
-        <button className="chat-button" onClick={() => setChatOpen(true)}>
-          Chat
-        </button>
-      )}
 
       {chatOpen && (
         <div className="chat-window">

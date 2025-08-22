@@ -36,6 +36,12 @@
   gap: 15px;
 }
 
+.video-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .video-title {
   font-size: 1.8rem;
   margin: 0;
@@ -76,17 +82,13 @@
 }
 
 .chat-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
+  margin-left: 10px;
+  padding: 5px 10px;
   background-color: #2196f3;
   color: white;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
 }
 
 .chat-window {
