@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { video } from './structures/video';
-import { getVideo } from './request'; // Ensure this function is defined in your request.tsx
+import { getVideo, askVideoQuestion } from './request';
 import './WatchPage.css';
 
 export default function WatchPage() {
@@ -10,6 +10,12 @@ export default function WatchPage() {
   const [video, setVideo] = useState<video | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [videoError, setVideoError] = useState<string | null>(null); // Add error state
+  const [chatOpen, setChatOpen] = useState(false);
+  const [messages, setMessages] = useState<{ sender: 'user' | 'ai'; text: string }[]>([]);
+  const [question, setQuestion] = useState('');
+  const [isAsking, setIsAsking] = useState(false);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
 
   useEffect(() => {
     // Reset state when component mounts or id changes
@@ -44,6 +50,28 @@ export default function WatchPage() {
   if (!video) return <div>Video not found</div>;
   if (!video.url) return <div>Invalid video source - no URL provided</div>;
 
+  const handleSend = async () => {
+    if (!id || !question.trim()) return;
+    const userMessage = { sender: 'user' as const, text: question };
+    setMessages((prev) => [...prev, userMessage]);
+    setQuestion('');
+    setIsAsking(true);
+    try {
+      const answer = await askVideoQuestion(
+        id,
+        userMessage.text,
+        startTime ? Number(startTime) : undefined,
+        endTime ? Number(endTime) : undefined
+      );
+      setMessages((prev) => [...prev, { sender: 'ai', text: answer }]);
+    } catch (err) {
+      console.error(err);
+      setMessages((prev) => [...prev, { sender: 'ai', text: 'Failed to get response' }]);
+    } finally {
+      setIsAsking(false);
+    }
+  };
+
   return (
     <div className="watch-container">
       <div className="video-player-container">
@@ -64,7 +92,14 @@ export default function WatchPage() {
       </div>
 
       <div className="video-info">
-        <h1 className="video-title">{video.title}</h1>
+        <div className="video-header">
+          <h1 className="video-title">{video.title}</h1>
+          {!chatOpen && (
+            <button className="chat-button" onClick={() => setChatOpen(true)}>
+              Chat
+            </button>
+          )}
+        </div>
 
         <div className="video-description">
           <h3>Description</h3>
@@ -82,6 +117,51 @@ export default function WatchPage() {
           </div>
         </div>
       </div>
+
+      {chatOpen && (
+        <div className="chat-window">
+          <div className="chat-header">
+            <span>Ask AI</span>
+            <button onClick={() => setChatOpen(false)}>×</button>
+          </div>
+          <div className="chat-messages">
+            {messages.map((m, i) => (
+              <div key={i} className={`chat-message ${m.sender}`}>
+                {m.text}
+              </div>
+            ))}
+          </div>
+          <div className="time-range">
+            <input
+              type="number"
+              min="0"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              placeholder="Start (s)"
+              disabled={isAsking}
+            />
+            <input
+              type="number"
+              min="0"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              placeholder="End (s)"
+              disabled={isAsking}
+            />
+          </div>
+          <div className="chat-input">
+            <input
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              placeholder="Ask a question..."
+              disabled={isAsking}
+            />
+            <button onClick={handleSend} disabled={isAsking || !question.trim()}>
+              Send
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
