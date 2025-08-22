@@ -35,6 +35,24 @@ class Video(db.Model):
     def __repr__(self):
         return f"Video('{self.title}', '{self.description}', '{self.url}', '{self.tags}', '{self.imageUrl}')"
 
+
+# Comment Model
+class Comment(db.Model):
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    video_id = db.Column(db.Integer, db.ForeignKey('videos.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # relationships
+    user = db.relationship('User', backref=db.backref('comments', lazy=True))
+    video = db.relationship('Video', backref=db.backref('comments', lazy=True))
+
+    def __repr__(self):
+        return f"<Comment {self.id} by {self.user_id} on {self.video_id}>"
+
 # Video Database Functions
 def searchVideo(searchQuery: str, maxVideo: int):
     return Video.query.filter(
@@ -69,6 +87,23 @@ def addVideo(title, description, url, tags, imageUrl):
         print(f"Error adding video: {e}")
         db.session.rollback()
         return None
+
+
+# Comment Database Functions
+def addComment(text, user_id, video_id):
+    try:
+        comment = Comment(text=text, user_id=user_id, video_id=video_id)
+        db.session.add(comment)
+        db.session.commit()
+        return comment
+    except Exception as e:
+        print(f"Error adding comment: {e}")
+        db.session.rollback()
+        return None
+
+
+def getCommentsByVideo(video_id):
+    return Comment.query.filter_by(video_id=video_id).order_by(Comment.created_at.desc()).all()
 
 # User Database Functions
 def userLogin(email, password):

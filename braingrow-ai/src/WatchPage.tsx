@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { video } from './structures/video';
+import { getVideo } from './request'; // Ensure this function is defined in your request.tsx
 import './WatchPage.css';
 
 export default function WatchPage() {
