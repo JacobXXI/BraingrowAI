@@ -3,6 +3,7 @@
 *.sqlite3
 *.db
 *.db3
+*.pyc
 *.bak
 *.sql
 instance/
