@@ -127,6 +127,19 @@ export const getVideo = async (id: string): Promise<video> => {
   };
 };
 
+export const askVideoQuestion = async (id: string, question: string): Promise<string> => {
+  const response = await fetch(`${API_BASE}/api/videos/${encodeURIComponent(id)}/ask`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ question })
+  });
+  if (!response.ok) throw new Error('Ask AI failed');
+  const data = await response.json();
+  return data.answer;
+};
+
 export const signup = async (email: string, password: string, name: string): Promise<{ success: boolean; token?: string }> => {
   try {
     const response = await fetch('https://localhost:3000/api/signup', {
