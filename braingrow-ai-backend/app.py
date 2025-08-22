@@ -5,14 +5,15 @@ import jwt
 import datetime
 import traceback
 from functools import wraps
-from get_yt_file import extract_yt_url
+from video_handler import extract_yt_url, ask_AI
 from sqlalchemy import inspect, text
 
 # Import everything from the consolidated models file
 from models import (
-    db, Video, User,
+    db, Video, User, Comment,
     searchVideo, getVideoById, addVideo,
-    userLogin, userRegister, userProfile, getRecommendedVideos
+    userLogin, userRegister, userProfile, getRecommendedVideos,
+    addComment, getCommentsByVideo
 )
 
 app = Flask(__name__)
@@ -284,33 +285,81 @@ def signup():
         print(f"Error in signup: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/videos/<video_id>/comments', methods=['POST'])
+@app.route('/api/videos/<int:video_id>/comments', methods=['GET'])
+def get_comments(video_id):
+    """Get comments for a specific video."""
+    try:
+        video = getVideoById(video_id)
+        if not video:
+            return jsonify({'error': 'Video not found'}), 404
+
+        comments = getCommentsByVideo(video_id)
+        return jsonify([
+            {
+                'id': c.id,
+                'text': c.text,
+                'user_id': c.user_id,
+                'video_id': c.video_id,
+                'created_at': c.created_at.isoformat()
+            }
+            for c in comments
+        ])
+    except Exception as e:
+        print(f"Error in get_comments: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/videos/<int:video_id>/comments', methods=['POST'])
 @login_required
 def add_comment(video_id):
+    """Add a comment to a video. Requires authenticated user."""
     try:
         data = request.json
         if not data or not data.get('text'):
             return jsonify({'error': 'Comment text required'}), 400
-        
+
         video = getVideoById(video_id)
         if not video:
             return jsonify({'error': 'Video not found'}), 404
-        
-        # Mock implementation - you'll need to add comment functionality to your models
-        comment = {
-            'id': 1,
-            'text': data['text'],
-            'user_id': request.current_user_id,
-            'video_id': video_id,
-            'created_at': datetime.datetime.now().isoformat()
-        }
-        
+
+        comment = addComment(data['text'], request.current_user_id, video_id)
+        if not comment:
+            return jsonify({'error': 'Failed to add comment'}), 500
+
         return jsonify({
             'message': 'Comment added successfully',
-            'comment': comment
+            'comment': {
+                'id': comment.id,
+                'text': comment.text,
+                'user_id': comment.user_id,
+                'video_id': comment.video_id,
+                'created_at': comment.created_at.isoformat()
+            }
         })
     except Exception as e:
         print(f"Error in add_comment: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/api/videos/<video_id>/ask', methods=['POST'])
+def ask_video_question(video_id):
+    try:
+        data = request.json
+        if not data or not data.get('question'):
+            return jsonify({'error': 'Question text required'}), 400
+
+        video = getVideoById(video_id)
+        if not video:
+            return jsonify({'error': 'Video not found'}), 404
+
+        # Mock implementation - you'll need to add question functionality to your models
+        question = data['question']
+
+        return jsonify({
+            'question': question,
+            'answer': ask_AI(video.url, question)
+        })
+    except Exception as e:
+        print(f"Error in asking video question: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/check-auth')
