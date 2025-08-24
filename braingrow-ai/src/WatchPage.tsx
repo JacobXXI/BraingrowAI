@@ -14,8 +14,9 @@ export default function WatchPage() {
   const [messages, setMessages] = useState<{ sender: 'user' | 'ai'; text: string }[]>([]);
   const [question, setQuestion] = useState('');
   const [isAsking, setIsAsking] = useState(false);
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [duration, setDuration] = useState(0);
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
 
   useEffect(() => {
     // Reset state when component mounts or id changes
@@ -60,8 +61,8 @@ export default function WatchPage() {
       const answer = await askVideoQuestion(
         id,
         userMessage.text,
-        startTime ? Number(startTime) : undefined,
-        endTime ? Number(endTime) : undefined
+        startTime,
+        endTime
       );
       setMessages((prev) => [...prev, { sender: 'ai', text: answer }]);
     } catch (err) {
@@ -80,6 +81,11 @@ export default function WatchPage() {
             controls
             src={video.url}
             poster={video.coverUrl}
+            onLoadedMetadata={(e) => {
+              const dur = Math.floor(e.currentTarget.duration);
+              setDuration(dur);
+              setEndTime(dur);
+            }}
             onError={(e) => {
               const videoElement = e.target as HTMLVideoElement;
               const errorDetails = videoElement.error ? ` (Code: ${videoElement.error.code}, Message: ${videoElement.error.message})` : '';
@@ -133,21 +139,25 @@ export default function WatchPage() {
           </div>
           <div className="time-range">
             <input
-              type="number"
-              min="0"
+              type="range"
+              min={0}
+              max={endTime}
               value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              placeholder="Start (s)"
+              onChange={(e) => setStartTime(Number(e.target.value))}
               disabled={isAsking}
             />
             <input
-              type="number"
-              min="0"
+              type="range"
+              min={startTime}
+              max={duration}
               value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              placeholder="End (s)"
+              onChange={(e) => setEndTime(Number(e.target.value))}
               disabled={isAsking}
             />
+            <div className="time-values">
+              <span>{startTime}s</span>
+              <span>{endTime}s</span>
+            </div>
           </div>
           <div className="chat-input">
             <input

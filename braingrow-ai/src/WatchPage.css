@@ -141,15 +141,20 @@
 
 .time-range {
   display: flex;
-  gap: 5px;
+  flex-direction: column;
   padding: 10px;
   border-top: 1px solid #ccc;
+  gap: 5px;
 }
 
-.time-range input {
-  flex: 1;
-  padding: 5px;
-  box-sizing: border-box;
+.time-range input[type="range"] {
+  width: 100%;
+}
+
+.time-range .time-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
 }
 
 .chat-input {
