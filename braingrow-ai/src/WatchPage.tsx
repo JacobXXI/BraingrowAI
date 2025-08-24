@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { video } from './structures/video';
-import { getVideo } from './request'; // Ensure this function is defined in your request.tsx
+import { getVideo, askVideoQuestion } from './request';
 import './WatchPage.css';
 
 export default function WatchPage() {
@@ -10,6 +10,25 @@ export default function WatchPage() {
   const [video, setVideo] = useState<video | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [videoError, setVideoError] = useState<string | null>(null); // Add error state
+  const [chatOpen, setChatOpen] = useState(false);
+  const [messages, setMessages] = useState<{ sender: 'user' | 'ai'; text: string }[]>([]);
+  const [question, setQuestion] = useState('');
+  const [isAsking, setIsAsking] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
+
+  const handleStartChange = (value: number) => {
+    setStartTime(Math.min(value, endTime));
+  };
+
+  const handleEndChange = (value: number) => {
+    setEndTime(Math.max(value, startTime));
+  };
+
+  const startPercent = duration ? (startTime / duration) * 100 : 0;
+  const endPercent = duration ? (endTime / duration) * 100 : 0;
+  const trackBackground = `linear-gradient(to right, #ccc ${startPercent}%, #2196f3 ${startPercent}%, #2196f3 ${endPercent}%, #ccc ${endPercent}%)`;
 
   useEffect(() => {
     // Reset state when component mounts or id changes
@@ -44,6 +63,28 @@ export default function WatchPage() {
   if (!video) return <div>Video not found</div>;
   if (!video.url) return <div>Invalid video source - no URL provided</div>;
 
+  const handleSend = async () => {
+    if (!id || !question.trim()) return;
+    const userMessage = { sender: 'user' as const, text: question };
+    setMessages((prev) => [...prev, userMessage]);
+    setQuestion('');
+    setIsAsking(true);
+    try {
+      const answer = await askVideoQuestion(
+        id,
+        userMessage.text,
+        startTime,
+        endTime
+      );
+      setMessages((prev) => [...prev, { sender: 'ai', text: answer }]);
+    } catch (err) {
+      console.error(err);
+      setMessages((prev) => [...prev, { sender: 'ai', text: 'Failed to get response' }]);
+    } finally {
+      setIsAsking(false);
+    }
+  };
+
   return (
     <div className="watch-container">
       <div className="video-player-container">
@@ -52,6 +93,11 @@ export default function WatchPage() {
             controls
             src={video.url}
             poster={video.coverUrl}
+            onLoadedMetadata={(e) => {
+              const dur = Math.floor(e.currentTarget.duration);
+              setDuration(dur);
+              setEndTime(dur);
+            }}
             onError={(e) => {
               const videoElement = e.target as HTMLVideoElement;
               const errorDetails = videoElement.error ? ` (Code: ${videoElement.error.code}, Message: ${videoElement.error.message})` : '';
@@ -64,7 +110,14 @@ export default function WatchPage() {
       </div>
 
       <div className="video-info">
-        <h1 className="video-title">{video.title}</h1>
+        <div className="video-header">
+          <h1 className="video-title">{video.title}</h1>
+          {!chatOpen && (
+            <button className="chat-button" onClick={() => setChatOpen(true)}>
+              Chat
+            </button>
+          )}
+        </div>
 
         <div className="video-description">
           <h3>Description</h3>
@@ -82,6 +135,60 @@ export default function WatchPage() {
           </div>
         </div>
       </div>
+
+      {chatOpen && (
+        <div className="chat-window">
+          <div className="chat-header">
+            <span>Ask AI</span>
+            <button onClick={() => setChatOpen(false)}>×</button>
+          </div>
+          <div className="chat-messages">
+            {messages.map((m, i) => (
+              <div key={i} className={`chat-message ${m.sender}`}>
+                {m.text}
+              </div>
+            ))}
+          </div>
+          <div className="time-range">
+            <div className="range-inputs">
+              <input
+                type="range"
+                min={0}
+                max={duration}
+                value={endTime}
+                onChange={(e) => handleEndChange(Number(e.target.value))}
+                disabled={isAsking}
+                className="range-end"
+                style={{ background: trackBackground }}
+              />
+              <input
+                type="range"
+                min={0}
+                max={duration}
+                value={startTime}
+                onChange={(e) => handleStartChange(Number(e.target.value))}
+                disabled={isAsking}
+                className="range-start"
+              />
+            </div>
+            <div className="time-values">
+              <span>{startTime}s</span>
+              <span>{endTime}s</span>
+            </div>
+          </div>
+          <div className="chat-input">
+            <input
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              placeholder="Ask a question..."
+              disabled={isAsking}
+            />
+            <button onClick={handleSend} disabled={isAsking || !question.trim()}>
+              Send
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
