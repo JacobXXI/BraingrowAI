@@ -18,6 +18,18 @@ export default function WatchPage() {
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
 
+  const handleStartChange = (value: number) => {
+    setStartTime(Math.min(value, endTime));
+  };
+
+  const handleEndChange = (value: number) => {
+    setEndTime(Math.max(value, startTime));
+  };
+
+  const startPercent = duration ? (startTime / duration) * 100 : 0;
+  const endPercent = duration ? (endTime / duration) * 100 : 0;
+  const trackBackground = `linear-gradient(to right, #ccc ${startPercent}%, #2196f3 ${startPercent}%, #2196f3 ${endPercent}%, #ccc ${endPercent}%)`;
+
   useEffect(() => {
     // Reset state when component mounts or id changes
     setVideo(null);
@@ -138,22 +150,27 @@ export default function WatchPage() {
             ))}
           </div>
           <div className="time-range">
-            <input
-              type="range"
-              min={0}
-              max={endTime}
-              value={startTime}
-              onChange={(e) => setStartTime(Number(e.target.value))}
-              disabled={isAsking}
-            />
-            <input
-              type="range"
-              min={startTime}
-              max={duration}
-              value={endTime}
-              onChange={(e) => setEndTime(Number(e.target.value))}
-              disabled={isAsking}
-            />
+            <div className="range-inputs">
+              <input
+                type="range"
+                min={0}
+                max={duration}
+                value={endTime}
+                onChange={(e) => handleEndChange(Number(e.target.value))}
+                disabled={isAsking}
+                className="range-end"
+                style={{ background: trackBackground }}
+              />
+              <input
+                type="range"
+                min={0}
+                max={duration}
+                value={startTime}
+                onChange={(e) => handleStartChange(Number(e.target.value))}
+                disabled={isAsking}
+                className="range-start"
+              />
+            </div>
             <div className="time-values">
               <span>{startTime}s</span>
               <span>{endTime}s</span>
