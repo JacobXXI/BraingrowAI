@@ -5,7 +5,11 @@ import jwt
 import datetime
 import traceback
 from functools import wraps
-from video_handler import extract_yt_url, ask_AI
+from video_handler import (
+    extract_yt_url,
+    ask_AI,
+    VertexAICredentialsError,
+)
 from sqlalchemy import inspect, text
 
 # Import everything from the consolidated models file
@@ -358,6 +362,9 @@ def ask_video_question(video_id):
             'question': question,
             'answer': ask_AI(video.url, question)
         })
+    except VertexAICredentialsError as e:
+        print(f"Vertex AI credentials error: {str(e)}")
+        return jsonify({'error': str(e), 'code': 'NO_CREDENTIALS'}), 500
     except Exception as e:
         print(f"Error in asking video question: {str(e)}")
         return jsonify({'error': str(e)}), 500
