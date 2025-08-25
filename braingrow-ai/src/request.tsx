@@ -127,6 +127,13 @@ export const getVideo = async (id: string): Promise<video> => {
   };
 };
 
+export const recognizeVideo = async (id: string): Promise<string> => {
+  const response = await fetch(`${API_BASE}/api/videos/${encodeURIComponent(id)}/recognize`);
+  if (!response.ok) throw new Error('Video recognition failed');
+  const data = await response.json();
+  return data.description;
+};
+
 export const askVideoQuestion = async (
   id: string,
   question: string,

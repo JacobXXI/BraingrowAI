@@ -1,6 +1,8 @@
 from yt_dlp import YoutubeDL
-from google import genai
-from google.genai.types import HttpOptions, Part
+import os
+import mimetypes
+import vertexai
+from vertexai.preview.generative_models import GenerativeModel, Part
 from os import path
 
 ydl_opts = {
@@ -13,17 +15,36 @@ def extract_yt_url(url):
         info = ydl.extract_info(url, download=False)
         return info.get('url', None)
 
-def ask_AI(url, question, start_timestamp = None, end_timestamp = None):
-    client = genai.Client(http_options=HttpOptions(api_version="v1"))
-    response = client.models.generate_content(
-    model="gemini-2.5-flash",
-    contents=[
-        Part.from_uri(
-            file_uri=url,
-            mime_type=path.splitext(url)[1],
-        ),
+def _init_vertex_ai(project_id: str | None = None, location: str = "us-central1"):
+    project_id = "braingrowai"
+    location = os.getenv("australia-southeast2", location)
+    vertexai.init(project=project_id, location=location)
+
+
+def _get_mime_type(url: str) -> str:
+    """Return the MIME type for the given video URL."""
+    mime_type, _ = mimetypes.guess_type(url)
+    return mime_type or "video/mp4"
+
+
+def ask_AI(url, question, start_timestamp=None, end_timestamp=None):
+    _init_vertex_ai()
+    model = GenerativeModel("gemini-2.5-flash")
+    response = model.generate_content([
+        Part.from_uri(uri=url, mime_type=_get_mime_type(url)),
         generate_prompt(question, start_timestamp, end_timestamp),
-    ],)
+    ])
+    return response.text
+
+
+def recognize_video(url):
+    """Use Vertex AI to describe objects and actions in a video."""
+    _init_vertex_ai()
+    model = GenerativeModel("gemini-2.5-flash")
+    response = model.generate_content([
+        Part.from_uri(uri=url, mime_type=_get_mime_type(url)),
+        "Describe the main objects and actions in this video.",
+    ])
     return response.text
 
 def generate_prompt(question, start_timestamp, end_timestamp):

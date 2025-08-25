@@ -96,6 +96,13 @@
   cursor: pointer;
 }
 
+.fullscreen-chat-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
 .chat-window {
   position: fixed;
   bottom: 90px;
