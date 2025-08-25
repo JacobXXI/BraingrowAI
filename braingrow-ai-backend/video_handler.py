@@ -1,5 +1,6 @@
 from yt_dlp import YoutubeDL
 import os
+import mimetypes
 import vertexai
 from vertexai.preview.generative_models import GenerativeModel, Part
 from os import path
@@ -20,11 +21,17 @@ def _init_vertex_ai(project_id: str | None = None, location: str = "us-central1"
     vertexai.init(project=project_id, location=location)
 
 
+def _get_mime_type(url: str) -> str:
+    """Return the MIME type for the given video URL."""
+    mime_type, _ = mimetypes.guess_type(url)
+    return mime_type or "video/mp4"
+
+
 def ask_AI(url, question, start_timestamp=None, end_timestamp=None):
     _init_vertex_ai()
     model = GenerativeModel("gemini-2.5-flash")
     response = model.generate_content([
-        Part.from_uri(file_uri=url, mime_type=path.splitext(url)[1]),
+        Part.from_uri(uri=url, mime_type=_get_mime_type(url)),
         generate_prompt(question, start_timestamp, end_timestamp),
     ])
     return response.text
@@ -35,7 +42,7 @@ def recognize_video(url):
     _init_vertex_ai()
     model = GenerativeModel("gemini-2.5-flash")
     response = model.generate_content([
-        Part.from_uri(file_uri=url, mime_type=path.splitext(url)[1]),
+        Part.from_uri(uri=url, mime_type=_get_mime_type(url)),
         "Describe the main objects and actions in this video.",
     ])
     return response.text
