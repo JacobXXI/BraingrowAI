@@ -47,17 +47,6 @@ def ask_AI(url, question, start_timestamp=None, end_timestamp=None):
     ])
     return response.text
 
-
-def recognize_video(url):
-    """Use Vertex AI to describe objects and actions in a video."""
-    _init_vertex_ai()
-    model = GenerativeModel("gemini-2.5-flash")
-    response = model.generate_content([
-        Part.from_uri(uri=url, mime_type=_get_mime_type(url)),
-        "Describe the main objects and actions in this video.",
-    ])
-    return response.text
-
 def generate_prompt(question, start_timestamp, end_timestamp):
     if start_timestamp and end_timestamp:
         prompt = f"Watch the video from {start_timestamp} to {end_timestamp} and answer the question: {question}"

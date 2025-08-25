@@ -8,7 +8,6 @@ from functools import wraps
 from video_handler import (
     extract_yt_url,
     ask_AI,
-    recognize_video,
     VertexAICredentialsError,
 )
 from sqlalchemy import inspect, text
@@ -368,22 +367,6 @@ def ask_video_question(video_id):
         return jsonify({'error': str(e), 'code': 'NO_CREDENTIALS'}), 500
     except Exception as e:
         print(f"Error in asking video question: {str(e)}")
-        return jsonify({'error': str(e)}), 500
-
-
-@app.route('/api/videos/<video_id>/recognize', methods=['GET'])
-def recognize_video_route(video_id):
-    try:
-        video = getVideoById(video_id)
-        if not video:
-            return jsonify({'error': 'Video not found'}), 404
-        description = recognize_video(video.url)
-        return jsonify({'description': description})
-    except VertexAICredentialsError as e:
-        print(f"Vertex AI credentials error: {str(e)}")
-        return jsonify({'error': str(e), 'code': 'NO_CREDENTIALS'}), 500
-    except Exception as e:
-        print(f"Error in video recognition: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/check-auth')
