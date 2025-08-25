@@ -21,8 +21,8 @@ def extract_yt_url(url):
         return info.get('url', None)
 
 def _init_vertex_ai(project_id: str | None = None, location: str = "us-central1"):
-    project_id = project_id or os.getenv("GOOGLE_CLOUD_PROJECT")
-    location = os.getenv("GOOGLE_CLOUD_REGION", location)
+    project_id = "braingrowai"
+    location ="australia-southeast2"
     try:
         vertexai.init(project=project_id, location=location)
     except DefaultCredentialsError as exc:
