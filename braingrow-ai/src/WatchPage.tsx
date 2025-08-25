@@ -67,7 +67,11 @@ export default function WatchPage() {
           setMessages((prev) => [...prev, { sender: 'ai', text: description }]);
           setHasRecognized(true);
         })
-        .catch((err) => console.error('Error recognizing video:', err));
+        .catch((err) => {
+          console.error('Error recognizing video:', err);
+          const msg = err instanceof Error ? err.message : 'Failed to summarize video';
+          setMessages((prev) => [...prev, { sender: 'ai', text: msg }]);
+        });
     }
   }, [chatOpen, id, hasRecognized]);
 
@@ -100,7 +104,8 @@ export default function WatchPage() {
       setMessages((prev) => [...prev, { sender: 'ai', text: answer }]);
     } catch (err) {
       console.error(err);
-      setMessages((prev) => [...prev, { sender: 'ai', text: 'Failed to get response' }]);
+      const msg = err instanceof Error ? err.message : 'Failed to get response';
+      setMessages((prev) => [...prev, { sender: 'ai', text: msg }]);
     } finally {
       setIsAsking(false);
     }

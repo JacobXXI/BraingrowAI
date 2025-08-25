@@ -4,6 +4,11 @@ import mimetypes
 import vertexai
 from vertexai.preview.generative_models import GenerativeModel, Part
 from os import path
+from google.auth.exceptions import DefaultCredentialsError
+
+
+class VertexAICredentialsError(RuntimeError):
+    """Raised when Google credentials are missing."""
 
 ydl_opts = {
     'format': 'best',
@@ -18,7 +23,13 @@ def extract_yt_url(url):
 def _init_vertex_ai(project_id: str | None = None, location: str = "us-central1"):
     project_id = "braingrowai"
     location = os.getenv("australia-southeast2", location)
-    vertexai.init(project=project_id, location=location)
+    try:
+        vertexai.init(project=project_id, location=location)
+    except DefaultCredentialsError as exc:
+        raise VertexAICredentialsError(
+            "Google Application Default Credentials not found. "
+            "Set up credentials by following https://cloud.google.com/docs/authentication/external/set-up-adc"
+        ) from exc
 
 
 def _get_mime_type(url: str) -> str:
