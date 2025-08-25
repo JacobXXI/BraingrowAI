@@ -1,6 +1,7 @@
 from yt_dlp import YoutubeDL
-from google import genai
-from google.genai.types import HttpOptions, Part
+import os
+import vertexai
+from vertexai.preview.generative_models import GenerativeModel, Part
 from os import path
 
 ydl_opts = {
@@ -13,17 +14,30 @@ def extract_yt_url(url):
         info = ydl.extract_info(url, download=False)
         return info.get('url', None)
 
-def ask_AI(url, question, start_timestamp = None, end_timestamp = None):
-    client = genai.Client(http_options=HttpOptions(api_version="v1"))
-    response = client.models.generate_content(
-    model="gemini-2.5-flash",
-    contents=[
-        Part.from_uri(
-            file_uri=url,
-            mime_type=path.splitext(url)[1],
-        ),
+def _init_vertex_ai(project_id: str | None = None, location: str = "us-central1"):
+    project_id = project_id or os.getenv("GOOGLE_CLOUD_PROJECT")
+    location = os.getenv("GOOGLE_CLOUD_REGION", location)
+    vertexai.init(project=project_id, location=location)
+
+
+def ask_AI(url, question, start_timestamp=None, end_timestamp=None):
+    _init_vertex_ai()
+    model = GenerativeModel("gemini-2.5-flash")
+    response = model.generate_content([
+        Part.from_uri(file_uri=url, mime_type=path.splitext(url)[1]),
         generate_prompt(question, start_timestamp, end_timestamp),
-    ],)
+    ])
+    return response.text
+
+
+def recognize_video(url):
+    """Use Vertex AI to describe objects and actions in a video."""
+    _init_vertex_ai()
+    model = GenerativeModel("gemini-2.5-flash")
+    response = model.generate_content([
+        Part.from_uri(file_uri=url, mime_type=path.splitext(url)[1]),
+        "Describe the main objects and actions in this video.",
+    ])
     return response.text
 
 def generate_prompt(question, start_timestamp, end_timestamp):

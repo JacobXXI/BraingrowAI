@@ -5,7 +5,7 @@ import jwt
 import datetime
 import traceback
 from functools import wraps
-from video_handler import extract_yt_url, ask_AI
+from video_handler import extract_yt_url, ask_AI, recognize_video
 from sqlalchemy import inspect, text
 
 # Import everything from the consolidated models file
@@ -360,6 +360,19 @@ def ask_video_question(video_id):
         })
     except Exception as e:
         print(f"Error in asking video question: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/videos/<video_id>/recognize', methods=['GET'])
+def recognize_video_route(video_id):
+    try:
+        video = getVideoById(video_id)
+        if not video:
+            return jsonify({'error': 'Video not found'}), 404
+        description = recognize_video(video.url)
+        return jsonify({'description': description})
+    except Exception as e:
+        print(f"Error in video recognition: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/check-auth')

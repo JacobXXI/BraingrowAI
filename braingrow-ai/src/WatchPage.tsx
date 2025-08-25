@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { video } from './structures/video';
-import { getVideo, askVideoQuestion } from './request';
+import { getVideo, askVideoQuestion, recognizeVideo } from './request';
 import './WatchPage.css';
 
 export default function WatchPage() {
@@ -17,6 +17,8 @@ export default function WatchPage() {
   const [duration, setDuration] = useState(0);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
+  const [hasRecognized, setHasRecognized] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const handleStartChange = (value: number) => {
     setStartTime(Math.min(value, endTime));
@@ -57,6 +59,25 @@ export default function WatchPage() {
       setVideoError('No video ID provided');
     }
   }, [id, location.state]);
+
+  useEffect(() => {
+    if (chatOpen && id && !hasRecognized) {
+      recognizeVideo(id)
+        .then((description) => {
+          setMessages((prev) => [...prev, { sender: 'ai', text: description }]);
+          setHasRecognized(true);
+        })
+        .catch((err) => console.error('Error recognizing video:', err));
+    }
+  }, [chatOpen, id, hasRecognized]);
+
+  useEffect(() => {
+    const handleFullscreen = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreen);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreen);
+  }, []);
 
   if (isLoading) return <div>Loading video...</div>;
   if (videoError) return <div className="error-message">Error: {videoError}</div>;
@@ -135,6 +156,15 @@ export default function WatchPage() {
           </div>
         </div>
       </div>
+
+      {isFullscreen && !chatOpen && (
+        <button
+          className="chat-button fullscreen-chat-button"
+          onClick={() => setChatOpen(true)}
+        >
+          Chat
+        </button>
+      )}
 
       {chatOpen && (
         <div className="chat-window">
