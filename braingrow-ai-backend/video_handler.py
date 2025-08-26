@@ -1,11 +1,6 @@
 from yt_dlp import YoutubeDL
-import os
-import mimetypes
-import vertexai
-from vertexai.preview.generative_models import GenerativeModel, Part
-from os import path
-from google.auth.exceptions import DefaultCredentialsError
-
+from google import genai
+from google.genai import types
 
 class VertexAICredentialsError(RuntimeError):
     """Raised when Google credentials are missing."""
@@ -20,38 +15,60 @@ def extract_yt_url(url):
         info = ydl.extract_info(url, download=False)
         return info.get('url', None)
 
-def _init_vertex_ai(project_id: str | None = None, location: str = "us-central1"):
-    project_id = "braingrowai"
-    location ="australia-southeast2"
-    try:
-        vertexai.init(project=project_id, location=location)
-    except DefaultCredentialsError as exc:
-        raise VertexAICredentialsError(
-            "Google Application Default Credentials not found. "
-            "Set up credentials by following https://cloud.google.com/docs/authentication/external/set-up-adc"
-        ) from exc
+def ask_AI(video_url, question, start = -1, end = -1):
+  client = genai.Client(
+    vertexai=True,
+    project="braingrowai",
+    location="global",
+  )
+  video = types.Part.from_uri(
+      file_uri=video_url,
+      mime_type="video/mp4"
+  )
+  if start == -1 and end == -1:
+    prompt = types.Part.from_text(text=f"""Watch the provided video. Then, answer the following question based on the video content: {question}""")
+  elif start != -1 and end == -1:
+    prompt = types.Part.from_text(text=f"""Watch the provided video at {start}. Then, answer the following question based on the video content: {question}""")
+  else:
+    prompt = types.Part.from_text(text=f"""Watch the provided video from {start} to {end}. Then, answer the following question based on the video content: {question}""")
+  
+  model = "gemini-2.5-flash-lite"
+  contents = [
+    types.Content(
+      role="user",
+      parts=[
+        video,
+        prompt
+      ]
+    )
+  ]
+  generate_content_config = types.GenerateContentConfig(
+    temperature = 1,
+    top_p = 0.95,
+    max_output_tokens = 65535,
+    safety_settings = [types.SafetySetting(
+      category="HARM_CATEGORY_HATE_SPEECH",
+      threshold="OFF"
+    ),types.SafetySetting(
+      category="HARM_CATEGORY_DANGEROUS_CONTENT",
+      threshold="OFF"
+    ),types.SafetySetting(
+      category="HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      threshold="OFF"
+    ),types.SafetySetting(
+      category="HARM_CATEGORY_HARASSMENT",
+      threshold="OFF"
+    )],
+    thinking_config=types.ThinkingConfig(
+      thinking_budget=0,
+    ),
+  )
 
-
-def _get_mime_type(url: str) -> str:
-    """Return the MIME type for the given video URL."""
-    mime_type, _ = mimetypes.guess_type(url)
-    return mime_type or "video/mp4"
-
-
-def ask_AI(url, question, start_timestamp=None, end_timestamp=None):
-    _init_vertex_ai()
-    model = GenerativeModel("gemini-2.5-flash")
-    response = model.generate_content([
-        Part.from_uri(uri=url, mime_type=_get_mime_type(url)),
-        generate_prompt(question, start_timestamp, end_timestamp),
-    ])
-    return response.text
-
-def generate_prompt(question, start_timestamp, end_timestamp):
-    if start_timestamp and end_timestamp:
-        prompt = f"Watch the video from {start_timestamp} to {end_timestamp} and answer the question: {question}"
-    elif start_timestamp:
-        prompt = f"Watch the frame on {start_timestamp} and answer the question: {question}"
-    else:
-        prompt = f"Answer the question about the video: {question}"
-    return prompt
+  response_text = ""
+  for chunk in client.models.generate_content_stream(
+    model = model,
+    contents = contents,
+    config = generate_content_config,
+    ):
+    response_text += chunk.text or ""
+  return response_text
