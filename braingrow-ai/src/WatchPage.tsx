@@ -10,14 +10,12 @@ export default function WatchPage() {
   const [video, setVideo] = useState<video | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [videoError, setVideoError] = useState<string | null>(null); // Add error state
-  const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState<{ sender: 'user' | 'ai'; text: string }[]>([]);
   const [question, setQuestion] = useState('');
   const [isAsking, setIsAsking] = useState(false);
   const [duration, setDuration] = useState(0);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const handleStartChange = (value: number) => {
     setStartTime(Math.min(value, endTime));
@@ -58,14 +56,6 @@ export default function WatchPage() {
       setVideoError('No video ID provided');
     }
   }, [id, location.state]);
-
-  useEffect(() => {
-    const handleFullscreen = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-    document.addEventListener('fullscreenchange', handleFullscreen);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreen);
-  }, []);
 
   if (isLoading) return <div>Loading video...</div>;
   if (videoError) return <div className="error-message">Error: {videoError}</div>;
@@ -122,11 +112,6 @@ export default function WatchPage() {
       <div className="video-info">
         <div className="video-header">
           <h1 className="video-title">{video.title}</h1>
-          {!chatOpen && (
-            <button className="chat-button" onClick={() => setChatOpen(true)}>
-              Chat
-            </button>
-          )}
         </div>
 
         <div className="video-description">
@@ -134,32 +119,9 @@ export default function WatchPage() {
           <p>{video.description}</p>
         </div>
 
-        <div className="video-comments">
-          <h3>Comments</h3>
-          <div className="comment-input">
-            <textarea placeholder="Add a comment..." />
-            <button className="comment-submit">Post</button>
-          </div>
-          <div className="comments-list">
-            <p>No comments yet. Be the first to comment!</p>
-          </div>
-        </div>
-      </div>
-
-      {isFullscreen && !chatOpen && (
-        <button
-          className="chat-button fullscreen-chat-button"
-          onClick={() => setChatOpen(true)}
-        >
-          Chat
-        </button>
-      )}
-
-      {chatOpen && (
         <div className="chat-window">
           <div className="chat-header">
             <span>Ask AI</span>
-            <button onClick={() => setChatOpen(false)}>×</button>
           </div>
           <div className="chat-messages">
             {messages.map((m, i) => (
@@ -207,7 +169,7 @@ export default function WatchPage() {
             </button>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
