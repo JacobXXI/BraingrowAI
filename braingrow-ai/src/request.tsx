@@ -127,7 +127,6 @@ export const getVideo = async (id: string): Promise<video> => {
   };
 };
 
-
 export const askVideoQuestion = async (
   id: string,
   question: string,

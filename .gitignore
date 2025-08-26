@@ -5,6 +5,7 @@
 *.db3
 *.bak
 *.sql
+*.pyc
 instance/
 __pycache__/
 .env
