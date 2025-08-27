@@ -30,7 +30,7 @@ const ProfilePage: React.FC = () => {
             if (t) parsed[t] = true;
           });
         }
-        setTendencies(parsed);
+        // setTendencies(parsed);
       }
       setLoading(false);
     };
@@ -95,6 +95,7 @@ const ProfilePage: React.FC = () => {
               onClick={() => {
                 if (selectedTopic && !(selectedTopic in tendencies)) {
                   setTendencies((prev) => ({ ...prev, [selectedTopic]: true }));
+                  console.log('Updated:', selectedTopic);
                   setSelectedTopic('');
                 }
               }}
@@ -111,11 +112,13 @@ const ProfilePage: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={enabled}
-                      onChange={() =>
+                      onChange={() => {
                         setTendencies((prev) => ({
                           ...prev,
                           [topic]: !prev[topic]
-                        }))
+                        }));
+                        console.log('Updated:', selectedTopic);
+                      }
                       }
                     />
                     <span className="slider round"></span>
@@ -128,6 +131,7 @@ const ProfilePage: React.FC = () => {
                         delete updated[topic];
                         return updated;
                       });
+                      console.log('Updated:', selectedTopic);
                     }}
                   >
                     ×

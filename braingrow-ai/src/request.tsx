@@ -87,6 +87,7 @@ export const updateTendency = async (
       credentials: 'include',
       body: JSON.stringify({ tendency: JSON.stringify(tendency) })
     });
+    console.log('Update tendency response status:', response.status);
     return response.ok;
   } catch (error) {
     console.error('Update tendency error:', error);
