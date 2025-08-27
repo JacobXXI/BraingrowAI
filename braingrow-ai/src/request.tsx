@@ -48,10 +48,6 @@ export interface UserProfile {
   tendency: string;
   photoUrl: string;
   created_at?: string;
-  session_info?: {
-    login_time?: string;
-    session_permanent?: boolean;
-  };
 }
 
 export const getProfile = async (): Promise<UserProfile | null> => {
