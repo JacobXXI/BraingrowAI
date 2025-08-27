@@ -6,6 +6,9 @@ const ProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [tendencies, setTendencies] = useState<Record<string, boolean>>({});
+  const [selectedTopic, setSelectedTopic] = useState('');
+
+  const allTopics = ['Science', 'Math', 'History', 'Language', 'Technology'];
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -59,45 +62,73 @@ const ProfilePage: React.FC = () => {
               Joined {new Date(userData.created_at).toLocaleString()}
             </p>
           )}
-          {userData.session_info?.login_time && (
-            <p className="profile-join-date">
-              Last login {new Date(userData.session_info.login_time).toLocaleString()}
-            </p>
-          )}
         </div>
       </div>
 
       <div className="profile-content">
         <div className="profile-bio">
           <h2>Learning Tendency</h2>
+          <div className="tendency-add">
+            <select
+              value={selectedTopic}
+              onChange={(e) => setSelectedTopic(e.target.value)}
+            >
+              <option value="">Select a topic</option>
+              {allTopics
+                .filter((t) => !(t in tendencies))
+                .map((topic) => (
+                  <option key={topic} value={topic}>
+                    {topic}
+                  </option>
+                ))}
+            </select>
+            <button
+              onClick={() => {
+                if (selectedTopic && !(selectedTopic in tendencies)) {
+                  setTendencies((prev) => ({ ...prev, [selectedTopic]: true }));
+                  setSelectedTopic('');
+                }
+              }}
+            >
+              Add
+            </button>
+          </div>
           {Object.keys(tendencies).length ? (
             Object.entries(tendencies).map(([topic, enabled]) => (
               <div className="preference-item" key={topic}>
                 <span>{topic}</span>
-                <label className="switch">
-                  <input type="checkbox" checked={enabled} readOnly />
-                  <span className="slider round"></span>
-                </label>
+                <div className="preference-controls">
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={enabled}
+                      onChange={() =>
+                        setTendencies((prev) => ({
+                          ...prev,
+                          [topic]: !prev[topic]
+                        }))
+                      }
+                    />
+                    <span className="slider round"></span>
+                  </label>
+                  <button
+                    className="remove-btn"
+                    onClick={() => {
+                      setTendencies((prev) => {
+                        const updated = { ...prev };
+                        delete updated[topic];
+                        return updated;
+                      });
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
               </div>
             ))
           ) : (
             <p>Not specified</p>
           )}
-        </div>
-
-        <div className="profile-preferences">
-          <h2>Session Info</h2>
-          <div className="preference-item">
-            <span>Persistent Session</span>
-            <label className="switch">
-              <input
-                type="checkbox"
-                checked={!!userData.session_info?.session_permanent}
-                readOnly
-              />
-              <span className="slider round"></span>
-            </label>
-          </div>
         </div>
       </div>
     </div>
