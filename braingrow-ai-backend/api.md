@@ -160,3 +160,29 @@ curl -H "Authorization: <token>" http://localhost:5000/profile
 {"error": "Invalid token"}
 {"error": "Invalid credentials"}
 ```
+
+## POST /api/profile/tendency
+
+Update the authenticated user's learning tendency.
+
+### Authentication
+
+JWT token required in Authorization header
+
+### Request Body
+
+- `tendency` (string, required): New learning tendency
+
+### Response
+
+- On success: `{ "message": "Tendency updated", "tendency": "<value>" }`
+- On failure: Error message with appropriate status code
+
+### Example Request
+
+```bash
+curl -X POST -H "Authorization: <token>" \
+     -H "Content-Type: application/json" \
+     -d '{"tendency":"visual"}' \
+     http://localhost:5000/api/profile/tendency
+```

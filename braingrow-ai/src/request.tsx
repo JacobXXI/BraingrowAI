@@ -73,6 +73,28 @@ export const getProfile = async (): Promise<UserProfile | null> => {
   }
 };
 
+export const updateTendency = async (tendency: string): Promise<boolean> => {
+  try {
+    const token = Cookies.get('authToken');
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`${API_BASE}/api/profile/tendency`, {
+      method: 'POST',
+      headers,
+      credentials: 'include',
+      body: JSON.stringify({ tendency }),
+    });
+    return response.ok;
+  } catch (error) {
+    console.error('Update tendency error:', error);
+    return false;
+  }
+};
+
 export const getRecommandVideo = async(maxVideo: number = 10): Promise<video[]> => {
   const response = await fetch(`${API_BASE}/api/recommendations?maxVideo=${maxVideo}`);
   if (!response.ok) throw new Error('Get recommand video failed');
