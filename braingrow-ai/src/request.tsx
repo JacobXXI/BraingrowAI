@@ -41,14 +41,17 @@ export const isAuthenticated = (): boolean => {
   return !!Cookies.get('authToken');
 };
 
-export interface UserProfile {
-  user_id: number;
-  username: string;
-  email: string;
-  tendency: string;
-  photoUrl: string;
-  created_at?: string;
-}
+  export interface UserProfile {
+    user_id: number;
+    username: string;
+    email: string;
+    tendency?: string;
+    photoUrl: string;
+    session_info?: {
+      login_time?: string;
+      session_permanent?: boolean;
+    };
+  }
 
 export const getProfile = async (): Promise<UserProfile | null> => {
   try {
@@ -59,7 +62,8 @@ export const getProfile = async (): Promise<UserProfile | null> => {
     }
     const response = await fetch(`${API_BASE}/api/profile`, {
       headers,
-      credentials: 'include'
+      credentials: 'include',
+      cache: 'no-store'
     });
     if (!response.ok) return null;
     return await response.json();
