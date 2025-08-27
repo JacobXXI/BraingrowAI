@@ -446,6 +446,7 @@ def profile():
                 'email': getattr(user, 'email', ''),
                 'tendency': getattr(user, 'tendency', ''),
                 'photoUrl': getattr(user, 'photoUrl', ''),
+                'created_at': getattr(user, 'created_at', None).isoformat() if getattr(user, 'created_at', None) else None,
                 'session_info': {
                     'login_time': session.get('login_time'),
                     'session_permanent': session.permanent

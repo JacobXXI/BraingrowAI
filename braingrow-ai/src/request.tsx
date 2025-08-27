@@ -47,6 +47,7 @@ export interface UserProfile {
   email: string;
   tendency: string;
   photoUrl: string;
+  created_at?: string;
   session_info?: {
     login_time?: string;
     session_permanent?: boolean;
