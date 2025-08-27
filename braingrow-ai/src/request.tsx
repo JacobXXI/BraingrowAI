@@ -148,9 +148,13 @@ export const askVideoQuestion = async (
   return data.answer;
 };
 
-export const signup = async (email: string, password: string, name: string): Promise<{ success: boolean; token?: string }> => {
+export const signup = async (
+  email: string,
+  password: string,
+  name: string
+): Promise<{ success: boolean; token?: string }> => {
   try {
-    const response = await fetch('https://localhost:3000/api/signup', {
+    const response = await fetch(`${API_BASE}/api/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
