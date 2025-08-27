@@ -36,6 +36,7 @@ const ProfilePage: React.FC = () => {
         <div className="profile-info">
           <h1 className="profile-name">{userData.username}</h1>
           <p className="profile-email">{userData.email}</p>
+          <p className="profile-tendency">Current tendency: {userData.tendency || 'Not specified'}</p>
           {userData.session_info?.login_time && (
             <p className="profile-join-date">
               Logged in {new Date(userData.session_info.login_time).toLocaleString()}
