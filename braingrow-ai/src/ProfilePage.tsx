@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './ProfilePage.css';
-import { getProfile, UserProfile } from './request';
+import { getProfile, UserProfile, updateTendency } from './request';
 
 const ProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [tendencies, setTendencies] = useState<Record<string, boolean>>({});
   const [selectedTopic, setSelectedTopic] = useState('');
+  const initialLoad = useRef(true);
 
   const allTopics = ['Science', 'Math', 'History', 'Language', 'Technology'];
 
@@ -35,6 +36,14 @@ const ProfilePage: React.FC = () => {
     };
     fetchProfile();
   }, []);
+
+  useEffect(() => {
+    if (initialLoad.current) {
+      initialLoad.current = false;
+    } else {
+      updateTendency(tendencies);
+    }
+  }, [tendencies]);
 
   if (loading) {
     return <div className="profile-container">Loading...</div>;

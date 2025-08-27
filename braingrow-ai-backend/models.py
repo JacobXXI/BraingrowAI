@@ -154,3 +154,16 @@ def userProfile(user_id):
     except Exception as e:
         print(f"Error in userProfile: {e}")
         return None
+
+def updateUserTendency(user_id, tendency):
+    try:
+        user = User.query.get(user_id)
+        if not user:
+            return False
+        user.tendency = tendency
+        db.session.commit()
+        return True
+    except Exception as e:
+        print(f"Error in updateUserTendency: {e}")
+        db.session.rollback()
+        return False

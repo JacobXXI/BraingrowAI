@@ -17,7 +17,7 @@ from models import (
     db, Video, User, Comment,
     searchVideo, getVideoById, addVideo,
     userLogin, userRegister, userProfile, getRecommendedVideos,
-    addComment, getCommentsByVideo
+    addComment, getCommentsByVideo, updateUserTendency
 )
 
 app = Flask(__name__)
@@ -451,6 +451,21 @@ def profile():
         return jsonify({'error': 'User not found'}), 404
     except Exception as e:
         print(f"Error in profile: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/api/profile/tendency', methods=['PUT'])
+@login_required
+def update_tendency():
+    try:
+        data = request.json
+        if not data or 'tendency' not in data:
+            return jsonify({'error': 'tendency required'}), 400
+        success = updateUserTendency(request.current_user_id, data['tendency'])
+        if success:
+            return jsonify({'message': 'Tendency updated'})
+        return jsonify({'error': 'Failed to update tendency'}), 500
+    except Exception as e:
+        print(f"Error in update_tendency: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/protected-search')
