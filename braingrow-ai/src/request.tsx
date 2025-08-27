@@ -171,25 +171,3 @@ export const signup = async (email: string, password: string, name: string): Pro
     return { success: false };
   }
 };
-
-export const addComment = async (videoId: string, text: string): Promise<{ success: boolean; comment?: unknown }> => {
-  try {
-    const token = Cookies.get('authToken');
-    if (!token) return { success: false };
-
-    const response = await fetch(`https://localhost:3000/api/videos/${videoId}/comments`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ text })
-    });
-
-    const data = await response.json();
-    return { success: response.ok, comment: data.comment };
-  } catch (error) {
-    console.error('Add comment error:', error);
-    return { success: false };
-  }
-};
