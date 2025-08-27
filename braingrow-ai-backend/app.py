@@ -468,6 +468,27 @@ def update_tendency():
         print(f"Error in update_tendency: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/profile/tendency', methods=['POST'])
+@login_required
+def update_tendency():
+    try:
+        data = request.json or {}
+        tendency = data.get('tendency')
+        if not tendency:
+            return jsonify({'error': 'Tendency required'}), 400
+
+        user = userProfile(request.current_user_id)
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+
+        user.tendency = tendency
+        db.session.commit()
+        return jsonify({'message': 'Tendency updated', 'tendency': user.tendency})
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error in update_tendency: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/protected-search')
 @login_required
 def protected_search():

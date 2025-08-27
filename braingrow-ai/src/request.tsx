@@ -47,10 +47,7 @@ export const isAuthenticated = (): boolean => {
     email: string;
     tendency?: string;
     photoUrl: string;
-    session_info?: {
-      login_time?: string;
-      session_permanent?: boolean;
-    };
+    created_at: string;
   }
 
 export const getProfile = async (): Promise<UserProfile | null> => {
