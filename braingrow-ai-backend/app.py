@@ -4,6 +4,7 @@ from flask_cors import CORS
 import jwt
 import datetime
 import traceback
+import json
 from functools import wraps
 from video_handler import (
     extract_yt_url,
@@ -444,7 +445,7 @@ def profile():
                 'user_id': user.id,
                 'username': getattr(user, 'username', user.email),
                 'email': getattr(user, 'email', ''),
-                'tendency': getattr(user, 'tendency', ''),
+                'tendency': json.loads(user.tendency) if getattr(user, 'tendency', None) else None,
                 'photoUrl': getattr(user, 'photoUrl', ''),
                 'session_info': {
                     'login_time': session.get('login_time'),
@@ -469,9 +470,9 @@ def update_tendency():
         if not user:
             return jsonify({'error': 'User not found'}), 404
 
-        user.tendency = tendency
+        user.tendency = json.dumps(tendency)
         db.session.commit()
-        return jsonify({'message': 'Tendency updated', 'tendency': user.tendency})
+        return jsonify({'message': 'Tendency updated', 'tendency': tendency})
     except Exception as e:
         db.session.rollback()
         print(f"Error in update_tendency: {str(e)}")

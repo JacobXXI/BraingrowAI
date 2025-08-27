@@ -41,17 +41,22 @@ export const isAuthenticated = (): boolean => {
   return !!Cookies.get('authToken');
 };
 
-  export interface UserProfile {
-    user_id: number;
-    username: string;
-    email: string;
-    tendency?: string;
-    photoUrl: string;
-    session_info?: {
-      login_time?: string;
-      session_permanent?: boolean;
-    };
-  }
+export interface Tendency {
+  name: string;
+  [key: string]: unknown;
+}
+
+export interface UserProfile {
+  user_id: number;
+  username: string;
+  email: string;
+  tendency?: Tendency;
+  photoUrl: string;
+  session_info?: {
+    login_time?: string;
+    session_permanent?: boolean;
+  };
+}
 
 export const getProfile = async (): Promise<UserProfile | null> => {
   try {
@@ -66,14 +71,22 @@ export const getProfile = async (): Promise<UserProfile | null> => {
       cache: 'no-store'
     });
     if (!response.ok) return null;
-    return await response.json();
+    const data = await response.json();
+    if (data?.tendency && typeof data.tendency === 'string') {
+      try {
+        data.tendency = JSON.parse(data.tendency);
+      } catch {
+        /* ignore parse errors */
+      }
+    }
+    return data;
   } catch (error) {
     console.error('Profile fetch error:', error);
     return null;
   }
 };
 
-export const updateTendency = async (tendency: string): Promise<boolean> => {
+export const updateTendency = async (tendency: Tendency): Promise<boolean> => {
   try {
     const token = Cookies.get('authToken');
     const headers: Record<string, string> = {

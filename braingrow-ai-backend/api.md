@@ -132,7 +132,7 @@ JWT token required in Authorization header
 
 - `user_id` (integer): User ID
 - `username` (string): Username
-- `tendency` (string): User's learning tendency/preference
+- `tendency` (object): User's learning tendency/preference
 - `photoUrl` (string): URL to user's profile photo
 
 ### Example Request
@@ -147,7 +147,7 @@ curl -H "Authorization: <token>" http://localhost:5000/profile
 {
   "user_id": 1,
   "username": "testuser",
-  "tendency": "visual",
+  "tendency": { "name": "visual" },
   "photoUrl": "/profile/photo1.jpg"
 }
 ```
@@ -171,11 +171,11 @@ JWT token required in Authorization header
 
 ### Request Body
 
-- `tendency` (string, required): New learning tendency
+- `tendency` (object, required): New learning tendency
 
 ### Response
 
-- On success: `{ "message": "Tendency updated", "tendency": "<value>" }`
+- On success: `{ "message": "Tendency updated", "tendency": { ... } }`
 - On failure: Error message with appropriate status code
 
 ### Example Request
@@ -183,6 +183,6 @@ JWT token required in Authorization header
 ```bash
 curl -X POST -H "Authorization: <token>" \
      -H "Content-Type: application/json" \
-     -d '{"tendency":"visual"}' \
+     -d '{"tendency":{"name":"visual"}}' \
      http://localhost:5000/api/profile/tendency
 ```
