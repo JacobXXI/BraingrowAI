@@ -62,6 +62,27 @@ export default function WatchPage() {
   if (!video) return <div>Video not found</div>;
   if (!video.url) return <div>Invalid video source - no URL provided</div>;
 
+  const isYouTubeUrl = (url: string) => /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i.test(url);
+  const extractYouTubeId = (url: string): string | null => {
+    try {
+      const u = new URL(url);
+      if (u.hostname.includes('youtu.be')) {
+        return u.pathname.slice(1) || null;
+      }
+      if (u.hostname.includes('youtube.com')) {
+        if (u.pathname === '/watch') return u.searchParams.get('v');
+        const parts = u.pathname.split('/').filter(Boolean);
+        const idx = parts.indexOf('embed');
+        if (idx >= 0 && parts[idx + 1]) return parts[idx + 1];
+      }
+    } catch {
+      // ignore
+    }
+    return null;
+  };
+  const ytId = isYouTubeUrl(video.url) ? extractYouTubeId(video.url) : null;
+  const ytEmbed = ytId ? `https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1` : null;
+
   const handleSend = async () => {
     if (!id || !question.trim()) return;
     const userMessage = { sender: 'user' as const, text: question };
@@ -89,23 +110,32 @@ export default function WatchPage() {
     <div className="watch-container">
       <div className="video-player-container">
         <div className="video-player">
-          <video
-            controls
-            src={video.url}
-            poster={video.coverUrl}
-            onLoadedMetadata={(e) => {
-              const dur = Math.floor(e.currentTarget.duration);
-              setDuration(dur);
-              setEndTime(dur);
-            }}
-            onError={(e) => {
-              const videoElement = e.target as HTMLVideoElement;
-              const errorDetails = videoElement.error ? ` (Code: ${videoElement.error.code}, Message: ${videoElement.error.message})` : '';
-              setVideoError(`Failed to load video player${errorDetails}`);
-              console.error('Video element error details:', videoElement.error);
-              console.error('Attempted video URL:', video.url);
-            }}
-          />
+          {ytEmbed ? (
+            <iframe
+              src={ytEmbed}
+              title={video.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          ) : (
+            <video
+              controls
+              src={video.url}
+              poster={video.coverUrl}
+              onLoadedMetadata={(e) => {
+                const dur = Math.floor(e.currentTarget.duration);
+                setDuration(dur);
+                setEndTime(dur);
+              }}
+              onError={(e) => {
+                const videoElement = e.target as HTMLVideoElement;
+                const errorDetails = videoElement.error ? ` (Code: ${videoElement.error.code}, Message: ${videoElement.error.message})` : '';
+                setVideoError(`Failed to load video player${errorDetails}`);
+                console.error('Video element error details:', videoElement.error);
+                console.error('Attempted video URL:', video.url);
+              }}
+            />
+          )}
         </div>
       </div>
 

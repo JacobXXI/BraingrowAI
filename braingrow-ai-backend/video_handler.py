@@ -1,19 +1,8 @@
-from yt_dlp import YoutubeDL
 from google import genai
 from google.genai import types
 
 class VertexAICredentialsError(RuntimeError):
     """Raised when Google credentials are missing."""
-
-ydl_opts = {
-    'format': 'best',
-    'noplaylist': True  # if you only want a single video
-}
-
-def extract_yt_url(url):
-    with YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=False)
-        return info.get('url', None)
 
 def ask_AI(video_url, question, start = -1, end = -1):
   client = genai.Client(
