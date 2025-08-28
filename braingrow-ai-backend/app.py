@@ -165,7 +165,8 @@ def get_video(video_id):
                 'publishedAt': getattr(video, 'date', datetime.datetime.now()).isoformat(),
                 'category': getattr(video, 'category', 'General'),
                 'viewCount': getattr(video, 'views', 0),
-                'url': extract_yt_url(video.url),
+                # Return the canonical YouTube URL instead of a direct stream URL
+                'url': video.url,
                 'coverUrl': video.imageUrl
             })
         return jsonify({'error': 'Video not found'}), 404

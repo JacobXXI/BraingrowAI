@@ -22,7 +22,8 @@
   border-radius: 8px;
 }
 
-.video-player video {
+.video-player video,
+.video-player iframe {
   position: absolute;
   top: 0;
   left: 0;
