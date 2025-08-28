@@ -5,6 +5,7 @@ import Footer from './structures/Footer';
 import { HomePage } from './HomePage';
 import SearchPage from './SearchPage';
 import LoginPage from './LoginPage';
+import SignUpPage from './SignUpPage';
 import WatchPage from './WatchPage';
 import ProfilePage from './ProfilePage';
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
           <Route path="/watch/:id" element={<WatchPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Routes>
