@@ -1,7 +1,9 @@
 import Cookies from 'js-cookie';
 import { video } from './structures/video';
 
-const API_BASE = 'http://localhost:8080';
+// Use same-origin base in dev so Vite proxy forwards /api to backend (no CORS/preflight)
+const API_BASE = (typeof import.meta !== 'undefined' && (import.meta as any).env?.DEV) ? '' : 'http://localhost:8080';
+const ABS_BASE = (typeof window !== 'undefined') ? window.location.origin : API_BASE;
 
 export const login = async (email: string, password: string): Promise<{ success: boolean; token?: string }> => {
   try {
@@ -41,34 +43,47 @@ export const isAuthenticated = (): boolean => {
   return !!Cookies.get('authToken');
 };
 
-export interface UserProfile {
-  user_id: number;
-  username: string;
-  email: string;
-  tendency: string;
-  photoUrl: string;
-  session_info?: {
-    login_time?: string;
-    session_permanent?: boolean;
-  };
-}
+  export interface UserProfile {
+    user_id: number;
+    username: string;
+    email: string;
+    tendency?: string;
+    photoUrl: string;
+    created_at: string;
+  }
 
 export const getProfile = async (): Promise<UserProfile | null> => {
   try {
-    const token = Cookies.get('authToken');
-    const headers: Record<string, string> = {};
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
     const response = await fetch(`${API_BASE}/api/profile`, {
-      headers,
-      credentials: 'include'
+      credentials: 'include',
+      cache: 'no-store'
     });
     if (!response.ok) return null;
     return await response.json();
   } catch (error) {
     console.error('Profile fetch error:', error);
     return null;
+  }
+};
+
+export const updateTendency = async (
+  tendency: Record<string, boolean>
+): Promise<boolean> => {
+  try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json'
+    };
+    const response = await fetch(`${API_BASE}/api/profile/tendency`, {
+      method: 'PUT',
+      headers,
+      credentials: 'include',
+      body: JSON.stringify({ tendency: JSON.stringify(tendency) })
+    });
+    console.log('Update tendency response status:', response.status);
+    return response.ok;
+  } catch (error) {
+    console.error('Update tendency error:', error);
+    return false;
   }
 };
 
@@ -86,7 +101,7 @@ export const getRecommandVideo = async(maxVideo: number = 10): Promise<video[]> 
     category: item.category,
     views: item.viewCount,
     url: item.videoUrl,
-    coverUrl: new URL(item.imageUrl, API_BASE).href
+    coverUrl: new URL(item.imageUrl, ABS_BASE).href
   }));
 }
 
@@ -105,8 +120,38 @@ export const search = async (query: string, maxVideo: number = 10): Promise<vide
     category: item.category,
     views: item.viewCount,
     url: item.url,
-    coverUrl: new URL(item.imageUrl, API_BASE).href
+    coverUrl: new URL(item.imageUrl, ABS_BASE).href
   }));
+};
+
+export const updateProfile = async (payload: { username?: string; photoUrl?: string }): Promise<UserProfile> => {
+  const response = await fetch(`${API_BASE}/api/profile`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(payload)
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err?.error || 'Failed to update profile');
+  }
+  return response.json();
+};
+
+export const uploadProfilePhoto = async (file: File): Promise<string> => {
+  const form = new FormData();
+  form.append('photo', file);
+  const response = await fetch(`${API_BASE}/api/profile/photo`, {
+    method: 'POST',
+    credentials: 'include',
+    body: form
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err?.error || 'Failed to upload photo');
+  }
+  const data = await response.json();
+  return data.photoUrl as string;
 };
 
 export const getVideo = async (id: string): Promise<video> => {
@@ -122,8 +167,8 @@ export const getVideo = async (id: string): Promise<video> => {
     date: new Date(rawData.publishedAt),
     category: rawData.category,
     views: rawData.viewCount,
-    url: rawData.url.startsWith('http') ? rawData.url : new URL(rawData.url, API_BASE).href,
-    coverUrl: rawData.coverUrl.startsWith('http') ? rawData.coverUrl : new URL(rawData.coverUrl, API_BASE).href
+    url: rawData.url.startsWith('http') ? rawData.url : new URL(rawData.url, ABS_BASE).href,
+    coverUrl: rawData.coverUrl.startsWith('http') ? rawData.coverUrl : new URL(rawData.coverUrl, ABS_BASE).href
   };
 };
 
