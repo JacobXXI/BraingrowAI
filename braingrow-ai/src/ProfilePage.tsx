@@ -1,13 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './ProfilePage.css';
-import { getProfile, UserProfile, updateTendency } from './request';
+import { getProfile, UserProfile, updateTendency, updateProfile, uploadProfilePhoto } from './request';
 
 const ProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [tendencies, setTendencies] = useState<Record<string, boolean>>({});
   const [selectedTopic, setSelectedTopic] = useState('');
-  const initialLoad = useRef(true);
+  // Track whether a tendencies change was user-initiated
+  const dirtyRef = useRef(false);
+  const [editing, setEditing] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [tempPhotoUrl, setTempPhotoUrl] = useState<string | null>(null);
 
   const allTopics = ['Science', 'Math', 'History', 'Language', 'Technology'];
 
@@ -15,6 +21,7 @@ const ProfilePage: React.FC = () => {
     const fetchProfile = async () => {
       const data = await getProfile();
       setUserData(data);
+      if (data?.username) setNewUsername(data.username);
       if (data?.tendency) {
         const parsed: Record<string, boolean> = {};
         try {
@@ -30,7 +37,7 @@ const ProfilePage: React.FC = () => {
             if (t) parsed[t] = true;
           });
         }
-        // setTendencies(parsed);
+        setTendencies(parsed);
       }
       setLoading(false);
     };
@@ -38,11 +45,10 @@ const ProfilePage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (initialLoad.current) {
-      initialLoad.current = false;
-    } else {
-      updateTendency(tendencies);
-    }
+    // Only push updates when the user changed tendencies
+    if (!dirtyRef.current) return;
+    dirtyRef.current = false;
+    updateTendency(tendencies);
   }, [tendencies]);
 
   if (loading) {
@@ -58,19 +64,94 @@ const ProfilePage: React.FC = () => {
       <div className="profile-header">
         <div className="profile-avatar">
           <img
-            src={userData.photoUrl || 'https://via.placeholder.com/150'}
+            src={tempPhotoUrl || userData.photoUrl || 'https://via.placeholder.com/150'}
             alt="Profile"
             className="avatar-image"
           />
+          {editing && (
+            <>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  setUploading(true);
+                  try {
+                    const url = await uploadProfilePhoto(file);
+                    setTempPhotoUrl(url);
+                  } catch (err) {
+                    console.error(err);
+                    alert((err as Error).message);
+                  } finally {
+                    setUploading(false);
+                  }
+                }}
+                style={{ marginTop: '8px' }}
+              />
+              {uploading && <div>Uploading...</div>}
+            </>
+          )}
         </div>
         <div className="profile-info">
-          <h1 className="profile-name">{userData.username}</h1>
+          {editing ? (
+            <input
+              value={newUsername}
+              onChange={(e) => setNewUsername(e.target.value)}
+              className="profile-name"
+              style={{ fontSize: '1.75rem', padding: '6px', width: '100%' }}
+            />
+          ) : (
+            <h1 className="profile-name">{userData.username}</h1>
+          )}
           <p className="profile-email">{userData.email}</p>
           {userData.created_at && (
             <p className="profile-join-date">
               Joined {new Date(userData.created_at).toLocaleString()}
             </p>
           )}
+          <div style={{ marginTop: '8px' }}>
+            {!editing ? (
+              <button onClick={() => setEditing(true)} title="Edit profile">
+                ✎ Edit
+              </button>
+            ) : (
+              <>
+                <button
+                  disabled={saving}
+                  onClick={async () => {
+                    setSaving(true);
+                    try {
+                      const updated = await updateProfile({
+                        username: newUsername || undefined,
+                        photoUrl: tempPhotoUrl || undefined
+                      });
+                      setUserData(updated);
+                      setEditing(false);
+                      setTempPhotoUrl(null);
+                    } catch (err) {
+                      console.error(err);
+                      alert((err as Error).message);
+                    } finally {
+                      setSaving(false);
+                    }
+                  }}
+                  style={{ marginRight: '8px' }}
+                >
+                  {saving ? 'Saving...' : 'Save'}
+                </button>
+                <button
+                  onClick={() => {
+                    setEditing(false);
+                    setNewUsername(userData.username);
+                    setTempPhotoUrl(null);
+                  }}
+                >
+                  Cancel
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -94,8 +175,8 @@ const ProfilePage: React.FC = () => {
             <button
               onClick={() => {
                 if (selectedTopic && !(selectedTopic in tendencies)) {
+                  dirtyRef.current = true;
                   setTendencies((prev) => ({ ...prev, [selectedTopic]: true }));
-                  console.log('Updated:', selectedTopic);
                   setSelectedTopic('');
                 }
               }}
@@ -113,11 +194,11 @@ const ProfilePage: React.FC = () => {
                       type="checkbox"
                       checked={enabled}
                       onChange={() => {
+                        dirtyRef.current = true;
                         setTendencies((prev) => ({
                           ...prev,
                           [topic]: !prev[topic]
                         }));
-                        console.log('Updated:', selectedTopic);
                       }
                       }
                     />
@@ -126,12 +207,12 @@ const ProfilePage: React.FC = () => {
                   <button
                     className="remove-btn"
                     onClick={() => {
+                      dirtyRef.current = true;
                       setTendencies((prev) => {
                         const updated = { ...prev };
                         delete updated[topic];
                         return updated;
                       });
-                      console.log('Updated:', selectedTopic);
                     }}
                   >
                     ×

@@ -11,13 +11,17 @@ from video_handler import (
     VertexAICredentialsError,
 )
 from sqlalchemy import inspect, text
+import os
+from werkzeug.utils import secure_filename
+import urllib.request
+import mimetypes
 
 # Import everything from the consolidated models file
 from models import (
     db, Video, User, Comment,
     searchVideo, getVideoById, addVideo,
     userLogin, userRegister, userProfile, getRecommendedVideos,
-    addComment, getCommentsByVideo, updateUserTendency
+    addComment, getCommentsByVideo, updateUserTendency, updateUserProfile
 )
 
 app = Flask(__name__)
@@ -37,6 +41,13 @@ CORS(app, origins=[
     "http://localhost:5173",
     "https://localhost:3000"  # Added for your frontend auth endpoints
 ], supports_credentials=True)
+
+# Ensure CORS preflights never trigger route logic
+@app.before_request
+def _short_circuit_options_preflight():
+    if request.method == 'OPTIONS':
+        # Let Flask-CORS add the appropriate headers in after_request
+        return ('', 204)
 
 # Create database tables and ensure reaction columns exist
 def ensure_reaction_columns():
@@ -194,10 +205,10 @@ def login():
             if remember_me:
                 session.permanent = True
                 app.permanent_session_lifetime = datetime.timedelta(days=30)
-                token_expiry = datetime.datetime.utcnow() + datetime.timedelta(days=30)
+                token_expiry = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
             else:
                 session.permanent = False
-                token_expiry = datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+                token_expiry = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=24)
             
             # Create JWT token
             token = jwt.encode({
@@ -270,7 +281,7 @@ def signup():
             session['login_time'] = datetime.datetime.now().isoformat()
             
             # Create JWT token
-            token_expiry = datetime.datetime.utcnow() + datetime.timedelta(days=7)
+            token_expiry = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=7)
             token = jwt.encode({
                 'user_id': user.id,
                 'username': user.username,
@@ -466,6 +477,82 @@ def update_tendency():
         return jsonify({'error': 'Failed to update tendency'}), 500
     except Exception as e:
         print(f"Error in update_tendency: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/profile', methods=['PUT'])
+@login_required
+def update_profile():
+    try:
+        data = request.json or {}
+        username = data.get('username')
+        photoUrl = data.get('photoUrl')
+        # If client passed a remote URL, download and store it locally
+        if photoUrl and isinstance(photoUrl, str) and photoUrl.startswith(('http://', 'https://')):
+            try:
+                # Fetch remote image
+                with urllib.request.urlopen(photoUrl) as resp:
+                    content = resp.read()
+                    ctype = resp.headers.get_content_type() if hasattr(resp.headers, 'get_content_type') else resp.headers.get('Content-Type', '')
+                # Guess extension from content-type or URL
+                ext = mimetypes.guess_extension(ctype) if ctype else None
+                if not ext:
+                    parsed_ext = os.path.splitext(urllib.parse.urlparse(photoUrl).path)[1]
+                    ext = parsed_ext if parsed_ext else '.jpg'
+                # Ensure uploads directory exists
+                upload_dir = os.path.join(os.path.dirname(__file__), 'static', 'uploads')
+                os.makedirs(upload_dir, exist_ok=True)
+                unique_name = f"user{request.current_user_id}_{int(datetime.datetime.now(datetime.timezone.utc).timestamp())}{ext}"
+                filepath = os.path.join(upload_dir, secure_filename(unique_name))
+                with open(filepath, 'wb') as f:
+                    f.write(content)
+                # Replace external URL with local static path
+                photoUrl = f"/static/uploads/{unique_name}"
+            except Exception as e:
+                print(f"Failed to download photoUrl: {photoUrl} err={e}")
+                return jsonify({'error': 'Failed to download photo'}), 400
+        success, err = updateUserProfile(request.current_user_id, username=username, photoUrl=photoUrl)
+        if not success:
+            return jsonify({'error': err or 'Failed to update profile'}), 400
+        user = userProfile(request.current_user_id)
+        return jsonify({
+            'user_id': user.id,
+            'username': getattr(user, 'username', user.email),
+            'email': getattr(user, 'email', ''),
+            'tendency': getattr(user, 'tendency', ''),
+            'photoUrl': getattr(user, 'photoUrl', ''),
+            'created_at': getattr(user, 'created_at', None).isoformat() if getattr(user, 'created_at', None) else None
+        })
+    except Exception as e:
+        print(f"Error in update_profile: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/profile/photo', methods=['POST'])
+@login_required
+def upload_profile_photo():
+    try:
+        if 'photo' not in request.files:
+            return jsonify({'error': 'No photo file provided'}), 400
+        file = request.files['photo']
+        if file.filename == '':
+            return jsonify({'error': 'Empty filename'}), 400
+        filename = secure_filename(file.filename)
+        # Ensure uploads directory exists under static
+        upload_dir = os.path.join(os.path.dirname(__file__), 'static', 'uploads')
+        os.makedirs(upload_dir, exist_ok=True)
+        # Make filename unique per user
+        name, ext = os.path.splitext(filename)
+        unique_name = f"user{request.current_user_id}_{int(datetime.datetime.now(datetime.timezone.utc).timestamp())}{ext or '.png'}"
+        filepath = os.path.join(upload_dir, unique_name)
+        file.save(filepath)
+        # Build a URL to the static file (served by Flask static folder)
+        public_url = f"/static/uploads/{unique_name}"
+        # Persist on user
+        success, err = updateUserProfile(request.current_user_id, photoUrl=public_url)
+        if not success:
+            return jsonify({'error': err or 'Failed to save photo'}), 400
+        return jsonify({'photoUrl': public_url})
+    except Exception as e:
+        print(f"Error in upload_profile_photo: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/protected-search')

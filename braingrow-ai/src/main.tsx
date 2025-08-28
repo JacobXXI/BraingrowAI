@@ -4,9 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <BrowserRouter basename="/braingrow-ai">
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+  // Disable StrictMode during dev to avoid double effects/fetches
+  <BrowserRouter basename="/braingrow-ai">
+    <App />
+  </BrowserRouter>
 );

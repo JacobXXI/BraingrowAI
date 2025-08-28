@@ -167,3 +167,24 @@ def updateUserTendency(user_id, tendency):
         print(f"Error in updateUserTendency: {e}")
         db.session.rollback()
         return False
+
+def updateUserProfile(user_id, username=None, photoUrl=None):
+    try:
+        user = User.query.get(user_id)
+        if not user:
+            return False, 'User not found'
+        if username is not None:
+            # Ensure username uniqueness if changed
+            if username != user.username:
+                existing = User.query.filter_by(username=username).first()
+                if existing:
+                    return False, 'Username already taken'
+            user.username = username
+        if photoUrl is not None:
+            user.photoUrl = photoUrl
+        db.session.commit()
+        return True, None
+    except Exception as e:
+        print(f"Error in updateUserProfile: {e}")
+        db.session.rollback()
+        return False, str(e)
