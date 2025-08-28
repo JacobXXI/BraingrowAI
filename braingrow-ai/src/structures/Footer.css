@@ -29,19 +29,7 @@
   object-fit: contain;
 }
 
-.social-icons {
-  display: flex;
-  gap: 1rem;
-}
-
-.social-icon {
-  width: 24px;
-  height: 24px;
-}
-
-.youtube-icon {
-  height: 18px;
-}
+/* removed social icons */
 
 .hot-topics-section {
   display: flex;

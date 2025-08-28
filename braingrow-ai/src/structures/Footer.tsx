@@ -2,10 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
 import logo from '../assets/logo.png';
-import xLogo from '../assets/x-logo.svg';
-import instagramLogo from '../assets/instagram-logo.svg';
-import youtubeLogo from '../assets/youtube-logo.svg';
-import linkedinLogo from '../assets/linkedin-logo.svg';
 
 const Footer: React.FC = () => {
   const hotTopics = [
@@ -21,16 +17,10 @@ const Footer: React.FC = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
-        {/* Logo and Social Icons */}
+        {/* Logo */}
         <div className="logo-section">
           <div className="logo-container">
             <img src={logo} alt="Logo" className="footer-logo" />
-          </div>
-          <div className="social-icons">
-            <a href="#" aria-label="X"><img src={xLogo} alt="X" className="social-icon" /></a>
-            <a href="#" aria-label="Instagram"><img src={instagramLogo} alt="Instagram" className="social-icon" /></a>
-            <a href="#" aria-label="YouTube"><img src={youtubeLogo} alt="YouTube" className="social-icon youtube-icon" /></a>
-            <a href="#" aria-label="LinkedIn"><img src={linkedinLogo} alt="LinkedIn" className="social-icon" /></a>
           </div>
         </div>
 
