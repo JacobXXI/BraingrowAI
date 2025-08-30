@@ -109,6 +109,26 @@
   gap: 5px;
 }
 
+.time-range .time-range-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.time-range .clear-selection {
+  background: transparent;
+  color: #666;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.85rem;
+}
+
+.time-range .clear-selection:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .time-range .range-inputs {
   position: relative;
   height: 30px;

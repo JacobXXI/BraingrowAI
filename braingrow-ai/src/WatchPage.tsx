@@ -16,6 +16,12 @@ export default function WatchPage() {
   const [duration, setDuration] = useState(0);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
+  const clearSelection = () => {
+    if (duration > 0) {
+      setStartTime(0);
+      setEndTime(duration);
+    }
+  };
 
   const handleStartChange = (value: number) => {
     setStartTime(Math.min(value, endTime));
@@ -28,6 +34,7 @@ export default function WatchPage() {
   const startPercent = duration ? (startTime / duration) * 100 : 0;
   const endPercent = duration ? (endTime / duration) * 100 : 0;
   const trackBackground = `linear-gradient(to right, #ccc ${startPercent}%, #2196f3 ${startPercent}%, #2196f3 ${endPercent}%, #ccc ${endPercent}%)`;
+  const selectionActive = duration > 0 && (startTime > 0 || endTime < duration);
 
   useEffect(() => {
     // Reset state when component mounts or id changes
@@ -44,13 +51,6 @@ export default function WatchPage() {
             throw new Error('Video URL is missing');
           }
           setVideo(videoData);
-          console.log('Fetched video object:', videoData);
-          if (videoData.tags) {
-            console.log('Video tags:', videoData.tags);
-          }
-          if (videoData.board || videoData.topic) {
-            console.log('Video classification:', { board: videoData.board, topic: videoData.topic });
-          }
         })
         .catch((error: unknown) => {
           console.error('Error fetching video:', error);
@@ -167,6 +167,18 @@ export default function WatchPage() {
             ))}
           </div>
           <div className="time-range">
+            {selectionActive && (
+              <div className="time-range-actions">
+                <button
+                  type="button"
+                  className="clear-selection"
+                  onClick={clearSelection}
+                  disabled={isAsking}
+                >
+                  Cancel selection
+                </button>
+              </div>
+            )}
             <div className="range-inputs">
               <input
                 type="range"
@@ -189,8 +201,14 @@ export default function WatchPage() {
               />
             </div>
             <div className="time-values">
-              <span>{startTime}s</span>
-              <span>{endTime}s</span>
+              {selectionActive ? (
+                <>
+                  <span>{startTime}s</span>
+                  <span>{endTime}s</span>
+                </>
+              ) : (
+                  <span>Full video</span>
+              )}
             </div>
           </div>
           <div className="chat-input">
