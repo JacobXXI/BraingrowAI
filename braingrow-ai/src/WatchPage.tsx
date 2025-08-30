@@ -195,6 +195,11 @@ export default function WatchPage() {
                 dangerouslySetInnerHTML={renderMarkdown(m.text)}
               />
             ))}
+            {isAsking && (
+              <div className="chat-message ai loading">
+                <div className="loading-spinner" />
+              </div>
+            )}
           </div>
           <div className="time-range">
             {selectionActive && (
