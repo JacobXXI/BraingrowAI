@@ -101,6 +101,15 @@
   margin-bottom: 8px;
 }
 
+.chat-message ol {
+  margin: 0 0 8px 1.25em;
+  padding-left: 0;
+}
+
+.chat-message p {
+  margin: 0 0 8px;
+}
+
 .time-range {
   display: flex;
   flex-direction: column;

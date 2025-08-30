@@ -16,6 +16,34 @@ export default function WatchPage() {
   const [duration, setDuration] = useState(0);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
+  const renderMarkdown = (text: string) => {
+    const lines = text.split('\n');
+    let html = '';
+    let listItems: string[] = [];
+    const flushList = () => {
+      if (listItems.length > 0) {
+        html += `<ol>${listItems.join('')}</ol>`;
+        listItems = [];
+      }
+    };
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        flushList();
+        return;
+      }
+      const bolded = trimmed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      const listMatch = /^(\d+)\.\s+(.*)/.exec(bolded);
+      if (listMatch) {
+        listItems.push(`<li>${listMatch[2]}</li>`);
+      } else {
+        flushList();
+        html += `<p>${bolded}</p>`;
+      }
+    });
+    flushList();
+    return { __html: html };
+  };
   const clearSelection = () => {
     if (duration > 0) {
       setStartTime(0);
@@ -161,9 +189,11 @@ export default function WatchPage() {
           </div>
           <div className="chat-messages">
             {messages.map((m, i) => (
-              <div key={i} className={`chat-message ${m.sender}`}>
-                {m.text}
-              </div>
+              <div
+                key={i}
+                className={`chat-message ${m.sender}`}
+                dangerouslySetInnerHTML={renderMarkdown(m.text)}
+              />
             ))}
           </div>
           <div className="time-range">

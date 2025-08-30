@@ -2,7 +2,9 @@ import Cookies from 'js-cookie';
 import { video } from './structures/video';
 
 // Use same-origin base in dev so Vite proxy forwards /api to backend (no CORS/preflight)
-const API_BASE = (typeof import.meta !== 'undefined' && (import.meta as any).env?.DEV) ? '' : 'http://localhost:8080';
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.DEV)
+  ? ''
+  : 'http://localhost:8080';
 const ABS_BASE = (typeof window !== 'undefined') ? window.location.origin : API_BASE;
 
 // Helper: attach Authorization header if JWT is present in cookie
