@@ -1,12 +1,24 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './ProfilePage.css';
-import { getProfile, UserProfile, updateTendency, updateProfile, uploadProfilePhoto } from './request';
+import { 
+  getProfile, 
+  UserProfile, 
+  updateProfile, 
+  uploadProfilePhoto,
+  getTagsCatalog,
+  updateTendencySelection,
+  TagCatalog
+} from './request';
 
 const ProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tendencies, setTendencies] = useState<Record<string, boolean>>({});
-  const [selectedTopic, setSelectedTopic] = useState('');
+  // Tag catalog (board -> topic -> keywords)
+  const [catalog, setCatalog] = useState<TagCatalog | null>(null);
+  // User selection: board -> topics[]
+  const [selected, setSelected] = useState<Record<string, string[]>>({});
+  // Keep parsed tokens from existing tendency string to preseed selection once catalog loads
+  const tokensRef = useRef<Set<string>>(new Set());
   // Track whether a tendencies change was user-initiated
   const dirtyRef = useRef(false);
   const [editing, setEditing] = useState(false);
@@ -15,41 +27,92 @@ const ProfilePage: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const [tempPhotoUrl, setTempPhotoUrl] = useState<string | null>(null);
 
-  const allTopics = ['Science', 'Math', 'History', 'Language', 'Technology'];
+  // Helpers
+  const toTokens = (raw?: string): Set<string> => {
+    const out = new Set<string>();
+    if (!raw) return out;
+    try {
+      // try JSON first (legacy may be map)
+      const obj = JSON.parse(raw);
+      if (obj && typeof obj === 'object') {
+        Object.entries(obj as Record<string, unknown>).forEach(([k, v]) => {
+          if (typeof v === 'boolean' && v) out.add(k.toLowerCase());
+          else out.add(k.toLowerCase());
+        });
+        return out;
+      }
+    } catch {
+      // ignore; fall through to split
+    }
+    // split on commas and spaces
+    const parts = [
+      ...raw.split(',').map((s) => s.trim()),
+    ].flatMap((s) => s.split(' ')).map((s) => s.trim().toLowerCase()).filter(Boolean);
+    parts.forEach((p) => out.add(p));
+    return out;
+  };
+
+  const fmt = (s: string): string => {
+    // Simple title case with a few acronym tweaks
+    const acronyms = new Set(['ai', 'nba', 'aws', 'gcp', 'nlp', 'api', 'sql']);
+    const lower = s.toLowerCase();
+    if (acronyms.has(lower)) return lower.toUpperCase();
+    return lower.replace(/\b\w/g, (m) => m.toUpperCase());
+  };
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const data = await getProfile();
-      setUserData(data);
-      if (data?.username) setNewUsername(data.username);
-      if (data?.tendency) {
-        const parsed: Record<string, boolean> = {};
-        try {
-          const obj = JSON.parse(data.tendency);
-          if (obj && typeof obj === 'object') {
-            Object.entries(obj).forEach(([key, value]) => {
-              parsed[key] = Boolean(value);
-            });
-          }
-        } catch {
-          data.tendency.split(',').forEach((topic) => {
-            const t = topic.trim();
-            if (t) parsed[t] = true;
-          });
-        }
-        setTendencies(parsed);
+    const fetchAll = async () => {
+      const [profile, tags] = await Promise.all([
+        getProfile(),
+        getTagsCatalog().catch(() => null)
+      ]);
+      if (tags) setCatalog(tags);
+      if (profile) {
+        setUserData(profile);
+        if (profile.username) setNewUsername(profile.username);
+        // pre-parse tokens; we will map to selection after catalog is set
+        tokensRef.current = toTokens(profile.tendency);
       }
       setLoading(false);
     };
-    fetchProfile();
+    fetchAll();
   }, []);
 
   useEffect(() => {
-    // Only push updates when the user changed tendencies
+    // When we have both catalog and tokens (from profile), seed selection once
+    if (!catalog || !userData) return;
+    if (Object.keys(selected).length > 0) return; // don't overwrite user edits
+    const tokens = tokensRef.current;
+    if (!tokens || tokens.size === 0) return;
+    const next: Record<string, string[]> = {};
+    Object.entries(catalog).forEach(([board, topics]) => {
+      const b = board.toLowerCase();
+      const chosen: string[] = [];
+      const topicKeys = Object.keys(topics || {});
+      // If board token is present, select all topics; otherwise select only token-matching topics
+      if (tokens.has(b)) {
+        chosen.push(...topicKeys);
+      } else {
+        topicKeys.forEach((t) => {
+          if (tokens.has(t.toLowerCase())) chosen.push(t);
+        });
+      }
+      if (chosen.length > 0) next[board] = chosen;
+    });
+    if (Object.keys(next).length > 0) setSelected(next);
+  }, [catalog, userData]);
+
+  useEffect(() => {
+    // Auto-save selection when user changes it
     if (!dirtyRef.current) return;
     dirtyRef.current = false;
-    updateTendency(tendencies);
-  }, [tendencies]);
+    if (Object.keys(selected).length === 0) {
+      // If cleared, send empty selection
+      updateTendencySelection({}).catch(() => undefined);
+    } else {
+      updateTendencySelection(selected).catch(() => undefined);
+    }
+  }, [selected]);
 
   if (loading) {
     return <div className="profile-container">Loading...</div>;
@@ -158,70 +221,85 @@ const ProfilePage: React.FC = () => {
       <div className="profile-content">
         <div className="profile-bio">
           <h2>Learning Tendency</h2>
-          <div className="tendency-add">
-            <select
-              value={selectedTopic}
-              onChange={(e) => setSelectedTopic(e.target.value)}
-            >
-              <option value="">Select a topic</option>
-              {allTopics
-                .filter((t) => !(t in tendencies))
-                .map((topic) => (
-                  <option key={topic} value={topic}>
-                    {topic}
-                  </option>
-                ))}
-            </select>
-            <button
-              onClick={() => {
-                if (selectedTopic && !(selectedTopic in tendencies)) {
-                  dirtyRef.current = true;
-                  setTendencies((prev) => ({ ...prev, [selectedTopic]: true }));
-                  setSelectedTopic('');
-                }
-              }}
-            >
-              Add
-            </button>
-          </div>
-          {Object.keys(tendencies).length ? (
-            Object.entries(tendencies).map(([topic, enabled]) => (
-              <div className="preference-item" key={topic}>
-                <span>{topic}</span>
-                <div className="preference-controls">
-                  <label className="switch">
-                    <input
-                      type="checkbox"
-                      checked={enabled}
-                      onChange={() => {
-                        dirtyRef.current = true;
-                        setTendencies((prev) => ({
-                          ...prev,
-                          [topic]: !prev[topic]
-                        }));
-                      }
-                      }
-                    />
-                    <span className="slider round"></span>
-                  </label>
-                  <button
-                    className="remove-btn"
-                    onClick={() => {
-                      dirtyRef.current = true;
-                      setTendencies((prev) => {
-                        const updated = { ...prev };
-                        delete updated[topic];
-                        return updated;
-                      });
-                    }}
-                  >
-                    ×
-                  </button>
-                </div>
-              </div>
-            ))
+          {!catalog ? (
+            <p>Loading tags...</p>
           ) : (
-            <p>Not specified</p>
+            <>
+              {Object.keys(catalog).length === 0 ? (
+                <p>No tags available.</p>
+              ) : (
+                Object.entries(catalog).map(([board, topics]) => {
+                  const topicList = Object.keys(topics || {});
+                  const chosen = new Set((selected[board] || []).map((t) => t));
+                  const allSelected = topicList.length > 0 && topicList.every((t) => chosen.has(t));
+                  const hasAny = chosen.size > 0;
+                  return (
+                    <div key={board} style={{ marginBottom: '1rem' }}>
+                      <div className="preference-item">
+                        <span style={{ fontWeight: 600 }}>{fmt(board)}</span>
+                        <div className="preference-controls">
+                          <button
+                            onClick={() => {
+                              dirtyRef.current = true;
+                              setSelected((prev) => ({
+                                ...prev,
+                                [board]: topicList.slice()
+                              }));
+                            }}
+                            disabled={allSelected || topicList.length === 0}
+                            title="Select all topics"
+                          >
+                            Select All
+                          </button>
+                          <button
+                            onClick={() => {
+                              dirtyRef.current = true;
+                              setSelected((prev) => {
+                                const next = { ...prev };
+                                delete next[board];
+                                return next;
+                              });
+                            }}
+                            disabled={!hasAny}
+                            title="Clear selection"
+                          >
+                            Clear
+                          </button>
+                        </div>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '6px 12px', padding: '6px 0' }}>
+                        {topicList.map((t) => (
+                          <label key={t} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <input
+                              type="checkbox"
+                              checked={chosen.has(t)}
+                              onChange={(e) => {
+                                dirtyRef.current = true;
+                                setSelected((prev) => {
+                                  const current = new Set(prev[board] || []);
+                                  if (e.target.checked) current.add(t); else current.delete(t);
+                                  const arr = Array.from(current);
+                                  const next = { ...prev } as Record<string, string[]>;
+                                  if (arr.length > 0) next[board] = arr; else delete next[board];
+                                  return next;
+                                });
+                              }}
+                            />
+                            <span>{fmt(t)}</span>
+                          </label>
+                        ))}
+                        {topicList.length === 0 && (
+                          <span style={{ color: '#666' }}>No topics</span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+              {Object.keys(selected).length === 0 && (
+                <p style={{ color: '#666' }}>Not specified</p>
+              )}
+            </>
           )}
         </div>
       </div>

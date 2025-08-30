@@ -67,17 +67,31 @@ export const getProfile = async (): Promise<UserProfile | null> => {
 };
 
 export const updateTendency = async (
-  tendency: Record<string, boolean>
+  tendency: Record<string, boolean> | string[] | string
 ): Promise<boolean> => {
   try {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json'
     };
+    // Normalize payload for backend contract:
+    // - { tags: string[] } OR { tendency: string } OR { selected: { board: string[] } }
+    // This function supports string[] or comma string or legacy map<boolean>.
+    let payload: unknown;
+    if (Array.isArray(tendency)) {
+      payload = { tags: tendency };
+    } else if (typeof tendency === 'string') {
+      payload = { tendency };
+    } else {
+      const tags = Object.entries(tendency)
+        .filter(([, enabled]) => !!enabled)
+        .map(([key]) => key);
+      payload = { tags };
+    }
     const response = await fetch(`${API_BASE}/api/profile/tendency`, {
       method: 'PUT',
       headers,
       credentials: 'include',
-      body: JSON.stringify({ tendency: JSON.stringify(tendency) })
+      body: JSON.stringify(payload)
     });
     console.log('Update tendency response status:', response.status);
     return response.ok;
@@ -85,6 +99,29 @@ export const updateTendency = async (
     console.error('Update tendency error:', error);
     return false;
   }
+};
+
+export type TagCatalog = Record<string, Record<string, string[]>>;
+
+export const getTagsCatalog = async (): Promise<TagCatalog> => {
+  const response = await fetch(`${API_BASE}/api/tags`, {
+    credentials: 'include',
+    cache: 'no-store'
+  });
+  if (!response.ok) throw new Error('Failed to fetch tags catalog');
+  return response.json();
+};
+
+export const updateTendencySelection = async (
+  selected: Record<string, string[]>
+): Promise<boolean> => {
+  const response = await fetch(`${API_BASE}/api/profile/tendency`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ selected })
+  });
+  return response.ok;
 };
 
 export const getRecommandVideo = async(maxVideo: number = 10): Promise<video[]> => {

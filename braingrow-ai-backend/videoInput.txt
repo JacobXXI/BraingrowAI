@@ -1,179 +1,418 @@
-=== AI Ethics ===
+=== AI ===
 Video 1
-title: The Future of AI Ethics
-description: Exploring ethical frameworks for artificial intelligence development and deployment in society.
-url: https://www.youtube.com/watch?v=7n8GqGzYt0k
-tags: AI, Ethics, Technology, Philosophy
-image_url: https://i.ytimg.com/vi/7n8GqGzYt0k/hqdefault.jpg
-
-Video 2
-title: Bias in AI Systems
-description: How to identify and mitigate algorithmic bias in machine learning models.
-url: https://www.youtube.com/watch?v=9XwazD5aRGU
-tags: AI, Bias, Machine Learning, Diversity
-image_url: https://i.ytimg.com/vi/9XwazD5aRGU/hqdefault.jpg
-
-Video 3
-title: AI Privacy Concerns
-description: Examining data privacy issues in the age of artificial intelligence and surveillance.
-url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
-tags: AI, Privacy, Data, Surveillance
-image_url: https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg
-
-Video 4
-title: AI and Employment
-description: The impact of automation on jobs and the future of work.
-url: https://www.youtube.com/watch?v=M5QY2_8704o
-tags: AI, Employment, Automation, Future
-image_url: https://i.ytimg.com/vi/M5QY2_8704o/hqdefault.jpg
-
-Video 5
-title: AI Governance Models
-description: Comparing international approaches to regulating artificial intelligence technologies.
-url: https://www.youtube.com/watch?v=LlXZ6x7P590
-tags: AI, Governance, Regulation, Policy
-image_url: https://i.ytimg.com/vi/LlXZ6x7P590/hqdefault.jpg
-
-=== Machine Learning ===
-Video 1
-title: Introduction to Neural Networks
-description: A beginner's guide to understanding artificial neural networks and their applications.
+title: But what is a neural network? | Deep learning chapter 1
+description: A visual introduction to neural networks and how they learn.
 url: https://www.youtube.com/watch?v=aircAruvnKk
-tags: Machine Learning, Neural Networks, AI, Programming
+tags: machine learning, neural networks, deep learning
 image_url: https://i.ytimg.com/vi/aircAruvnKk/hqdefault.jpg
 
 Video 2
-title: Deep Learning Fundamentals
-description: Exploring deep learning architectures and their practical implementations.
+title: Gradient descent, how neural networks learn | Deep Learning Chapter 2
+description: How gradient descent optimizes neural networks during training.
 url: https://www.youtube.com/watch?v=IHZwWFHWa-w
-tags: Deep Learning, Machine Learning, AI, Neural Networks
+tags: machine learning, deep learning
 image_url: https://i.ytimg.com/vi/IHZwWFHWa-w/hqdefault.jpg
 
 Video 3
-title: Natural Language Processing
-description: How machines understand and generate human language through AI.
-url: https://www.youtube.com/watch?v=oBxN7YFbOaA
-tags: NLP, Machine Learning, AI, Language
-image_url: https://i.ytimg.com/vi/oBxN7YFbOaA/hqdefault.jpg
+title: Backpropagation, intuitively | Deep Learning Chapter 3
+description: An intuitive explanation of backpropagation in deep learning.
+url: https://www.youtube.com/watch?v=Ilg3gGewQ5U
+tags: deep learning, neural networks
+image_url: https://i.ytimg.com/vi/Ilg3gGewQ5U/hqdefault.jpg
 
 Video 4
-title: Computer Vision Applications
-description: Real-world uses of computer vision technology in various industries.
-url: https://www.youtube.com/watch?v=0h2b4ftbZcU
-tags: Computer Vision, Machine Learning, AI, Image Processing
-image_url: https://i.ytimg.com/vi/0h2b4ftbZcU/hqdefault.jpg
+title: Convolutional Neural Networks (CNNs) explained
+description: A clear explanation of CNNs and their use in computer vision.
+url: https://www.youtube.com/watch?v=YRhxdVk_sIs
+tags: computer vision, deep learning, neural networks
+image_url: https://i.ytimg.com/vi/YRhxdVk_sIs/hqdefault.jpg
 
 Video 5
-title: Reinforcement Learning
-description: How AI agents learn optimal behavior through interaction with environments.
-url: https://www.youtube.com/watch?v=sxXhFGOj5qQ
-tags: Reinforcement Learning, Machine Learning, AI, Robotics
-image_url: https://i.ytimg.com/vi/sxXhFGOj5qQ/hqdefault.jpg
+title: Let's build GPT: from scratch, in code, spelled out.
+description: Building a GPT-like transformer model from scratch in Python.
+url: https://www.youtube.com/watch?v=kCc8FmEb1nY
+tags: nlp, transformers, deep learning, reinforcement learning
+image_url: https://i.ytimg.com/vi/kCc8FmEb1nY/hqdefault.jpg
+
+=== Calculus ===
+Video 1
+title: The essence of calculus
+description: Visual intuition for derivatives and integrals.
+url: https://www.youtube.com/watch?v=WUvTyaaNkzM
+tags: limits, derivatives, integrals
+image_url: https://i.ytimg.com/vi/WUvTyaaNkzM/hqdefault.jpg
+
+Video 2
+title: Calculus 1 - Full College Course
+description: A full introductory single-variable calculus course.
+url: https://www.youtube.com/watch?v=HfACrKJ_Y2w
+tags: limits, derivatives, integrals, series, differential equations, optimization
+image_url: https://i.ytimg.com/vi/HfACrKJ_Y2w/hqdefault.jpg
+
+Video 3
+title: But what is the Fourier Transform?  A visual introduction.
+description: Understanding the Fourier Transform and its connection to integrals and series.
+url: https://www.youtube.com/watch?v=spUNpyF58BY
+tags: integrals, series
+image_url: https://i.ytimg.com/vi/spUNpyF58BY/hqdefault.jpg
+
+=== Programming ===
+Video 1
+title: Python for Beginners - Learn Coding with Python in 1 Hour
+description: A beginner-friendly introduction to Python programming.
+url: https://www.youtube.com/watch?v=kqtD5dpn9C8
+tags: python, programming
+image_url: https://i.ytimg.com/vi/kqtD5dpn9C8/hqdefault.jpg
+
+Video 2
+title: Learn Python - Full Course for Beginners [Tutorial]
+description: A comprehensive Python course for complete beginners.
+url: https://www.youtube.com/watch?v=rfscVS0vtbw
+tags: python, programming, backend, frontend, api, testing
+image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
+
+Video 3
+title: Python for Everybody - Full University Python Course
+description: Complete Python course covering basics to intermediate topics.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: python, programming, javascript, java, c++, web
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+
+=== Data Science ===
+Video 1
+title: Complete Python Pandas Data Science Tutorial! (Reading CSV/Excel files, Sorting, Filtering, Groupby)
+description: Learn the essentials of Pandas for data analysis in Python.
+url: https://www.youtube.com/watch?v=vmEHCJofslg
+tags: pandas, data science, python, matplotlib
+image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
+
+Video 2
+title: Python: NUMPY | Numerical Python Arrays Tutorial
+description: A practical guide to NumPy arrays for numerical computing.
+url: https://www.youtube.com/watch?v=8Mpc9ukltVA
+tags: numpy, data science, python, statistics
+image_url: https://i.ytimg.com/vi/8Mpc9ukltVA/hqdefault.jpg
+
+Video 3
+title: Python NumPy Tutorial for Beginners
+description: Learn NumPy basics to manipulate arrays and perform computations.
+url: https://www.youtube.com/watch?v=QUT1VHiLmmI
+tags: numpy, data science, ml
+image_url: https://i.ytimg.com/vi/QUT1VHiLmmI/hqdefault.jpg
 
 === Quantum Computing ===
 Video 1
-title: Quantum Computing Explained
-description: An introduction to the principles and potential of quantum computing.
+title: Quantum Computers Explained - Limits of Human Technology
+description: An accessible explanation of quantum computers and how they work.
 url: https://www.youtube.com/watch?v=JhHMJCUmq28
-tags: Quantum Computing, Physics, Technology, Science
+tags: quantum, mechanics, physics
+image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+
+=== Math ===
+Video 1
+title: Tag coverage - Math A
+description: Placeholder video to cover Math keywords.
+url: https://www.youtube.com/watch?v=HfACrKJ_Y2w
+tags: equations, inequalities, polynomials, factorization, linear, quadratic
+image_url: https://i.ytimg.com/vi/HfACrKJ_Y2w/hqdefault.jpg
+
+Video 2
+title: Tag coverage - Math B
+description: Placeholder video to cover Math keywords.
+url: https://www.youtube.com/watch?v=WUvTyaaNkzM
+tags: systems of equations, triangles, circles, angles, area
+image_url: https://i.ytimg.com/vi/WUvTyaaNkzM/hqdefault.jpg
+
+Video 3
+title: Tag coverage - Math C
+description: Placeholder video to cover Math keywords.
+url: https://www.youtube.com/watch?v=spUNpyF58BY
+tags: volume, proofs, euclidean, similarity, congruence, sine
+image_url: https://i.ytimg.com/vi/spUNpyF58BY/hqdefault.jpg
+
+Video 4
+title: Tag coverage - Math D
+description: Placeholder video to cover Math keywords.
+url: https://www.youtube.com/watch?v=WUvTyaaNkzM
+tags: cosine, tangent, identities, unit circle, radians, limits
+image_url: https://i.ytimg.com/vi/WUvTyaaNkzM/hqdefault.jpg
+
+Video 5
+title: Tag coverage - Math E
+description: Placeholder video to cover Math keywords.
+url: https://www.youtube.com/watch?v=HfACrKJ_Y2w
+tags: derivatives, integrals, series, differential equations, optimization
+image_url: https://i.ytimg.com/vi/HfACrKJ_Y2w/hqdefault.jpg
+
+Video 6
+title: Tag coverage - Math F
+description: Placeholder video to cover Math keywords.
+url: https://www.youtube.com/watch?v=spUNpyF58BY
+tags: probability, distributions, hypothesis testing, regression, bayes, data analysis
+image_url: https://i.ytimg.com/vi/spUNpyF58BY/hqdefault.jpg
+
+Video 7
+title: Tag coverage - Math G
+description: Placeholder video to cover Math keywords.
+url: https://www.youtube.com/watch?v=WUvTyaaNkzM
+tags: primes, modular arithmetic, gcd, diophantine
+image_url: https://i.ytimg.com/vi/WUvTyaaNkzM/hqdefault.jpg
+
+=== Science ===
+Video 1
+title: Tag coverage - Science A
+description: Placeholder video to cover Science keywords.
+url: https://www.youtube.com/watch?v=JhHMJCUmq28
+tags: mechanics, kinematics, dynamics, thermodynamics, electricity
 image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
 
 Video 2
-title: Quantum Algorithms
-description: Exploring groundbreaking quantum algorithms that outperform classical approaches.
-url: https://www.youtube.com/watch?v=F_Riqjdh2oM
-tags: Quantum Computing, Algorithms, Programming, Science
-image_url: https://i.ytimg.com/vi/F_Riqjdh2oM/hqdefault.jpg
+title: Tag coverage - Science B
+description: Placeholder video to cover Science keywords.
+url: https://www.youtube.com/watch?v=JhHMJCUmq28
+tags: magnetism, optics, quantum, atoms, molecules
+image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
 
 Video 3
-title: Quantum Cryptography
-description: How quantum technology is revolutionizing data security and encryption.
-url: https://www.youtube.com/watch?v=9L77QExPmI0
-tags: Quantum Computing, Cryptography, Security, Privacy
-image_url: https://i.ytimg.com/vi/9L77QExPmI0/hqdefault.jpg
+title: Tag coverage - Science C
+description: Placeholder video to cover Science keywords.
+url: https://www.youtube.com/watch?v=JhHMJCUmq28
+tags: reactions, stoichiometry, periodic table, organic, inorganic
+image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
 
 Video 4
-title: Quantum Supremacy
-description: Understanding the milestone achievement of quantum computers surpassing classical ones.
-url: https://www.youtube.com/watch?v=-UrdExQW0cs
-tags: Quantum Computing, Technology, Science, Innovation
-image_url: https://i.ytimg.com/vi/-UrdExQW0cs/hqdefault.jpg
+title: Tag coverage - Science D
+description: Placeholder video to cover Science keywords.
+url: https://www.youtube.com/watch?v=JhHMJCUmq28
+tags: cells, genetics, evolution, anatomy, physiology
+image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
 
 Video 5
-title: Future of Quantum Computing
-description: Predictions and potential applications for quantum computing in the next decade.
-url: https://www.youtube.com/watch?v=Z2U5qYc1E3w
-tags: Quantum Computing, Future, Technology, Science
-image_url: https://i.ytimg.com/vi/Z2U5qYc1E3w/hqdefault.jpg
+title: Tag coverage - Science E
+description: Placeholder video to cover Science keywords.
+url: https://www.youtube.com/watch?v=JhHMJCUmq28
+tags: ecology, microbiology, algorithms, data structures, complexity
+image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
 
-=== Sustainable Tech ===
+Video 6
+title: Tag coverage - Science F
+description: Placeholder video to cover Science keywords.
+url: https://www.youtube.com/watch?v=JhHMJCUmq28
+tags: networks, operating systems, databases, machine learning
+image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+
+Video 7
+title: Tag coverage - Science G
+description: Placeholder video to cover Science keywords.
+url: https://www.youtube.com/watch?v=JhHMJCUmq28
+tags: neural networks, deep learning, nlp, computer vision
+image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+
+Video 8
+title: Tag coverage - Science H
+description: Placeholder video to cover Science keywords.
+url: https://www.youtube.com/watch?v=JhHMJCUmq28
+tags: reinforcement learning, transformers, planets, stars
+image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+
+Video 9
+title: Tag coverage - Science I
+description: Placeholder video to cover Science keywords.
+url: https://www.youtube.com/watch?v=JhHMJCUmq28
+tags: galaxies, cosmology, telescopes, geology, meteorology
+image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+
+Video 10
+title: Tag coverage - Science J
+description: Placeholder video to cover Science keywords.
+url: https://www.youtube.com/watch?v=JhHMJCUmq28
+tags: oceanography, climate
+image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+
+=== English ===
 Video 1
-title: Renewable Energy Innovations
-description: New technologies driving the transition to sustainable energy sources.
-url: https://www.youtube.com/watch?v=0aKqV2KZ9wY
-tags: Sustainable Tech, Renewable Energy, Innovation, Environment
-image_url: https://i.ytimg.com/vi/0aKqV2KZ9wY/hqdefault.jpg
+title: Tag coverage - English A
+description: Placeholder video to cover English keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: parts of speech, tenses, punctuation, clauses
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
 
 Video 2
-title: Green Building Technologies
-description: How sustainable construction methods are reducing environmental impact.
-url: https://www.youtube.com/watch?v=8YJf6aA0s0g
-tags: Sustainable Tech, Green Building, Construction, Environment
-image_url: https://i.ytimg.com/vi/8YJf6aA0s0g/hqdefault.jpg
+title: Tag coverage - English B
+description: Placeholder video to cover English keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: prepositions, articles, subject-verb agreement, synonyms
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
 
 Video 3
-title: Sustainable Transportation
-description: The future of electric vehicles and public transportation systems.
-url: https://www.youtube.com/watch?v=9Z3swdO890k
-tags: Sustainable Tech, Transportation, Electric Vehicles, Environment
-image_url: https://i.ytimg.com/vi/9Z3swdO890k/hqdefault.jpg
+title: Tag coverage - English C
+description: Placeholder video to cover English keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: antonyms, idioms, phrasal verbs, collocations
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
 
 Video 4
-title: Circular Economy Models
-description: How businesses are adopting circular economy principles to reduce waste.
-url: https://www.youtube.com/watch?v=9GorqroigqM
-tags: Sustainable Tech, Circular Economy, Business, Environment
-image_url: https://i.ytimg.com/vi/9GorqroigqM/hqdefault.jpg
+title: Tag coverage - English D
+description: Placeholder video to cover English keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: essays, argumentative, narrative, descriptive
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
 
 Video 5
-title: Sustainable Agriculture
-description: Technological innovations improving food production while protecting ecosystems.
-url: https://www.youtube.com/watch?v=UcVfVrHQsHs
-tags: Sustainable Tech, Agriculture, Environment, Food Security
-image_url: https://i.ytimg.com/vi/UcVfVrHQsHs/hqdefault.jpg
+title: Tag coverage - English E
+description: Placeholder video to cover English keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: thesis, outline, editing, style
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
 
-=== Metaverse ===
+Video 6
+title: Tag coverage - English F
+description: Placeholder video to cover English keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: poetry, drama, novels, short stories
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+
+Video 7
+title: Tag coverage - English G
+description: Placeholder video to cover English keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: literary devices, analysis, phonetics, stress
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+
+Video 8
+title: Tag coverage - English H
+description: Placeholder video to cover English keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: intonation, accent, skimming, scanning
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+
+Video 9
+title: Tag coverage - English I
+description: Placeholder video to cover English keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: inference, main idea
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+
+=== Sports ===
 Video 1
-title: Introduction to the Metaverse
-description: Understanding the concept and potential of virtual shared spaces.
-url: https://www.youtube.com/watch?v=89VNZ0J7lQo
-tags: Metaverse, Virtual Reality, Technology, Social Media
-image_url: https://i.ytimg.com/vi/89VNZ0J7lQo/hqdefault.jpg
+title: Tag coverage - Sports A
+description: Placeholder video to cover Sports keywords.
+url: https://www.youtube.com/watch?v=rfscVS0vtbw
+tags: tactics, training, highlights, premier league, world cup
+image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
 
 Video 2
-title: Metaverse Business Opportunities
-description: How companies are leveraging the metaverse for new revenue streams.
-url: https://www.youtube.com/watch?v=9bZkp7q19f0
-tags: Metaverse, Business, Technology, Innovation
-image_url: https://i.ytimg.com/vi/9bZkp7q19f0/hqdefault.jpg
+title: Tag coverage - Sports B
+description: Placeholder video to cover Sports keywords.
+url: https://www.youtube.com/watch?v=rfscVS0vtbw
+tags: skills, nba, drills, shooting, defense
+image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
 
 Video 3
-title: Virtual Reality in Education
-description: The metaverse's potential to transform learning experiences.
-url: https://www.youtube.com/watch?v=5VRVtf2hlsE
-tags: Metaverse, Education, Virtual Reality, Technology
-image_url: https://i.ytimg.com/vi/5VRVtf2hlsE/hqdefault.jpg
+title: Tag coverage - Sports C
+description: Placeholder video to cover Sports keywords.
+url: https://www.youtube.com/watch?v=rfscVS0vtbw
+tags: forehand, backhand, serve, strategy, grand slam
+image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
 
 Video 4
-title: Metaverse Social Interactions
-description: How virtual spaces are changing human communication and relationships.
-url: https://www.youtube.com/watch?v=e2sGdD7fK2c
-tags: Metaverse, Social Media, Technology, Communication
-image_url: https://i.ytimg.com/vi/e2sGdD7fK2c/hqdefault.jpg
+title: Tag coverage - Sports D
+description: Placeholder video to cover Sports keywords.
+url: https://www.youtube.com/watch?v=rfscVS0vtbw
+tags: workout, cardio, strength, yoga, pilates
+image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
+
+=== Arts ===
+Video 1
+title: Tag coverage - Arts A
+description: Placeholder video to cover Arts keywords.
+url: https://www.youtube.com/watch?v=kqtD5dpn9C8
+tags: ballet, hip hop, contemporary, salsa, k-pop
+image_url: https://i.ytimg.com/vi/kqtD5dpn9C8/hqdefault.jpg
+
+Video 2
+title: Tag coverage - Arts B
+description: Placeholder video to cover Arts keywords.
+url: https://www.youtube.com/watch?v=kqtD5dpn9C8
+tags: theory, guitar, piano, singing, production
+image_url: https://i.ytimg.com/vi/kqtD5dpn9C8/hqdefault.jpg
+
+Video 3
+title: Tag coverage - Arts C
+description: Placeholder video to cover Arts keywords.
+url: https://www.youtube.com/watch?v=kqtD5dpn9C8
+tags: watercolor, acrylic, oil, drawing, perspective
+image_url: https://i.ytimg.com/vi/kqtD5dpn9C8/hqdefault.jpg
+
+=== Technology ===
+Video 1
+title: Tag coverage - Technology A
+description: Placeholder video to cover Technology keywords.
+url: https://www.youtube.com/watch?v=vmEHCJofslg
+tags: python, javascript, java, c++, web
+image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
+
+Video 2
+title: Tag coverage - Technology B
+description: Placeholder video to cover Technology keywords.
+url: https://www.youtube.com/watch?v=vmEHCJofslg
+tags: backend, frontend, api, testing, pandas
+image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
+
+Video 3
+title: Tag coverage - Technology C
+description: Placeholder video to cover Technology keywords.
+url: https://www.youtube.com/watch?v=vmEHCJofslg
+tags: numpy, matplotlib, statistics, ml, aws
+image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
+
+Video 4
+title: Tag coverage - Technology D
+description: Placeholder video to cover Technology keywords.
+url: https://www.youtube.com/watch?v=vmEHCJofslg
+tags: gcp, azure, docker, kubernetes, terraform
+image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
 
 Video 5
-title: Metaverse Economy
-description: Understanding digital currencies, NFTs, and virtual asset ownership.
-url: https://www.youtube.com/watch?v=YQ_xWvX1n9g
-tags: Metaverse, Economy, NFTs, Cryptocurrency
-image_url: https://i.ytimg.com/vi/YQ_xWvX1n9g/hqdefault.jpg
+title: Tag coverage - Technology E
+description: Placeholder video to cover Technology keywords.
+url: https://www.youtube.com/watch?v=vmEHCJofslg
+tags: network, encryption, pentesting, malware, security
+image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
+
+=== Business ===
+Video 1
+title: Tag coverage - Business A
+description: Placeholder video to cover Business keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: investing, stocks, options, budgeting, valuation
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+
+Video 2
+title: Tag coverage - Business B
+description: Placeholder video to cover Business keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: seo, content, social media, brand, ads
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+
+Video 3
+title: Tag coverage - Business C
+description: Placeholder video to cover Business keywords.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
+tags: startup, mvp, fundraising, product, growth
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+
+=== Life ===
+Video 1
+title: Tag coverage - Life A
+description: Placeholder video to cover Life keywords.
+url: https://www.youtube.com/watch?v=kCc8FmEb1nY
+tags: nutrition, sleep, mental health, meditation, mindfulness
+image_url: https://i.ytimg.com/vi/kCc8FmEb1nY/hqdefault.jpg
+
+Video 2
+title: Tag coverage - Life B
+description: Placeholder video to cover Life keywords.
+url: https://www.youtube.com/watch?v=kCc8FmEb1nY
+tags: time management, focus, habits, study techniques
+image_url: https://i.ytimg.com/vi/kCc8FmEb1nY/hqdefault.jpg
