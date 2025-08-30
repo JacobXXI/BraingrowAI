@@ -110,309 +110,309 @@ image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
 
 === Math ===
 Video 1
-title: Tag coverage - Math A
-description: Placeholder video to cover Math keywords.
+title: Calculus 1 - Full College Course
+description: A complete single-variable calculus course by freeCodeCamp.
 url: https://www.youtube.com/watch?v=HfACrKJ_Y2w
 tags: equations, inequalities, polynomials, factorization, linear, quadratic
 image_url: https://i.ytimg.com/vi/HfACrKJ_Y2w/hqdefault.jpg
 
 Video 2
-title: Tag coverage - Math B
-description: Placeholder video to cover Math keywords.
+title: The essence of calculus
+description: 3Blue1Brown's visual introduction to calculus fundamentals.
 url: https://www.youtube.com/watch?v=WUvTyaaNkzM
 tags: systems of equations, triangles, circles, angles, area
 image_url: https://i.ytimg.com/vi/WUvTyaaNkzM/hqdefault.jpg
 
 Video 3
-title: Tag coverage - Math C
-description: Placeholder video to cover Math keywords.
+title: But what is the Fourier Transform?  A visual introduction.
+description: 3Blue1Brown explains the Fourier Transform visually.
 url: https://www.youtube.com/watch?v=spUNpyF58BY
 tags: volume, proofs, euclidean, similarity, congruence, sine
 image_url: https://i.ytimg.com/vi/spUNpyF58BY/hqdefault.jpg
 
 Video 4
-title: Tag coverage - Math D
-description: Placeholder video to cover Math keywords.
-url: https://www.youtube.com/watch?v=WUvTyaaNkzM
+title: Algebra Basics: What Is Algebra? - Math Antics
+description: Intro to algebraic concepts like variables and equations.
+url: https://www.youtube.com/watch?v=NybHckSEQBI
 tags: cosine, tangent, identities, unit circle, radians, limits
-image_url: https://i.ytimg.com/vi/WUvTyaaNkzM/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/NybHckSEQBI/hqdefault.jpg
 
 Video 5
-title: Tag coverage - Math E
-description: Placeholder video to cover Math keywords.
-url: https://www.youtube.com/watch?v=HfACrKJ_Y2w
+title: Gradient descent, how neural networks learn | Deep Learning Chapter 2
+description: How gradient descent optimizes neural networks during training.
+url: https://www.youtube.com/watch?v=IHZwWFHWa-w
 tags: derivatives, integrals, series, differential equations, optimization
-image_url: https://i.ytimg.com/vi/HfACrKJ_Y2w/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/IHZwWFHWa-w/hqdefault.jpg
 
 Video 6
-title: Tag coverage - Math F
-description: Placeholder video to cover Math keywords.
-url: https://www.youtube.com/watch?v=spUNpyF58BY
+title: Backpropagation, intuitively | Deep Learning Chapter 3
+description: An intuitive explanation of backpropagation and gradients.
+url: https://www.youtube.com/watch?v=Ilg3gGewQ5U
 tags: probability, distributions, hypothesis testing, regression, bayes, data analysis
-image_url: https://i.ytimg.com/vi/spUNpyF58BY/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/Ilg3gGewQ5U/hqdefault.jpg
 
 Video 7
-title: Tag coverage - Math G
-description: Placeholder video to cover Math keywords.
-url: https://www.youtube.com/watch?v=WUvTyaaNkzM
+title: Convolutional Neural Networks (CNNs) explained
+description: A clear explanation of CNNs and their use in vision.
+url: https://www.youtube.com/watch?v=YRhxdVk_sIs
 tags: primes, modular arithmetic, gcd, diophantine
-image_url: https://i.ytimg.com/vi/WUvTyaaNkzM/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/YRhxdVk_sIs/hqdefault.jpg
 
 === Science ===
 Video 1
-title: Tag coverage - Science A
-description: Placeholder video to cover Science keywords.
-url: https://www.youtube.com/watch?v=JhHMJCUmq28
+title: Newton's Laws: Crash Course Physics #5
+description: An engaging overview of Newton's three laws of motion.
+url: https://www.youtube.com/watch?v=kKKM8Y-u7ds
 tags: mechanics, kinematics, dynamics, thermodynamics, electricity
-image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/kKKM8Y-u7ds/hqdefault.jpg
 
 Video 2
-title: Tag coverage - Science B
-description: Placeholder video to cover Science keywords.
+title: Quantum Computers Explained – Limits of Human Technology
+description: Kurzgesagt explains how quantum computers work and their limits.
 url: https://www.youtube.com/watch?v=JhHMJCUmq28
 tags: magnetism, optics, quantum, atoms, molecules
 image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
 
 Video 3
-title: Tag coverage - Science C
-description: Placeholder video to cover Science keywords.
-url: https://www.youtube.com/watch?v=JhHMJCUmq28
+title: But what is the Fourier Transform?  A visual introduction.
+description: 3Blue1Brown explains Fourier transforms, used widely in physics.
+url: https://www.youtube.com/watch?v=spUNpyF58BY
 tags: reactions, stoichiometry, periodic table, organic, inorganic
-image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/spUNpyF58BY/hqdefault.jpg
 
 Video 4
-title: Tag coverage - Science D
-description: Placeholder video to cover Science keywords.
-url: https://www.youtube.com/watch?v=JhHMJCUmq28
+title: The essence of calculus
+description: 3Blue1Brown's visual introduction to calculus fundamentals.
+url: https://www.youtube.com/watch?v=WUvTyaaNkzM
 tags: cells, genetics, evolution, anatomy, physiology
-image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/WUvTyaaNkzM/hqdefault.jpg
 
 Video 5
-title: Tag coverage - Science E
-description: Placeholder video to cover Science keywords.
-url: https://www.youtube.com/watch?v=JhHMJCUmq28
+title: Calculus 1 - Full College Course
+description: A complete single-variable calculus course by freeCodeCamp.
+url: https://www.youtube.com/watch?v=HfACrKJ_Y2w
 tags: ecology, microbiology, algorithms, data structures, complexity
-image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/HfACrKJ_Y2w/hqdefault.jpg
 
 Video 6
-title: Tag coverage - Science F
-description: Placeholder video to cover Science keywords.
-url: https://www.youtube.com/watch?v=JhHMJCUmq28
+title: Complete Python Pandas Data Science Tutorial! (Reading CSV/Excel files, Sorting, Filtering, Groupby)
+description: Hands-on Pandas tutorial often used in scientific data analysis.
+url: https://www.youtube.com/watch?v=vmEHCJofslg
 tags: networks, operating systems, databases, machine learning
-image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
 
 Video 7
-title: Tag coverage - Science G
-description: Placeholder video to cover Science keywords.
-url: https://www.youtube.com/watch?v=JhHMJCUmq28
+title: Python: NUMPY | Numerical Python Arrays Tutorial
+description: A practical NumPy guide for numerical computing in science.
+url: https://www.youtube.com/watch?v=8Mpc9ukltVA
 tags: neural networks, deep learning, nlp, computer vision
-image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/8Mpc9ukltVA/hqdefault.jpg
 
 Video 8
-title: Tag coverage - Science H
-description: Placeholder video to cover Science keywords.
-url: https://www.youtube.com/watch?v=JhHMJCUmq28
+title: Python NumPy Tutorial for Beginners
+description: Learn NumPy basics for array math and scientific computing.
+url: https://www.youtube.com/watch?v=QUT1VHiLmmI
 tags: reinforcement learning, transformers, planets, stars
-image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/QUT1VHiLmmI/hqdefault.jpg
 
 Video 9
-title: Tag coverage - Science I
-description: Placeholder video to cover Science keywords.
-url: https://www.youtube.com/watch?v=JhHMJCUmq28
+title: Let's build GPT: from scratch, in code, spelled out.
+description: Andrej Karpathy builds a GPT-like transformer from scratch.
+url: https://www.youtube.com/watch?v=kCc8FmEb1nY
 tags: galaxies, cosmology, telescopes, geology, meteorology
-image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/kCc8FmEb1nY/hqdefault.jpg
 
 Video 10
-title: Tag coverage - Science J
-description: Placeholder video to cover Science keywords.
-url: https://www.youtube.com/watch?v=JhHMJCUmq28
+title: Python for Everybody - Full University Python Course
+description: Complete Python course; useful for scientific scripting basics.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
 tags: oceanography, climate
-image_url: https://i.ytimg.com/vi/JhHMJCUmq28/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
 
 === English ===
 Video 1
-title: Tag coverage - English A
-description: Placeholder video to cover English keywords.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
+title: The 8 Parts of Speech in English Grammar (+ Free PDF & Quiz)
+description: Learn the eight parts of speech with clear examples and tips.
+url: https://www.youtube.com/watch?v=chjmnCSPnbw
 tags: parts of speech, tenses, punctuation, clauses
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/chjmnCSPnbw/hqdefault.jpg
 
 Video 2
-title: Tag coverage - English B
-description: Placeholder video to cover English keywords.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
+title: JavaScript Crash Course For Beginners
+description: Traversy Media's fast-paced introduction to modern JavaScript.
+url: https://www.youtube.com/watch?v=hdI2bqOjy3c
 tags: prepositions, articles, subject-verb agreement, synonyms
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/hdI2bqOjy3c/hqdefault.jpg
 
 Video 3
-title: Tag coverage - English C
-description: Placeholder video to cover English keywords.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
+title: Learn Python - Full Course for Beginners [Tutorial]
+description: Comprehensive Python tutorial for beginners by freeCodeCamp.
+url: https://www.youtube.com/watch?v=rfscVS0vtbw
 tags: antonyms, idioms, phrasal verbs, collocations
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
 
 Video 4
-title: Tag coverage - English D
-description: Placeholder video to cover English keywords.
+title: Python for Everybody - Full University Python Course
+description: Full Python course covering basics to intermediate topics.
 url: https://www.youtube.com/watch?v=8DvywoWv6fI
 tags: essays, argumentative, narrative, descriptive
 image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
 
 Video 5
-title: Tag coverage - English E
-description: Placeholder video to cover English keywords.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
+title: Python for Beginners - Learn Coding with Python in 1 Hour
+description: A beginner-friendly introduction to Python programming.
+url: https://www.youtube.com/watch?v=kqtD5dpn9C8
 tags: thesis, outline, editing, style
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/kqtD5dpn9C8/hqdefault.jpg
 
 Video 6
-title: Tag coverage - English F
-description: Placeholder video to cover English keywords.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
+title: Complete Python Pandas Data Science Tutorial! (Reading CSV/Excel files, Sorting, Filtering, Groupby)
+description: Hands-on Pandas tutorial covering reading data, sorting, filtering, and groupby.
+url: https://www.youtube.com/watch?v=vmEHCJofslg
 tags: poetry, drama, novels, short stories
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
 
 Video 7
-title: Tag coverage - English G
-description: Placeholder video to cover English keywords.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
+title: Python NumPy Tutorial for Beginners
+description: Learn NumPy basics to manipulate arrays and perform computations.
+url: https://www.youtube.com/watch?v=QUT1VHiLmmI
 tags: literary devices, analysis, phonetics, stress
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/QUT1VHiLmmI/hqdefault.jpg
 
 Video 8
-title: Tag coverage - English H
-description: Placeholder video to cover English keywords.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
+title: Python: NUMPY | Numerical Python Arrays Tutorial
+description: A practical guide to NumPy arrays for numerical computing.
+url: https://www.youtube.com/watch?v=8Mpc9ukltVA
 tags: intonation, accent, skimming, scanning
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/8Mpc9ukltVA/hqdefault.jpg
 
 Video 9
-title: Tag coverage - English I
-description: Placeholder video to cover English keywords.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
+title: The essence of calculus
+description: Visual intuition for derivatives and integrals.
+url: https://www.youtube.com/watch?v=WUvTyaaNkzM
 tags: inference, main idea
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/WUvTyaaNkzM/hqdefault.jpg
 
 === Sports ===
 Video 1
-title: Tag coverage - Sports A
-description: Placeholder video to cover Sports keywords.
-url: https://www.youtube.com/watch?v=rfscVS0vtbw
+title: Yoga For Complete Beginners - 20 Minute Home Yoga Workout!
+description: Gentle 20-minute yoga practice perfect for beginners at home.
+url: https://www.youtube.com/watch?v=v7AYKMP6rOE
 tags: tactics, training, highlights, premier league, world cup
-image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/v7AYKMP6rOE/hqdefault.jpg
 
 Video 2
-title: Tag coverage - Sports B
-description: Placeholder video to cover Sports keywords.
-url: https://www.youtube.com/watch?v=rfscVS0vtbw
+title: 5-Minute Meditation You Can Do Anywhere | Goodful
+description: A short guided meditation to reduce stress and improve focus.
+url: https://www.youtube.com/watch?v=inpok4MKVLM
 tags: skills, nba, drills, shooting, defense
-image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/inpok4MKVLM/hqdefault.jpg
 
 Video 3
-title: Tag coverage - Sports C
-description: Placeholder video to cover Sports keywords.
-url: https://www.youtube.com/watch?v=rfscVS0vtbw
+title: Python for Beginners - Learn Coding with Python in 1 Hour
+description: A beginner-friendly introduction to Python programming.
+url: https://www.youtube.com/watch?v=kqtD5dpn9C8
 tags: forehand, backhand, serve, strategy, grand slam
-image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/kqtD5dpn9C8/hqdefault.jpg
 
 Video 4
-title: Tag coverage - Sports D
-description: Placeholder video to cover Sports keywords.
+title: Learn Python - Full Course for Beginners [Tutorial]
+description: Comprehensive Python tutorial for beginners by freeCodeCamp.
 url: https://www.youtube.com/watch?v=rfscVS0vtbw
 tags: workout, cardio, strength, yoga, pilates
 image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
 
 === Arts ===
 Video 1
-title: Tag coverage - Arts A
-description: Placeholder video to cover Arts keywords.
-url: https://www.youtube.com/watch?v=kqtD5dpn9C8
-tags: ballet, hip hop, contemporary, salsa, k-pop
-image_url: https://i.ytimg.com/vi/kqtD5dpn9C8/hqdefault.jpg
+title: Learn music theory in half an hour.
+description: Andrew Huang's concise crash course on core music theory.
+url: https://www.youtube.com/watch?v=rgaTLrZGlk0
+tags: music theory, chords, scales, harmony, ear training
+image_url: https://i.ytimg.com/vi/rgaTLrZGlk0/hqdefault.jpg
 
 Video 2
-title: Tag coverage - Arts B
-description: Placeholder video to cover Arts keywords.
-url: https://www.youtube.com/watch?v=kqtD5dpn9C8
-tags: theory, guitar, piano, singing, production
-image_url: https://i.ytimg.com/vi/kqtD5dpn9C8/hqdefault.jpg
+title: Guitar Lesson 1 - Absolute Beginner? Start Here! [Free 10 Day Starter Course]
+description: Andy Guitar teaches absolute basics: chords, strumming, and rhythm.
+url: https://www.youtube.com/watch?v=BBz-Jyr23M4
+tags: guitar, chords, beginner, strumming, rhythm
+image_url: https://i.ytimg.com/vi/BBz-Jyr23M4/hqdefault.jpg
 
 Video 3
-title: Tag coverage - Arts C
-description: Placeholder video to cover Arts keywords.
-url: https://www.youtube.com/watch?v=kqtD5dpn9C8
-tags: watercolor, acrylic, oil, drawing, perspective
-image_url: https://i.ytimg.com/vi/kqtD5dpn9C8/hqdefault.jpg
+title: Intro to Drawing Basics
+description: Proko covers essential drawing skills: lines, shapes, and perspective.
+url: https://www.youtube.com/watch?v=2szSyXx8cZQ
+tags: drawing, perspective, sketching, shading, basics
+image_url: https://i.ytimg.com/vi/2szSyXx8cZQ/hqdefault.jpg
 
 === Technology ===
 Video 1
-title: Tag coverage - Technology A
-description: Placeholder video to cover Technology keywords.
-url: https://www.youtube.com/watch?v=vmEHCJofslg
+title: JavaScript Crash Course For Beginners
+description: Traversy Media's fast-paced introduction to modern JavaScript.
+url: https://www.youtube.com/watch?v=hdI2bqOjy3c
 tags: python, javascript, java, c++, web
-image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/hdI2bqOjy3c/hqdefault.jpg
 
 Video 2
-title: Tag coverage - Technology B
-description: Placeholder video to cover Technology keywords.
+title: Complete Python Pandas Data Science Tutorial! (Reading CSV/Excel files, Sorting, Filtering, Groupby)
+description: Hands-on Pandas tutorial covering reading data, sorting, filtering, and groupby.
 url: https://www.youtube.com/watch?v=vmEHCJofslg
 tags: backend, frontend, api, testing, pandas
 image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
 
 Video 3
-title: Tag coverage - Technology C
-description: Placeholder video to cover Technology keywords.
-url: https://www.youtube.com/watch?v=vmEHCJofslg
+title: Python for Beginners - Learn Coding with Python in 1 Hour
+description: A beginner-friendly introduction to Python programming.
+url: https://www.youtube.com/watch?v=kqtD5dpn9C8
 tags: numpy, matplotlib, statistics, ml, aws
-image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/kqtD5dpn9C8/hqdefault.jpg
 
 Video 4
-title: Tag coverage - Technology D
-description: Placeholder video to cover Technology keywords.
-url: https://www.youtube.com/watch?v=vmEHCJofslg
+title: Learn Python - Full Course for Beginners [Tutorial]
+description: Comprehensive Python tutorial for beginners by freeCodeCamp.
+url: https://www.youtube.com/watch?v=rfscVS0vtbw
 tags: gcp, azure, docker, kubernetes, terraform
-image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
 
 Video 5
-title: Tag coverage - Technology E
-description: Placeholder video to cover Technology keywords.
-url: https://www.youtube.com/watch?v=vmEHCJofslg
+title: Python for Everybody - Full University Python Course
+description: Full Python course covering basics to intermediate topics.
+url: https://www.youtube.com/watch?v=8DvywoWv6fI
 tags: network, encryption, pentesting, malware, security
-image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
 
 === Business ===
 Video 1
-title: Tag coverage - Business A
-description: Placeholder video to cover Business keywords.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
+title: Session 1: Introduction to Valuation
+description: Aswath Damodaran introduces core valuation principles and pitfalls.
+url: https://www.youtube.com/watch?v=znmQ7oMiQrM
 tags: investing, stocks, options, budgeting, valuation
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/znmQ7oMiQrM/hqdefault.jpg
 
 Video 2
-title: Tag coverage - Business B
-description: Placeholder video to cover Business keywords.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
+title: Session 1 (Val Undergrads): introduction to class
+description: First session overview for Damodaran's undergraduate valuation course.
+url: https://www.youtube.com/watch?v=tjNJx2244Lc
 tags: seo, content, social media, brand, ads
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/tjNJx2244Lc/hqdefault.jpg
 
 Video 3
-title: Tag coverage - Business C
-description: Placeholder video to cover Business keywords.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
+title: Session 1: Introduction to Valuation (and the class)
+description: Introductory lecture covering themes of valuation and course structure.
+url: https://www.youtube.com/watch?v=32oabRFnplQ
 tags: startup, mvp, fundraising, product, growth
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/32oabRFnplQ/hqdefault.jpg
 
 === Life ===
 Video 1
-title: Tag coverage - Life A
-description: Placeholder video to cover Life keywords.
-url: https://www.youtube.com/watch?v=kCc8FmEb1nY
+title: 5-Minute Meditation You Can Do Anywhere | Goodful
+description: A short guided meditation to reduce stress and improve focus.
+url: https://www.youtube.com/watch?v=inpok4MKVLM
 tags: nutrition, sleep, mental health, meditation, mindfulness
-image_url: https://i.ytimg.com/vi/kCc8FmEb1nY/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/inpok4MKVLM/hqdefault.jpg
 
 Video 2
-title: Tag coverage - Life B
-description: Placeholder video to cover Life keywords.
-url: https://www.youtube.com/watch?v=kCc8FmEb1nY
+title: Yoga For Complete Beginners - 20 Minute Home Yoga Workout!
+description: Gentle 20-minute yoga practice perfect for beginners at home.
+url: https://www.youtube.com/watch?v=v7AYKMP6rOE
 tags: time management, focus, habits, study techniques
-image_url: https://i.ytimg.com/vi/kCc8FmEb1nY/hqdefault.jpg
+image_url: https://i.ytimg.com/vi/v7AYKMP6rOE/hqdefault.jpg
