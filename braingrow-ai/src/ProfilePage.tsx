@@ -225,6 +225,8 @@ const ProfilePage: React.FC = () => {
             <p>Loading tags...</p>
           ) : (
             <>
+              {editing ? (
+                <>
               {Object.keys(catalog).length === 0 ? (
                 <p>No tags available.</p>
               ) : (
@@ -298,6 +300,31 @@ const ProfilePage: React.FC = () => {
               )}
               {Object.keys(selected).length === 0 && (
                 <p style={{ color: '#666' }}>Not specified</p>
+              )}
+                </>
+              ) : (
+                <>
+                  {Object.keys(selected).length === 0 ? (
+                    <p style={{ color: '#666' }}>Not specified</p>
+                  ) : (
+                    Object.keys(catalog).map((board) => {
+                      const picks = selected[board];
+                      if (!picks || picks.length === 0) return null;
+                      return (
+                        <div key={board} style={{ marginBottom: '0.5rem' }}>
+                          <div style={{ fontWeight: 600 }}>{fmt(board)}</div>
+                          <div style={{ color: '#333' }}>
+                            {picks.map((t, idx) => (
+                              <span key={t}>
+                                {fmt(t)}{idx < picks.length - 1 ? ', ' : ''}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </>
               )}
             </>
           )}
