@@ -238,53 +238,53 @@ tags: parts of speech, tenses, punctuation, clauses
 image_url: https://i.ytimg.com/vi/chjmnCSPnbw/hqdefault.jpg
 
 Video 2
-title: JavaScript Crash Course For Beginners
-description: Traversy Media's fast-paced introduction to modern JavaScript.
-url: https://www.youtube.com/watch?v=hdI2bqOjy3c
-tags: prepositions, articles, subject-verb agreement, synonyms
-image_url: https://i.ytimg.com/vi/hdI2bqOjy3c/hqdefault.jpg
+title: Learn All English Verb Tenses (Easiest Method)
+description: A complete guide to English verb tenses with simple explanations.
+url: https://www.youtube.com/watch?v=sCiG6rlk2Bc
+tags: tenses, present, past, future, grammar
+image_url: https://i.ytimg.com/vi/sCiG6rlk2Bc/hqdefault.jpg
 
 Video 3
-title: Learn Python - Full Course for Beginners [Tutorial]
-description: Comprehensive Python tutorial for beginners by freeCodeCamp.
-url: https://www.youtube.com/watch?v=rfscVS0vtbw
-tags: antonyms, idioms, phrasal verbs, collocations
-image_url: https://i.ytimg.com/vi/rfscVS0vtbw/hqdefault.jpg
+title: English Punctuation Guide - English Writing Lesson
+description: Oxford Online English explains commas, periods, and more.
+url: https://www.youtube.com/watch?v=gfYq2ng9s4E
+tags: punctuation, commas, periods, semicolons, capitalization
+image_url: https://i.ytimg.com/vi/gfYq2ng9s4E/hqdefault.jpg
 
 Video 4
-title: Python for Everybody - Full University Python Course
-description: Full Python course covering basics to intermediate topics.
-url: https://www.youtube.com/watch?v=8DvywoWv6fI
-tags: essays, argumentative, narrative, descriptive
-image_url: https://i.ytimg.com/vi/8DvywoWv6fI/hqdefault.jpg
+title: Prepositions of PLACE  IN / ON / AT / BY
+description: Common English prepositions lesson with examples and mistakes to avoid.
+url: https://www.youtube.com/watch?v=XzkbcWh8s4w
+tags: prepositions, in, on, at, by
+image_url: https://i.ytimg.com/vi/XzkbcWh8s4w/hqdefault.jpg
 
 Video 5
-title: Python for Beginners - Learn Coding with Python in 1 Hour
-description: A beginner-friendly introduction to Python programming.
-url: https://www.youtube.com/watch?v=kqtD5dpn9C8
-tags: thesis, outline, editing, style
-image_url: https://i.ytimg.com/vi/kqtD5dpn9C8/hqdefault.jpg
+title: Collocations in English - Learn English Vocabulary
+description: Oxford Online English teaches common collocations and how to use them.
+url: https://www.youtube.com/watch?v=CqRloBkyqQs
+tags: collocations, vocabulary, common phrases
+image_url: https://i.ytimg.com/vi/CqRloBkyqQs/hqdefault.jpg
 
 Video 6
-title: Complete Python Pandas Data Science Tutorial! (Reading CSV/Excel files, Sorting, Filtering, Groupby)
-description: Hands-on Pandas tutorial covering reading data, sorting, filtering, and groupby.
-url: https://www.youtube.com/watch?v=vmEHCJofslg
-tags: poetry, drama, novels, short stories
-image_url: https://i.ytimg.com/vi/vmEHCJofslg/hqdefault.jpg
+title: 50+ COMMON ENGLISH PHRASAL VERBS (with workbook!)
+description: mmmEnglish goes through dozens of useful phrasal verbs.
+url: https://www.youtube.com/watch?v=r7VKVXbaj_Y
+tags: phrasal verbs, vocabulary, speaking
+image_url: https://i.ytimg.com/vi/r7VKVXbaj_Y/hqdefault.jpg
 
 Video 7
-title: Python NumPy Tutorial for Beginners
-description: Learn NumPy basics to manipulate arrays and perform computations.
-url: https://www.youtube.com/watch?v=QUT1VHiLmmI
-tags: literary devices, analysis, phonetics, stress
-image_url: https://i.ytimg.com/vi/QUT1VHiLmmI/hqdefault.jpg
+title: Learn 15 Common English Idioms (With Examples)
+description: Marina explains common idioms with definitions and examples.
+url: https://www.youtube.com/watch?v=HclqADvf35Y
+tags: idioms, expressions, vocabulary
+image_url: https://i.ytimg.com/vi/HclqADvf35Y/hqdefault.jpg
 
 Video 8
-title: Python: NUMPY | Numerical Python Arrays Tutorial
-description: A practical guide to NumPy arrays for numerical computing.
-url: https://www.youtube.com/watch?v=8Mpc9ukltVA
-tags: intonation, accent, skimming, scanning
-image_url: https://i.ytimg.com/vi/8Mpc9ukltVA/hqdefault.jpg
+title: Sentence Stress and Intonation in English (The Complete Guide)
+description: Learn how stress and intonation change meaning in English.
+url: https://www.youtube.com/watch?v=_P7_69FeqnU
+tags: pronunciation, stress, intonation, accent
+image_url: https://i.ytimg.com/vi/_P7_69FeqnU/hqdefault.jpg
 
 Video 9
 title: The essence of calculus

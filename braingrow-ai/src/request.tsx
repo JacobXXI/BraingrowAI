@@ -5,6 +5,12 @@ import { video } from './structures/video';
 const API_BASE = (typeof import.meta !== 'undefined' && (import.meta as any).env?.DEV) ? '' : 'http://localhost:8080';
 const ABS_BASE = (typeof window !== 'undefined') ? window.location.origin : API_BASE;
 
+// Helper: attach Authorization header if JWT is present in cookie
+const authHeaders = (): Record<string, string> => {
+  const token = Cookies.get('authToken');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 export const login = async (email: string, password: string): Promise<{ success: boolean; token?: string }> => {
   try {
     // Send API request to login endpoint
@@ -13,6 +19,7 @@ export const login = async (email: string, password: string): Promise<{ success:
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({ 
         email: email,
         password: password
@@ -56,7 +63,10 @@ export const getProfile = async (): Promise<UserProfile | null> => {
   try {
     const response = await fetch(`${API_BASE}/api/profile`, {
       credentials: 'include',
-      cache: 'no-store'
+      cache: 'no-store',
+      headers: {
+        ...authHeaders(),
+      },
     });
     if (!response.ok) return null;
     return await response.json();
@@ -71,7 +81,8 @@ export const updateTendency = async (
 ): Promise<boolean> => {
   try {
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      ...authHeaders(),
     };
     // Normalize payload for backend contract:
     // - { tags: string[] } OR { tendency: string } OR { selected: { board: string[] } }
@@ -106,7 +117,7 @@ export type TagCatalog = Record<string, Record<string, string[]>>;
 export const getTagsCatalog = async (): Promise<TagCatalog> => {
   const response = await fetch(`${API_BASE}/api/tags`, {
     credentials: 'include',
-    cache: 'no-store'
+    cache: 'no-store',
   });
   if (!response.ok) throw new Error('Failed to fetch tags catalog');
   return response.json();
@@ -117,7 +128,7 @@ export const updateTendencySelection = async (
 ): Promise<boolean> => {
   const response = await fetch(`${API_BASE}/api/profile/tendency`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
     credentials: 'include',
     body: JSON.stringify({ selected })
   });
@@ -125,7 +136,10 @@ export const updateTendencySelection = async (
 };
 
 export const getRecommandVideo = async(maxVideo: number = 10): Promise<video[]> => {
-  const response = await fetch(`${API_BASE}/api/recommendations?maxVideo=${maxVideo}`);
+  const response = await fetch(`${API_BASE}/api/recommendations?maxVideo=${maxVideo}`, {
+    headers: { ...authHeaders() },
+    credentials: 'include',
+  });
   if (!response.ok) throw new Error('Get recommand video failed');
   const rawData = await response.json();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -164,7 +178,7 @@ export const search = async (query: string, maxVideo: number = 10): Promise<vide
 export const updateProfile = async (payload: { username?: string; photoUrl?: string }): Promise<UserProfile> => {
   const response = await fetch(`${API_BASE}/api/profile`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
     credentials: 'include',
     body: JSON.stringify(payload)
   });
@@ -181,6 +195,7 @@ export const uploadProfilePhoto = async (file: File): Promise<string> => {
   const response = await fetch(`${API_BASE}/api/profile/photo`, {
     method: 'POST',
     credentials: 'include',
+    headers: { ...authHeaders() },
     body: form
   });
   if (!response.ok) {
@@ -205,7 +220,11 @@ export const getVideo = async (id: string): Promise<video> => {
     category: rawData.category,
     views: rawData.viewCount,
     url: rawData.url.startsWith('http') ? rawData.url : new URL(rawData.url, ABS_BASE).href,
-    coverUrl: rawData.coverUrl.startsWith('http') ? rawData.coverUrl : new URL(rawData.coverUrl, ABS_BASE).href
+    coverUrl: rawData.coverUrl.startsWith('http') ? rawData.coverUrl : new URL(rawData.coverUrl, ABS_BASE).href,
+    // Optional metadata for logging and display
+    tags: rawData.tags,
+    board: rawData.board ?? null,
+    topic: rawData.topic ?? null
   };
 };
 
@@ -241,6 +260,7 @@ export const signup = async (
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({ email, password, name }),
     });
 

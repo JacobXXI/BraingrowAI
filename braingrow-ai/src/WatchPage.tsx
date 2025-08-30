@@ -45,6 +45,12 @@ export default function WatchPage() {
           }
           setVideo(videoData);
           console.log('Fetched video object:', videoData);
+          if (videoData.tags) {
+            console.log('Video tags:', videoData.tags);
+          }
+          if (videoData.board || videoData.topic) {
+            console.log('Video classification:', { board: videoData.board, topic: videoData.topic });
+          }
         })
         .catch((error: unknown) => {
           console.error('Error fetching video:', error);

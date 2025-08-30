@@ -216,7 +216,11 @@ def get_video(video_id):
                 'viewCount': getattr(video, 'views', 0),
                 # Return the canonical YouTube URL instead of a direct stream URL
                 'url': video.url,
-                'coverUrl': video.imageUrl
+                'coverUrl': video.imageUrl,
+                # Include tags and structured classification if present
+                'tags': getattr(video, 'tags', ''),
+                'board': getattr(video, 'board', None),
+                'topic': getattr(video, 'topic', None),
             })
         return jsonify({'error': 'Video not found'}), 404
     except Exception as e:
