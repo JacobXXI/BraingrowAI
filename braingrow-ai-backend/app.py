@@ -172,7 +172,6 @@ def search():
 @app.route('/api/recommendations')
 def get_recommendations():
     limit = request.args.get('maxVideo', 5, type=int)
-    # Attempt to personalize if user is authenticated via token or session
     user_id = None
     token = request.headers.get('Authorization')
     if token and token.startswith('Bearer '):
@@ -186,7 +185,35 @@ def get_recommendations():
         user_id = session['user_id']
 
     if user_id:
-        videos = getRecommendedVideosForUser(user_id, limit)
+        # --- New logic: Recommend by most-watched topic ---
+        # 1. Get user's watch history with progress
+        watch_history = getUserWatchHistory(user_id)
+        topic_time = {}
+        watched_video_ids = set()
+        for wh in watch_history:
+            video = getVideoById(wh.video_id)
+            if not video or not getattr(video, 'topic', None):
+                continue
+            watched_video_ids.add(video.id)
+            # Use progress as a proxy for watch time (or use wh.progress * video duration if available)
+            topic = video.topic
+            topic_time[topic] = topic_time.get(topic, 0) + (wh.progress or 0)
+
+        # 2. Find the topic with the most watch time
+        if topic_time:
+            top_topic = max(topic_time, key=topic_time.get)
+            # 3. Recommend videos with this topic, excluding already watched
+            videos = Video.query.filter(
+                Video.topic == top_topic,
+                ~Video.id.in_(watched_video_ids)
+            ).limit(limit).all()
+            # If not enough, fill with general recommendations
+            if len(videos) < limit:
+                extra = getRecommendedVideos(limit - len(videos))
+                videos += [v for v in extra if v.id not in watched_video_ids and v not in videos]
+        else:
+            # Fallback: general recommendations
+            videos = getRecommendedVideos(limit)
     else:
         videos = getRecommendedVideos(limit)
 

@@ -1,4 +1,3 @@
-
 # Database files
 *.sqlite
 *.sqlite3
@@ -11,3 +10,6 @@ instance/
 __pycache__/
 .env
 venv/
+node_modules/
+braingrow-ai/node_modules/
+braingrow-ai/node_modules/.vite/
