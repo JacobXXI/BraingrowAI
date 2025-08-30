@@ -6,7 +6,6 @@ import datetime
 import traceback
 from functools import wraps
 from video_handler import (
-    extract_yt_url,
     ask_AI,
     VertexAICredentialsError,
 )
@@ -14,6 +13,7 @@ from sqlalchemy import inspect, text
 import os
 from werkzeug.utils import secure_filename
 import urllib.request
+import urllib.parse
 import mimetypes
 
 # Import everything from the consolidated models file
@@ -21,8 +21,11 @@ from models import (
     db, Video, User, Comment,
     searchVideo, getVideoById, addVideo,
     userLogin, userRegister, userProfile, getRecommendedVideos,
-    addComment, getCommentsByVideo, updateUserTendency, updateUserProfile
+    addComment, getCommentsByVideo, updateUserTendency, updateUserProfile,
+    # new imports for personalization
+    getRecommendedVideosForUser, updateUserFocusLevel, recordWatchHistory, getUserWatchHistory,
 )
+from tags import VIDEO_TAG_CATALOG
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
@@ -51,7 +54,10 @@ def _short_circuit_options_preflight():
 
 # Create database tables and ensure reaction columns exist
 def ensure_reaction_columns():
-    """Ensure legacy databases have likes/dislikes columns."""
+    """Ensure legacy databases have likes/dislikes columns and new personalization columns.
+
+    This function performs lightweight schema evolution for existing SQLite DBs without Alembic.
+    """
     inspector = inspect(db.engine)
     columns = {col['name'] for col in inspector.get_columns('videos')}
     added = False
@@ -61,8 +67,23 @@ def ensure_reaction_columns():
     if 'dislikes' not in columns:
         db.session.execute(text('ALTER TABLE videos ADD COLUMN dislikes INTEGER DEFAULT 0'))
         added = True
+    # New video categorization columns
+    if 'board' not in columns:
+        db.session.execute(text("ALTER TABLE videos ADD COLUMN board VARCHAR(50)"))
+        added = True
+    if 'topic' not in columns:
+        db.session.execute(text("ALTER TABLE videos ADD COLUMN topic VARCHAR(100)"))
+        added = True
+    # Users: focus_level
+    user_columns = {col['name'] for col in inspector.get_columns('users')}
+    if 'focus_level' not in user_columns:
+        db.session.execute(text('ALTER TABLE users ADD COLUMN focus_level FLOAT'))
+        added = True
     if added:
         db.session.commit()
+    # Ensure watch_histories table exists
+    if 'watch_histories' not in inspector.get_table_names():
+        db.create_all()
 
 with app.app_context():
     db.create_all()
@@ -100,6 +121,15 @@ def hello():
 @app.route('/')
 def home():
     return "Hello, BrainGrow AI!"
+
+# Expose the tag catalog for frontends to build tendency selection
+@app.route('/api/tags', methods=['GET'])
+def get_tags_catalog():
+    try:
+        return jsonify(VIDEO_TAG_CATALOG)
+    except Exception as e:
+        print(f"Error in get_tags_catalog: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
 # Updated search endpoint to match frontend expectations
 @app.route('/api/search')
@@ -142,13 +172,32 @@ def search():
 @app.route('/api/recommendations')
 def get_recommendations():
     limit = request.args.get('maxVideo', 5, type=int)
-    videos = getRecommendedVideos(limit)
+    # Attempt to personalize if user is authenticated via token or session
+    user_id = None
+    token = request.headers.get('Authorization')
+    if token and token.startswith('Bearer '):
+        token = token[7:]
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            user_id = data.get('user_id')
+        except Exception:
+            user_id = None
+    if not user_id and 'user_id' in session and session.get('logged_in'):
+        user_id = session['user_id']
+
+    if user_id:
+        videos = getRecommendedVideosForUser(user_id, limit)
+    else:
+        videos = getRecommendedVideos(limit)
+
     return jsonify([{
         'id': v.id,
         'title': v.title,
         'description': v.description,
         'url': v.url,
         'tags': v.tags,
+        'board': getattr(v, 'board', None),
+        'topic': getattr(v, 'topic', None),
         'imageUrl': v.imageUrl
     } for v in videos])
         
@@ -167,7 +216,11 @@ def get_video(video_id):
                 'viewCount': getattr(video, 'views', 0),
                 # Return the canonical YouTube URL instead of a direct stream URL
                 'url': video.url,
-                'coverUrl': video.imageUrl
+                'coverUrl': video.imageUrl,
+                # Include tags and structured classification if present
+                'tags': getattr(video, 'tags', ''),
+                'board': getattr(video, 'board', None),
+                'topic': getattr(video, 'topic', None),
             })
         return jsonify({'error': 'Video not found'}), 404
     except Exception as e:
@@ -469,12 +522,65 @@ def profile():
 @login_required
 def update_tendency():
     try:
-        data = request.json
-        if not data or 'tendency' not in data:
-            return jsonify({'error': 'tendency required'}), 400
-        success = updateUserTendency(request.current_user_id, data['tendency'])
+        data = request.json or {}
+        if not data:
+            return jsonify({'error': 'JSON body required'}), 400
+
+        # Accept multiple forms:
+        # 1) { tendency: "comma,separated,keywords" }
+        # 2) { tags: ["keyword", ...] }
+        # 3) { selected: { board: [topics...] } }
+        raw_tendency = data.get('tendency')
+        tags_list = data.get('tags')
+        selected = data.get('selected') or data.get('selection')
+
+        def normalize_tokens(tokens):
+            seen = set()
+            norm = []
+            for t in tokens:
+                if not t:
+                    continue
+                k = str(t).strip().lower()
+                if not k or k in seen:
+                    continue
+                seen.add(k)
+                norm.append(k)
+            return norm
+
+        tokens = []
+        if isinstance(raw_tendency, str) and raw_tendency.strip():
+            tokens = [p.strip() for chunk in raw_tendency.split(',') for p in chunk.split()]  # commas/spaces
+        elif isinstance(tags_list, list):
+            tokens = [str(x) for x in tags_list]
+        elif isinstance(selected, dict):
+            # selected = { board: [topics] }
+            for board, topics in selected.items():
+                if not board:
+                    continue
+                tokens.append(str(board))
+                topics = topics or []
+                for topic in topics:
+                    if not topic:
+                        continue
+                    tokens.append(str(topic))
+                    # include known keywords for this board/topic if present
+                    b = str(board).lower()
+                    t = str(topic).lower()
+                    if b in VIDEO_TAG_CATALOG:
+                        # add all keywords under topic if exists
+                        if isinstance(VIDEO_TAG_CATALOG[b], dict) and t in VIDEO_TAG_CATALOG[b]:
+                            tokens.extend(VIDEO_TAG_CATALOG[b][t])
+            # also add any generic board-level keywords (topicless)
+            # not strictly necessary; tokens already contain board/topic labels
+        else:
+            return jsonify({'error': 'Provide one of: tendency(string), tags(array), selected(object)'}), 400
+
+        tokens = normalize_tokens(tokens)
+        serialized = ','.join(tokens)
+
+        success = updateUserTendency(request.current_user_id, serialized)
         if success:
-            return jsonify({'message': 'Tendency updated'})
+            return jsonify({'message': 'Tendency updated', 'tendency': serialized, 'keywords': tokens})
         return jsonify({'error': 'Failed to update tendency'}), 500
     except Exception as e:
         print(f"Error in update_tendency: {str(e)}")
@@ -588,6 +694,59 @@ def protected_search():
         print(f"Error in protected_search: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/profile/focus-level', methods=['PUT'])
+@login_required
+def update_focus_level():
+    try:
+        data = request.json or {}
+        level = data.get('focusLevel')
+        if level is None:
+            return jsonify({'error': 'focusLevel required'}), 400
+        ok = updateUserFocusLevel(request.current_user_id, level)
+        if not ok:
+            return jsonify({'error': 'Failed to update focus level'}), 400
+        user = userProfile(request.current_user_id)
+        return jsonify({'message': 'Focus level updated', 'focusLevel': getattr(user, 'focus_level', None)})
+    except Exception as e:
+        print(f"Error in update_focus_level: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/watch-history', methods=['POST'])
+@login_required
+def add_watch_history():
+    """Record a watch event: expects video_id, optional progress [0..1], optional focus_sample [0..1]."""
+    try:
+        data = request.json or {}
+        vid = data.get('video_id') or data.get('videoId')
+        if not vid:
+            return jsonify({'error': 'video_id required'}), 400
+        progress = data.get('progress')
+        focus_sample = data.get('focus_sample') or data.get('focusSample')
+        wh = recordWatchHistory(request.current_user_id, int(vid), progress, focus_sample)
+        if not wh:
+            return jsonify({'error': 'Failed to record watch history'}), 500
+        return jsonify({'message': 'Watch history recorded', 'id': wh.id})
+    except Exception as e:
+        print(f"Error in add_watch_history: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/watch-history', methods=['GET'])
+@login_required
+def list_watch_history():
+    try:
+        items = getUserWatchHistory(request.current_user_id)
+        return jsonify([
+            {
+                'id': i.id,
+                'video_id': i.video_id,
+                'watched_at': i.watched_at.isoformat(),
+                'progress': i.progress,
+                'focus_sample': i.focus_sample
+            } for i in items
+        ])
+    except Exception as e:
+        print(f"Error in list_watch_history: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 @app.route('/api/add-sample-data')
 def add_sample_data():
     try:
@@ -596,17 +755,23 @@ def add_sample_data():
         if existing:
             return jsonify({'message': 'Sample data already exists', 'count': Video.query.count()})
         
-        # Add sample videos using the addVideo function
-        sample_data = [
-            ("Python Tutorial", "Learn Python programming basics", "https://youtube.com/watch?v=123", "python,programming,tutorial", "https://example.com/python.jpg"),
-            ("Flask Web Development", "Build web applications with Flask", "https://youtube.com/watch?v=456", "flask,web,python", "https://example.com/flask.jpg"),
-            ("JavaScript Basics", "Introduction to JavaScript programming", "https://youtube.com/watch?v=789", "javascript,web,frontend", "https://example.com/js.jpg")
+        # Add sample videos using the addVideo function (now with board/topic)
+        sample_videos = [
+            {"title": "Algebra for Beginners", "description": "Intro to algebraic expressions", "url": "https://youtube.com/watch?v=alg1", "imageUrl": "https://example.com/algebra.jpg", "board": "math", "topic": "algebra", "tags": "math,algebra,beginner"},
+            {"title": "What is AI?", "description": "Basics of Artificial Intelligence", "url": "https://youtube.com/watch?v=ai1", "imageUrl": "https://example.com/ai.jpg", "board": "science", "topic": "ai", "tags": "science,ai,ml"},
+            {"title": "Grammar Essentials", "description": "English grammar fundamentals", "url": "https://youtube.com/watch?v=eng1", "imageUrl": "https://example.com/grammar.jpg", "board": "english", "topic": "grammar", "tags": "english,grammar"},
         ]
+
+        for v in sample_videos:
+            addVideo(title=v["title"], description=v["description"], url=v["url"], tags=v.get("tags", ""), imageUrl=v["imageUrl"])  # keep existing helper
+            # Also try to update board/topic if created
+            created = Video.query.filter_by(url=v["url"]).first()
+            if created:
+                created.board = v.get("board")
+                created.topic = v.get("topic")
+        db.session.commit()
         
-        for title, description, url, tags, imageUrl in sample_data:
-            addVideo(title, description, url, tags, imageUrl)
-        
-        return jsonify({'message': 'Sample data added successfully', 'count': len(sample_data)})
+        return jsonify({'message': 'Sample data added successfully', 'count': len(sample_videos)})
     except Exception as e:
         print(f"Error adding sample data: {str(e)}")
         return jsonify({'error': str(e)}), 500

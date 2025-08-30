@@ -8,4 +8,8 @@ export interface video {
     views: number;
     url: string;
     coverUrl: string;
+    // Optional metadata from backend
+    tags?: string;
+    board?: string | null;
+    topic?: string | null;
 }
