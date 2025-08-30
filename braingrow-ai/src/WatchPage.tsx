@@ -13,28 +13,35 @@ export default function WatchPage() {
   const [messages, setMessages] = useState<{ sender: 'user' | 'ai'; text: string }[]>([]);
   const [question, setQuestion] = useState('');
   const [isAsking, setIsAsking] = useState(false);
-  const [duration, setDuration] = useState(0);
-  const [startTime, setStartTime] = useState(0);
-  const [endTime, setEndTime] = useState(0);
-  const clearSelection = () => {
-    if (duration > 0) {
-      setStartTime(0);
-      setEndTime(duration);
-    }
+  const renderMarkdown = (text: string) => {
+    const lines = text.split('\n');
+    let html = '';
+    let listItems: string[] = [];
+    const flushList = () => {
+      if (listItems.length > 0) {
+        html += `<ol>${listItems.join('')}</ol>`;
+        listItems = [];
+      }
+    };
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        flushList();
+        return;
+      }
+      const bolded = trimmed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      const listMatch = /^(\d+)\.\s+(.*)/.exec(bolded);
+      if (listMatch) {
+        listItems.push(`<li>${listMatch[2]}</li>`);
+      } else {
+        flushList();
+        html += `<p>${bolded}</p>`;
+      }
+    });
+    flushList();
+    return { __html: html };
   };
-
-  const handleStartChange = (value: number) => {
-    setStartTime(Math.min(value, endTime));
-  };
-
-  const handleEndChange = (value: number) => {
-    setEndTime(Math.max(value, startTime));
-  };
-
-  const startPercent = duration ? (startTime / duration) * 100 : 0;
-  const endPercent = duration ? (endTime / duration) * 100 : 0;
-  const trackBackground = `linear-gradient(to right, #ccc ${startPercent}%, #2196f3 ${startPercent}%, #2196f3 ${endPercent}%, #ccc ${endPercent}%)`;
-  const selectionActive = duration > 0 && (startTime > 0 || endTime < duration);
+  
 
   useEffect(() => {
     // Reset state when component mounts or id changes
@@ -98,9 +105,7 @@ export default function WatchPage() {
     try {
       const answer = await askVideoQuestion(
         id,
-        userMessage.text,
-        startTime,
-        endTime
+        userMessage.text
       );
       setMessages((prev) => [...prev, { sender: 'ai', text: answer }]);
     } catch (err) {
@@ -128,11 +133,6 @@ export default function WatchPage() {
               controls
               src={video.url}
               poster={video.coverUrl}
-              onLoadedMetadata={(e) => {
-                const dur = Math.floor(e.currentTarget.duration);
-                setDuration(dur);
-                setEndTime(dur);
-              }}
               onError={(e) => {
                 const videoElement = e.target as HTMLVideoElement;
                 const errorDetails = videoElement.error ? ` (Code: ${videoElement.error.code}, Message: ${videoElement.error.message})` : '';
@@ -161,55 +161,17 @@ export default function WatchPage() {
           </div>
           <div className="chat-messages">
             {messages.map((m, i) => (
-              <div key={i} className={`chat-message ${m.sender}`}>
-                {m.text}
-              </div>
+              <div
+                key={i}
+                className={`chat-message ${m.sender}`}
+                dangerouslySetInnerHTML={renderMarkdown(m.text)}
+              />
             ))}
-          </div>
-          <div className="time-range">
-            {selectionActive && (
-              <div className="time-range-actions">
-                <button
-                  type="button"
-                  className="clear-selection"
-                  onClick={clearSelection}
-                  disabled={isAsking}
-                >
-                  Cancel selection
-                </button>
+            {isAsking && (
+              <div className="chat-message ai loading">
+                <div className="loading-spinner" />
               </div>
             )}
-            <div className="range-inputs">
-              <input
-                type="range"
-                min={0}
-                max={duration}
-                value={endTime}
-                onChange={(e) => handleEndChange(Number(e.target.value))}
-                disabled={isAsking}
-                className="range-end"
-                style={{ background: trackBackground }}
-              />
-              <input
-                type="range"
-                min={0}
-                max={duration}
-                value={startTime}
-                onChange={(e) => handleStartChange(Number(e.target.value))}
-                disabled={isAsking}
-                className="range-start"
-              />
-            </div>
-            <div className="time-values">
-              {selectionActive ? (
-                <>
-                  <span>{startTime}s</span>
-                  <span>{endTime}s</span>
-                </>
-              ) : (
-                  <span>Full video</span>
-              )}
-            </div>
           </div>
           <div className="chat-input">
             <input

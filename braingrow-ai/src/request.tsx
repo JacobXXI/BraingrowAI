@@ -2,7 +2,9 @@ import Cookies from 'js-cookie';
 import { video } from './structures/video';
 
 // Use same-origin base in dev so Vite proxy forwards /api to backend (no CORS/preflight)
-const API_BASE = (typeof import.meta !== 'undefined' && (import.meta as any).env?.DEV) ? '' : 'http://localhost:8080';
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.DEV)
+  ? ''
+  : 'http://localhost:8080';
 const ABS_BASE = (typeof window !== 'undefined') ? window.location.origin : API_BASE;
 
 // Helper: attach Authorization header if JWT is present in cookie
@@ -230,13 +232,9 @@ export const getVideo = async (id: string): Promise<video> => {
 
 export const askVideoQuestion = async (
   id: string,
-  question: string,
-  startTime?: number,
-  endTime?: number
+  question: string
 ): Promise<string> => {
   const body: Record<string, unknown> = { question };
-  if (typeof startTime === 'number') body.startTime = startTime;
-  if (typeof endTime === 'number') body.endTime = endTime;
   const response = await fetch(`${API_BASE}/api/videos/${encodeURIComponent(id)}/ask`, {
     method: 'POST',
     headers: {
