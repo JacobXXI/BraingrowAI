@@ -1,3 +1,4 @@
+
 # Database files
 *.sqlite
 *.sqlite3
@@ -9,3 +10,4 @@
 instance/
 __pycache__/
 .env
+venv/
