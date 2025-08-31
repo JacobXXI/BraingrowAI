@@ -14,7 +14,7 @@ export function HomePage() {
   useEffect(() => {
     const fetchRecommendedVideos = async () => {
       try {
-        const recommendedVideos = await getRecommandVideo(3);
+        const recommendedVideos = await getRecommandVideo(5);
         setVideos(recommendedVideos);
       } catch (err) {
         console.error(err);
