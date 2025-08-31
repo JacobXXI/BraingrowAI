@@ -5,6 +5,7 @@ class VertexAICredentialsError(RuntimeError):
     """Raised when Google credentials are missing."""
 
 def ask_AI(video_url, question):
+  print("Asking AI...")
   client = genai.Client(
     vertexai=True,
     project="braingrowai",
@@ -58,4 +59,5 @@ def ask_AI(video_url, question):
     config = generate_content_config,
     ):
     response_text += chunk.text or ""
+  print("Got response from AI.")
   return response_text
