@@ -34,7 +34,8 @@ def ask_AI(video_url, question, start = -1, end = -1):
   generate_content_config = types.GenerateContentConfig(
     temperature = 1,
     top_p = 0.95,
-    max_output_tokens = 65535,
+    # Reduce the number of tokens the model may generate to speed up responses
+    max_output_tokens = 1024,
     safety_settings = [types.SafetySetting(
       category="HARM_CATEGORY_HATE_SPEECH",
       threshold="OFF"
