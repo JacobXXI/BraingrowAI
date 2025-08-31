@@ -42,7 +42,7 @@ Session(app)
 CORS(app, origins=[
     "http://localhost:5174", 
     "http://localhost:5173",
-    "https://localhost:3000"  # Added for your frontend auth endpoints
+    "https://jacobxxi.github.io"
 ], supports_credentials=True)
 
 # Ensure CORS preflights never trigger route logic

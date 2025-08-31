@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'https://braingrow-ai-backend-75904341630.australia-southeast1.run.app',
         changeOrigin: true,
         secure: false,
       },
