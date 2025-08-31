@@ -6,3 +6,4 @@ SQLAlchemy
 Werkzeug
 PyJWT
 google-genai
+gunicorn
