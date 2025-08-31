@@ -4,7 +4,7 @@ import App from './App';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   // Disable StrictMode during dev to avoid double effects/fetches
-  <BrowserRouter basename="/braingrow-ai">
+  <BrowserRouter basename="/BraingrowAI">
     <App />
   </BrowserRouter>
 );
