@@ -13,6 +13,34 @@ export default function WatchPage() {
   const [messages, setMessages] = useState<{ sender: 'user' | 'ai'; text: string }[]>([]);
   const [question, setQuestion] = useState('');
   const [isAsking, setIsAsking] = useState(false);
+  const renderMarkdown = (text: string) => {
+    const lines = text.split('\n');
+    let html = '';
+    let listItems: string[] = [];
+    const flushList = () => {
+      if (listItems.length > 0) {
+        html += `<ol>${listItems.join('')}</ol>`;
+        listItems = [];
+      }
+    };
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        flushList();
+        return;
+      }
+      const bolded = trimmed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      const listMatch = /^(\d+)\.\s+(.*)/.exec(bolded);
+      if (listMatch) {
+        listItems.push(`<li>${listMatch[2]}</li>`);
+      } else {
+        flushList();
+        html += `<p>${bolded}</p>`;
+      }
+    });
+    flushList();
+    return { __html: html };
+  };
   
 
   useEffect(() => {
@@ -133,10 +161,17 @@ export default function WatchPage() {
           </div>
           <div className="chat-messages">
             {messages.map((m, i) => (
-              <div key={i} className={`chat-message ${m.sender}`}>
-                {m.text}
-              </div>
+              <div
+                key={i}
+                className={`chat-message ${m.sender}`}
+                dangerouslySetInnerHTML={renderMarkdown(m.text)}
+              />
             ))}
+            {isAsking && (
+              <div className="chat-message ai loading">
+                <div className="loading-spinner" />
+              </div>
+            )}
           </div>
           <div className="chat-input">
             <input
