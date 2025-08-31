@@ -4,7 +4,7 @@ from google.genai import types
 class VertexAICredentialsError(RuntimeError):
     """Raised when Google credentials are missing."""
 
-def ask_AI(video_url, question, start = -1, end = -1):
+def ask_AI(video_url, question):
   client = genai.Client(
     vertexai=True,
     project="braingrowai",
@@ -14,13 +14,10 @@ def ask_AI(video_url, question, start = -1, end = -1):
       file_uri=video_url,
       mime_type="video/mp4"
   )
-  if start == -1 and end == -1:
-    prompt = types.Part.from_text(text=f"""Watch the provided video. Then, answer the following question based on the video content: {question}""")
-  elif start != -1 and end == -1:
-    prompt = types.Part.from_text(text=f"""Watch the provided video at {start}. Then, answer the following question based on the video content: {question}""")
-  else:
-    prompt = types.Part.from_text(text=f"""Watch the provided video from {start} to {end}. Then, answer the following question based on the video content: {question}""")
-  
+  prompt = types.Part.from_text(
+      text=f"""Watch the provided video, then answer this question based on the video content: {question}"""
+  )
+
   model = "gemini-2.5-flash-lite"
   contents = [
     types.Content(

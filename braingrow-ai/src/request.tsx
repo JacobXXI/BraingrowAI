@@ -230,13 +230,9 @@ export const getVideo = async (id: string): Promise<video> => {
 
 export const askVideoQuestion = async (
   id: string,
-  question: string,
-  startTime?: number,
-  endTime?: number
+  question: string
 ): Promise<string> => {
   const body: Record<string, unknown> = { question };
-  if (typeof startTime === 'number') body.startTime = startTime;
-  if (typeof endTime === 'number') body.endTime = endTime;
   const response = await fetch(`${API_BASE}/api/videos/${encodeURIComponent(id)}/ask`, {
     method: 'POST',
     headers: {
