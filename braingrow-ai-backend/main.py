@@ -420,12 +420,39 @@ def ask_video_question(video_id):
         if not video:
             return jsonify({'error': 'Video not found'}), 404
 
-        # Mock implementation - you'll need to add question functionality to your models
         question = data['question']
+
+        # Resume conversation per user and video
+        conversations = session.get('ai_conversations', {})
+        # Identify user from session or bearer token; fallback to 'anon'
+        user_part = session.get('user_id')
+        if not user_part:
+            auth = request.headers.get('Authorization')
+            if auth and auth.startswith('Bearer '):
+                token = auth[7:]
+                try:
+                    data_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+                    user_part = data_token.get('user_id')
+                except Exception:
+                    user_part = None
+        key = f"{user_part if user_part is not None else 'anon'}-{video_id}"
+        history = conversations.get(key, [])
+
+        answer = ask_AI(video.url, question, history=history)
+
+        # Update history: keep last ~20 turns to bound session size
+        history.append({'role': 'user', 'text': question})
+        history.append({'role': 'model', 'text': answer})
+        if len(history) > 40:
+            history = history[-40:]
+
+        conversations[key] = history
+        session['ai_conversations'] = conversations
+        session.modified = True
 
         return jsonify({
             'question': question,
-            'answer': ask_AI(video.url, question)
+            'answer': answer
         })
     except VertexAICredentialsError as e:
         print(f"Vertex AI credentials error: {str(e)}")
