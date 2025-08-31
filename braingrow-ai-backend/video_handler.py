@@ -1,7 +1,6 @@
 import google.generativeai as genai
 from google.generativeai import types
 
-
 import time
 class VertexAICredentialsError(RuntimeError):
     """Raised when Google credentials are missing."""
