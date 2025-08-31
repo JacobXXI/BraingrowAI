@@ -1,9 +1,9 @@
-Flask
+Flask==3.0.3
 Flask-Cors
 Flask-Session
 Flask-SQLAlchemy
 SQLAlchemy
-Werkzeug
+Werkzeug==3.0.3
 PyJWT
 google-genai
-gunicorn
+gunicorn==23.0.0
