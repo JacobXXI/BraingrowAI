@@ -39,7 +39,7 @@ const SignUpPage: React.FC = () => {
 
       const result = await signup(email, password, name);
       if (result.success) {
-        navigate('/');
+        navigate('/welcome');
       } else {
         setErrorMessage('Signup failed. Please try again.');
         setShowErrorModal(true);

@@ -5,9 +5,18 @@
   width: 100%;
 }
 
-.search-input {
+/* Keep input and button exactly same height */
+.header .search-input,
+.header .search-button {
+  box-sizing: border-box;
+  height: 36px;
+  min-height: 36px;
+  line-height: 1; /* avoid vertical mismatch */
+}
+
+.header .search-input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.35rem 0.75rem; /* compact, relies on border-box height */
   border-radius: 8px 0 0 8px;
   border: 1px solid #e0e0e0;
   border-right: none;
@@ -16,8 +25,8 @@
   transition: border-color 0.2s;
 }
 
-.search-button {
-  padding: 0.75rem 1rem;
+.header .search-button {
+  padding: 0.35rem 0.75rem; /* compact, relies on border-box height */
   border-radius: 0 8px 8px 0;
   border: 1px solid #e0e0e0;
   border-left: none;
@@ -28,6 +37,11 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.header .search-button .search-icon {
+  line-height: 1;
+  display: block;
 }
 
 .search-icon {
@@ -118,21 +132,21 @@
   gap: 0.75rem;
 }
 
-.login-button {
-  width: 150px;
+.header-login-button {
+  width: 100px;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   border: none;
-  background-color: #ffffff;
-  color: #333333;
+  background-color: #1a73e8;
+  color: #ffffff;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.signup-button {
-  width: 150px;
-  padding: 0.5rem 1rem;
+.header-signup-button {
+  width: 100px;
+  padding: 0.1rem 0.1rem;
   border-radius: 8px;
   border: none;
   background-color: #1a73e8;

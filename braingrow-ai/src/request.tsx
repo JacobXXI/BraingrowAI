@@ -4,9 +4,22 @@ import { video } from './structures/video';
 // Use same-origin base in dev so Vite proxy forwards /api to backend (no CORS/preflight)
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.DEV)
   ? ''
-  // : 'http://localhost:8080';
-  : 'https://braingrow-ai-backend-75904341630.australia-southeast1.run.app';
+  : 'http://localhost:8080';
+  // : 'https://braingrow-ai-backend-75904341630.australia-southeast1.run.app';
 const ABS_BASE = (typeof window !== 'undefined') ? window.location.origin : API_BASE;
+
+// Ensure a backend-relative URL like "/static/uploads/x.png" becomes absolute in production builds
+const toBackendAbsoluteUrl = (path: string): string => {
+  if (!path) return path;
+  if (/^https?:\/\//i.test(path)) return path;
+  // In dev, Vite proxy will forward /static to backend; keep relative
+  if (typeof import.meta !== 'undefined' && import.meta.env?.DEV) return path;
+  try {
+    return new URL(path, API_BASE || ABS_BASE).href;
+  } catch {
+    return path;
+  }
+};
 
 // Helper: attach Authorization header if JWT is present in cookie
 const authHeaders = (): Record<string, string> => {
@@ -72,7 +85,9 @@ export const getProfile = async (): Promise<UserProfile | null> => {
       },
     });
     if (!response.ok) return null;
-    return await response.json();
+    const data = await response.json();
+    if (data && data.photoUrl) data.photoUrl = toBackendAbsoluteUrl(data.photoUrl);
+    return data;
   } catch (error) {
     console.error('Profile fetch error:', error);
     return null;
@@ -189,7 +204,9 @@ export const updateProfile = async (payload: { username?: string; photoUrl?: str
     const err = await response.json().catch(() => ({}));
     throw new Error(err?.error || 'Failed to update profile');
   }
-  return response.json();
+  const data = await response.json();
+  if (data && data.photoUrl) data.photoUrl = toBackendAbsoluteUrl(data.photoUrl);
+  return data;
 };
 
 export const uploadProfilePhoto = async (file: File): Promise<string> => {
@@ -206,7 +223,7 @@ export const uploadProfilePhoto = async (file: File): Promise<string> => {
     throw new Error(err?.error || 'Failed to upload photo');
   }
   const data = await response.json();
-  return data.photoUrl as string;
+  return toBackendAbsoluteUrl(data.photoUrl as string);
 };
 
 export const getVideo = async (id: string): Promise<video> => {
