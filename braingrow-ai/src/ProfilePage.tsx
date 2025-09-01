@@ -9,6 +9,7 @@ import {
   updateTendencySelection,
   TagCatalog
 } from './request';
+import defaultUserImg from './assets/default-user.png';
 
 const ProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<UserProfile | null>(null);
@@ -127,7 +128,7 @@ const ProfilePage: React.FC = () => {
       <div className="profile-header">
         <div className="profile-avatar">
           <img
-            src={tempPhotoUrl || userData.photoUrl || '/assets/default-avatar.png'}
+            src={tempPhotoUrl || userData.photoUrl || defaultUserImg}
             alt="Profile"
             className="avatar-image"
           />
