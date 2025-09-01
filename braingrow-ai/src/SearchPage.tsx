@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { search } from './request';
 import { video } from './structures/video';
-import './SearchPage.css';
+// Reuse HomePage styles for consistent layout
+import './HomePage.css';
 
 const SearchPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -30,12 +31,12 @@ const SearchPage: React.FC = () => {
   }, [query]);
 
   return (
-    <div className="search-page screen">
+    <div className="screen">
       <h1>Search Result for "{query}"</h1>
       {loading ? (
         <div className="loading">Loading results...</div>
       ) : videos.length > 0 ? (
-        <div className="video-container">
+        <div className="video-grid">
           {videos.map((video) => (
             <div 
               key={video._id} 
@@ -43,15 +44,17 @@ const SearchPage: React.FC = () => {
               onClick={() => navigate(`/watch/${video._id}`)}
             >
               <div className="video-image-container">
-                <img src={video.coverUrl} alt={video.title} className="video-cover-image" />
+                <img 
+                  src={video.coverUrl} 
+                  alt={video.title} 
+                  className="video-cover-image"
+                  onError={(e) => { (e.target as HTMLImageElement).src = '/vite.svg'; }}
+                />
               </div>
               <div className="video-details">
                 <h3 className="video-title">{video.title}</h3>
                 <p className="video-description">{video.description || 'No description available'}</p>
-                <div className="video-metadata">
-                  <span className="video-author">👤 {video.author}</span>
-                  <span className="video-views">👁️ {video.views} views</span>
-                </div>
+                {/* Author and views intentionally removed for search results */}
               </div>
             </div>
           ))}
