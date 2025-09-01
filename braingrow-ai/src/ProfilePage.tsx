@@ -27,6 +27,7 @@ const ProfilePage: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [tempPhotoUrl, setTempPhotoUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Helpers
   const toTokens = (raw?: string): Set<string> => {
@@ -134,7 +135,16 @@ const ProfilePage: React.FC = () => {
           />
           {editing && (
             <>
+              <button
+                type="button"
+                className="avatar-overlay"
+                onClick={() => fileInputRef.current?.click()}
+                title="Change photo"
+              >
+                {uploading ? 'Uploading…' : 'Change Photo'}
+              </button>
               <input
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 onChange={async (e) => {
@@ -149,11 +159,12 @@ const ProfilePage: React.FC = () => {
                     alert((err as Error).message);
                   } finally {
                     setUploading(false);
+                    // reset input so selecting same file again re-triggers change
+                    if (fileInputRef.current) fileInputRef.current.value = '';
                   }
                 }}
-                style={{ marginTop: '8px' }}
+                style={{ display: 'none' }}
               />
-              {uploading && <div>Uploading...</div>}
             </>
           )}
         </div>
