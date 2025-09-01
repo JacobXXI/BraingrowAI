@@ -11,7 +11,8 @@ class User(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
+    # Use a generous length to accommodate modern hash formats (e.g., scrypt/pbkdf2)
+    password = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=True)
     tendency = db.Column(db.Text, nullable=True)
     photoUrl = db.Column(db.String(255), nullable=True)
@@ -232,10 +233,11 @@ def getCommentsByVideo(video_id):
 def userLogin(email, password):
     try:
         user = User.query.filter_by(email=email).first()
-        if user and user.password == password:
+        # Verify using hashed password check
+        if user and check_password_hash(user.password, password):
             return user
-        print(f"Wrong password: {email}")
-        print(f"Correct password: {user.password}")
+        # Optional debug output; avoid leaking hashes in production logs
+        print(f"Wrong password for: {email}")
         return None
     except Exception as e:
         print(f"Error in userLogin: {e}")

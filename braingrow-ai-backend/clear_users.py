@@ -1,5 +1,5 @@
 import argparse
-from app import app
+from main import app
 from models import db, User
 from flask import Flask
 

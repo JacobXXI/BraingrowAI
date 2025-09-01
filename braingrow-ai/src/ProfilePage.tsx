@@ -127,7 +127,7 @@ const ProfilePage: React.FC = () => {
       <div className="profile-header">
         <div className="profile-avatar">
           <img
-            src={tempPhotoUrl || userData.photoUrl || 'https://via.placeholder.com/150'}
+            src={tempPhotoUrl || userData.photoUrl || '/assets/default-avatar.png'}
             alt="Profile"
             className="avatar-image"
           />

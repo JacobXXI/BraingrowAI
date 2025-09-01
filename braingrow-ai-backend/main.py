@@ -611,21 +611,29 @@ def update_tendency():
             for board, topics in selected.items():
                 if not board:
                     continue
-                tokens.append(str(board))
+                # Only record the board token if ALL topics under that board are selected.
+                # Otherwise, record only the chosen topics (and their keywords).
                 topics = topics or []
-                for topic in topics:
-                    if not topic:
-                        continue
-                    tokens.append(str(topic))
+                b = str(board).strip()
+                # Determine if all topics for this board are selected
+                try:
+                    b_lower = b.lower()
+                    all_topics = list((VIDEO_TAG_CATALOG.get(b_lower) or {}).keys())
+                except Exception:
+                    all_topics = []
+
+                selected_topic_keys = [str(t).strip() for t in topics if t]
+                if all_topics and set(map(str.lower, selected_topic_keys)) >= set(map(str.lower, all_topics)):
+                    tokens.append(b)
+
+                for topic in selected_topic_keys:
+                    tokens.append(topic)
                     # include known keywords for this board/topic if present
-                    b = str(board).lower()
-                    t = str(topic).lower()
-                    if b in VIDEO_TAG_CATALOG:
+                    t_lower = topic.lower()
+                    if b_lower in VIDEO_TAG_CATALOG:
                         # add all keywords under topic if exists
-                        if isinstance(VIDEO_TAG_CATALOG[b], dict) and t in VIDEO_TAG_CATALOG[b]:
-                            tokens.extend(VIDEO_TAG_CATALOG[b][t])
-            # also add any generic board-level keywords (topicless)
-            # not strictly necessary; tokens already contain board/topic labels
+                        if isinstance(VIDEO_TAG_CATALOG[b_lower], dict) and t_lower in VIDEO_TAG_CATALOG[b_lower]:
+                            tokens.extend(VIDEO_TAG_CATALOG[b_lower][t_lower])
         else:
             return jsonify({'error': 'Provide one of: tendency(string), tags(array), selected(object)'}), 400
 

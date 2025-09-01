@@ -1,5 +1,5 @@
 from models import db, Video
-from app import app
+from main import app
 import time
 import argparse
 

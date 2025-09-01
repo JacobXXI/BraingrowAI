@@ -1,5 +1,5 @@
 import argparse
-from app import app, db, User
+from main import app, db, User
 
 def create_user_from_data(username, password, email=None, tendency=None, photoUrl=None):
     # Check if user already exists
