@@ -8,6 +8,7 @@ import LoginPage from './LoginPage';
 import SignUpPage from './SignUpPage';
 import WatchPage from './WatchPage';
 import ProfilePage from './ProfilePage';
+import WelcomePage from './WelcomePage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/welcome" element={<WelcomePage />} />
           <Route path="/watch/:id" element={<WatchPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Routes>
