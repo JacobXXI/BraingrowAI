@@ -4,8 +4,7 @@ import { video } from './structures/video';
 // Use same-origin base in dev so Vite proxy forwards /api to backend (no CORS/preflight)
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.DEV)
   ? ''
-  : 'http://localhost:8080';
-  // : 'https://braingrow-ai-backend-75904341630.australia-southeast1.run.app';
+  : 'https://braingrow-ai-backend-75904341630.australia-southeast1.run.app';
 const ABS_BASE = (typeof window !== 'undefined') ? window.location.origin : API_BASE;
 
 // Ensure a backend-relative URL like "/static/uploads/x.png" becomes absolute in production builds
