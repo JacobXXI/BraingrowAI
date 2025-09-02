@@ -5,13 +5,13 @@ import logo from '../assets/logo.png';
 
 const Footer: React.FC = () => {
   const hotTopics = [
-    { name: 'AI Ethics', href: '/search?query=AI%20Ethics' },
-    { name: 'Machine Learning', href: '/search?query=Machine%20Learning' },
-    { name: 'Quantum Computing', href: '/search?query=Quantum%20Computing' },
-    { name: 'Sustainable Tech', href: '/search?query=Sustainable%20Tech' },
-    { name: 'Metaverse', href: '/search?query=Metaverse' },
+    { name: 'Literature', href: '/search?query=Literature' },
+    { name: 'Basketball', href: '/search?query=Basketball' },
+    { name: 'Fitness', href: '/search?query=Fitness' },
+    { name: 'Music', href: '/search?query=Music' },
+    { name: 'Entrepreneurship', href: '/search?query=Entrepreneurship' },
     { name: 'Cybersecurity', href: '/search?query=Cybersecurity' },
-    { name: 'Renewable Energy', href: '/search?query=Renewable%20Energy' }
+    { name: 'Health', href: '/search?query=Health' }
   ];
 
   return (
@@ -24,9 +24,9 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Hot Topics Links */}
+        {/* Tags Links */}
         <div className="hot-topics-section">
-          <h3 className="section-title">Hot topics</h3>
+          <h3 className="section-title">Hot Topics</h3>
           {hotTopics.map((topic, index) => (
             <Link key={index} to={topic.href} className="footer-link">{topic.name}</Link>
           ))}
