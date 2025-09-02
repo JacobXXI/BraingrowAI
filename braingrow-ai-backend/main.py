@@ -34,6 +34,18 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config['SECRET_KEY'] = "your-secret-key-here"
 
+# Ensure session storage is writable in cloud environments (e.g., Cloud Run)
+# Cloud runtimes often mount the app filesystem read-only; only /tmp is writable.
+try:
+    import os as _os
+    _cloud_env = bool(_os.environ.get("K_SERVICE") or _os.environ.get("GAE_ENV"))
+    _session_dir = _os.environ.get("SESSION_FILE_DIR") or ("/tmp/flask_session" if _cloud_env else _os.path.join(app.instance_path, "flask_session"))
+    _os.makedirs(_session_dir, exist_ok=True)
+    app.config["SESSION_FILE_DIR"] = _session_dir
+except Exception:
+    # Non-fatal: fallback to default; errors will surface if session tries to write
+    pass
+
 # Initialize extensions
 db.init_app(app)
 Session(app)
@@ -483,10 +495,21 @@ def ask_video_question(video_id):
         })
     except VertexAICredentialsError as e:
         print(f"Vertex AI credentials error: {str(e)}")
+        # Print full traceback for cloud logs to aid diagnostics
+        traceback.print_exc()
         return jsonify({'error': str(e), 'code': 'NO_CREDENTIALS'}), 500
     except Exception as e:
         print(f"Error in asking video question: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        traceback.print_exc()
+        # Provide clearer client messages for common content issues
+        msg = str(e)
+        try:
+            from video_handler import TranscriptUnavailableError
+            if isinstance(e, TranscriptUnavailableError):
+                return jsonify({'error': 'YouTube transcript is unavailable for this video. Try a different video or upload a direct video file.'}), 400
+        except Exception:
+            pass
+        return jsonify({'error': msg}), 500
 
 @app.route('/api/check-auth')
 def check_auth():

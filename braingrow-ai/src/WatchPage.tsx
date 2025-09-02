@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { video } from './structures/video';
 import { getVideo, askVideoQuestion } from './request';
+import * as katex from 'katex';
+import 'katex/dist/katex.min.css';
 import './WatchPage.css';
 
 export default function WatchPage() {
@@ -14,30 +16,93 @@ export default function WatchPage() {
   const [question, setQuestion] = useState('');
   const [isAsking, setIsAsking] = useState(false);
   const renderMarkdown = (text: string) => {
+    const escapeHtml = (s: string) =>
+      s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
     const lines = text.split('\n');
     let html = '';
     let listItems: string[] = [];
+    let listType: 'ol' | 'ul' | null = null;
+
     const flushList = () => {
-      if (listItems.length > 0) {
-        html += `<ol>${listItems.join('')}</ol>`;
+      if (listItems.length > 0 && listType) {
+        const tag = listType;
+        html += `<${tag}>${listItems.join('')}</${tag}>`;
         listItems = [];
+        listType = null;
       }
     };
-    lines.forEach((line) => {
-      const trimmed = line.trim();
+
+    const inlineFormat = (s: string) => {
+      // 1) Extract inline math $...$ (no newlines) and replace with placeholders
+      const mathMap: string[] = [];
+      let withPlaceholders = s.replace(/\$([^$\n]+)\$/g, (_m, expr: string) => {
+        const html = katex.renderToString(expr, { throwOnError: false, output: 'html' });
+        const key = `@@MATH${mathMap.length}@@`;
+        mathMap.push(html);
+        return key;
+      });
+
+      // 2) Escape the rest
+      let t = escapeHtml(withPlaceholders);
+
+      // 3) Apply minimal inline markdown on non-math parts
+      // Bold: **text**
+      t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      // Inline code: `code`
+      t = t.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+      // 4) Restore math placeholders with KaTeX HTML (already safe)
+      mathMap.forEach((html, i) => {
+        const key = `@@MATH${i}@@`;
+        t = t.replace(key, html);
+      });
+
+      return t;
+    };
+
+    for (const line of lines) {
+      const raw = line.replace(/\r$/, '');
+      const trimmed = raw.trim();
       if (!trimmed) {
         flushList();
-        return;
+        continue;
       }
-      const bolded = trimmed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-      const listMatch = /^(\d+)\.\s+(.*)/.exec(bolded);
-      if (listMatch) {
-        listItems.push(`<li>${listMatch[2]}</li>`);
-      } else {
-        flushList();
-        html += `<p>${bolded}</p>`;
+
+      // Ordered list: "1. text"
+      let m = /^(\d+)\.\s+(.*)$/.exec(trimmed);
+      if (m) {
+        const item = `<li>${inlineFormat(m[2])}</li>`;
+        if (listType !== 'ol') {
+          flushList();
+          listType = 'ol';
+        }
+        listItems.push(item);
+        continue;
       }
-    });
+
+      // Unordered list: "- text" or "* text"
+      m = /^[-*]\s+(.*)$/.exec(trimmed);
+      if (m) {
+        const item = `<li>${inlineFormat(m[1])}</li>`;
+        if (listType !== 'ul') {
+          flushList();
+          listType = 'ul';
+        }
+        listItems.push(item);
+        continue;
+      }
+
+      // Regular paragraph
+      flushList();
+      html += `<p>${inlineFormat(trimmed)}</p>`;
+    }
+
     flushList();
     return { __html: html };
   };

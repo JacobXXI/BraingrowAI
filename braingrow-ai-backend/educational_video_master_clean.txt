@@ -1,0 +1,71 @@
+=== math – equations ===
+Video 1
+title: What is an Equation? (TED-Ed)
+description: A clear animated introduction to what equations are and why they matter.
+url: https://www.youtube.com/watch?v=jQJ5P9BV0M8
+tags: equations, algebra, solving, beginner
+image_url: https://i.ytimg.com/vi/jQJ5P9BV0M8/hqdefault.jpg
+
+Video 2
+title: Solving Linear Equations (PatrickJMT)
+description: Step-by-step solving of basic linear equations.
+url: https://www.youtube.com/watch?v=je0M1X0lBZ8
+tags: equations, algebra, solving, beginner
+image_url: https://i.ytimg.com/vi/je0M1X0lBZ8/hqdefault.jpg
+
+Video 3
+title: Balance Method for Equations (Math Antics)
+description: Visual explanation of balancing both sides of an equation.
+url: https://www.youtube.com/watch?v=jeWhnoiv7XQ
+tags: equations, algebra, solving, beginner
+image_url: https://i.ytimg.com/vi/jeWhnoiv7XQ/hqdefault.jpg
+
+Video 4
+title: Solving Two-Step Equations (MashUp Math)
+description: Fast guide to two-step linear equations.
+url: https://www.youtube.com/watch?v=IuD3E0r6S0E
+tags: equations, algebra, solving, beginner
+image_url: https://i.ytimg.com/vi/IuD3E0r6S0E/hqdefault.jpg
+
+Video 5
+title: Distributive Property in Equations (Eddie Woo)
+description: Applying the distributive property to simplify equations.
+url: https://www.youtube.com/watch?v=ae8lUWB_S1g
+tags: equations, algebra, solving, beginner
+image_url: https://i.ytimg.com/vi/ae8lUWB_S1g/hqdefault.jpg
+
+Video 6
+title: Solving Equations with Fractions (Mathispower4u)
+description: How to clear fractions and solve accurately.
+url: https://www.youtube.com/watch?v=T5oYVTH0n0E
+tags: equations, algebra, solving, beginner
+image_url: https://i.ytimg.com/vi/T5oYVTH0n0E/hqdefault.jpg
+
+Video 7
+title: Literal Equations (The Organic Chemistry Tutor)
+description: Rearranging formulas to isolate a variable.
+url: https://www.youtube.com/watch?v=1K9NwQ4Z8Ys
+tags: equations, algebra, solving, beginner
+image_url: https://i.ytimg.com/vi/1K9NwQ4Z8Ys/hqdefault.jpg
+
+Video 8
+title: Systems of Equations – Graphing (Tyler DeWitt Math)
+description: Solving systems by graphing and understanding intersections.
+url: https://www.youtube.com/watch?v=8w2V3x8WkGk
+tags: equations, algebra, solving, beginner
+image_url: https://i.ytimg.com/vi/8w2V3x8WkGk/hqdefault.jpg
+
+Video 9
+title: Quadratic Equations – Factoring Method (ProfRobBob)
+description: Solve quadratics by factoring with clean examples.
+url: https://www.youtube.com/watch?v=a0n9WjZrG1A
+tags: equations, algebra, solving, beginner
+image_url: https://i.ytimg.com/vi/a0n9WjZrG1A/hqdefault.jpg
+
+Video 10
+title: Why Equals Means Balance (Numberphile)
+description: Engaging perspective on equality and balance in equations.
+url: https://www.youtube.com/watch?v=c6X8pG8v0aI
+tags: equations, algebra, solving, beginner
+image_url: https://i.ytimg.com/vi/c6X8pG8v0aI/hqdefault.jpg
+

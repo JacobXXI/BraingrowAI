@@ -5,6 +5,12 @@ Flask-SQLAlchemy
 SQLAlchemy
 Werkzeug==3.0.3
 PyJWT
+# New Vertex AI Python GenAI client used by video_handler.py
+google-genai>=0.3.0
+# Retain previous packages for compatibility elsewhere
 google-generativeai>=0.8
 google-cloud-aiplatform>=1.67
+google-api-core>=2.19
+# Optional but required for YouTube transcript-based Q&A
+youtube-transcript-api>=0.6.2
 gunicorn==23.0.0
