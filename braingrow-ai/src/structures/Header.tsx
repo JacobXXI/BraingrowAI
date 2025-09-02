@@ -45,9 +45,12 @@ const Header: React.FC = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="search-input"
           />
-          <button type="submit" className="search-button">
+          <button
+            type="submit"
+            className="search-button"
+            aria-label="Search"
+          >
             <FaSearch size={16} className="search-icon" />
-            <span className="search-button-text">Search</span>
           </button>
         </form>
       </div>
