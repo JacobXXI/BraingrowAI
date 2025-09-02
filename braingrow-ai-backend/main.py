@@ -15,6 +15,7 @@ from werkzeug.utils import secure_filename
 import urllib.request
 import urllib.parse
 import mimetypes
+import random
 
 # Import everything from the consolidated models file
 from models import (
@@ -183,7 +184,8 @@ def search():
 
 @app.route('/api/recommendations')
 def get_recommendations():
-    limit = request.args.get('maxVideo', 5, type=int)
+    # Default to 10 recommendations if not specified
+    limit = request.args.get('maxVideo', 10, type=int)
     user_id = None
     token = request.headers.get('Authorization')
     if token and token.startswith('Bearer '):
@@ -197,38 +199,166 @@ def get_recommendations():
         user_id = session['user_id']
 
     if user_id:
-        # --- New logic: Recommend by most-watched topic ---
-        # 1. Get user's watch history with progress
+        # Consider both user's watch history (topic affinity) and declared tendency (keywords)
+        # 1) Watch history based topic preferences
         watch_history = getUserWatchHistory(user_id)
         topic_time = {}
         watched_video_ids = set()
         for wh in watch_history:
-            video = getVideoById(wh.video_id)
-            if not video or not getattr(video, 'topic', None):
+            v = getVideoById(wh.video_id)
+            if not v:
                 continue
-            watched_video_ids.add(video.id)
-            # Use progress as a proxy for watch time (or use wh.progress * video duration if available)
-            topic = video.topic
-            topic_time[topic] = topic_time.get(topic, 0) + (wh.progress or 0)
+            watched_video_ids.add(v.id)
+            if getattr(v, 'topic', None):
+                topic = v.topic
+                topic_time[topic] = topic_time.get(topic, 0) + (wh.progress or 0)
 
-        # 2. Find the topic with the most watch time
-        if topic_time:
-            top_topic = max(topic_time, key=topic_time.get)
-            # 3. Recommend videos with this topic, excluding already watched
-            videos = Video.query.filter(
+        top_topic = max(topic_time, key=topic_time.get) if topic_time else None
+
+        # 2) Parse user tendency keywords (can be multiple)
+        tendency_keywords = []
+        try:
+            u = userProfile(user_id)
+            raw = (u.tendency or '').lower() if u and getattr(u, 'tendency', None) else ''
+            if raw:
+                tendency_keywords = [p.strip() for chunk in raw.split(',') for p in chunk.split() if p.strip()]
+        except Exception:
+            tendency_keywords = []
+
+        # 3) Collect candidate videos from topic and tendency
+        candidates = {}
+        kw_to_vids = {}
+        def add_candidates(objs, base_score=0):
+            for vid in objs or []:
+                if vid.id in watched_video_ids:
+                    continue
+                score = candidates.get(vid.id, (None, 0))[1]
+                candidates[vid.id] = (vid, max(score, base_score))
+
+        # From top topic, if any
+        if top_topic:
+            topic_videos = Video.query.filter(
                 Video.topic == top_topic,
                 ~Video.id.in_(watched_video_ids)
-            ).limit(limit).all()
-            # If not enough, fill with general recommendations
-            if len(videos) < limit:
-                extra = getRecommendedVideos(limit - len(videos))
-                videos += [v for v in extra if v.id not in watched_video_ids and v not in videos]
+            ).limit(limit * 3).all()
+            add_candidates(topic_videos, base_score=5)
+
+        # From tendency keywords
+        if tendency_keywords:
+            from sqlalchemy import or_
+            for kw in tendency_keywords:
+                like = f"%{kw}%"
+                kw_videos = Video.query.filter(
+                    or_(
+                        Video.tags.like(like),
+                        Video.title.like(like),
+                        Video.description.like(like),
+                        Video.board == kw,
+                        Video.topic == kw,
+                    ),
+                    ~Video.id.in_(watched_video_ids)
+                ).limit(10).all()
+                add_candidates(kw_videos, base_score=3)
+                kw_to_vids[kw] = kw_videos
+
+        # Score candidates by combined signals
+        scored = []
+        for vid, base_score in candidates.values():
+            s = base_score
+            if top_topic and getattr(vid, 'topic', None) == top_topic:
+                s += 2
+            if tendency_keywords:
+                tags_lower = (vid.tags or '').lower()
+                bt = (getattr(vid, 'board', '') or '').lower()
+                tp = (getattr(vid, 'topic', '') or '').lower()
+                matches = sum(1 for kw in tendency_keywords if kw in tags_lower or kw == bt or kw == tp)
+                s += min(matches, 3)  # cap influence
+            scored.append((s, vid))
+
+        # Sort by score desc
+        scored.sort(key=lambda x: x[0], reverse=True)
+        score_map = {vid.id: s for s, vid in scored}
+
+        # Blend: include a few random recommendations (~10-20%) for serendipity
+        try:
+            random_ratio = float(os.getenv('RECO_RANDOM_RATIO', '0.15'))
+        except Exception:
+            random_ratio = 0.15
+        random_ratio = max(0.0, min(0.5, random_ratio))
+
+        random_target = int(round(limit * random_ratio))
+        # Ensure at least 1 random if limit allows, but keep one slot for personalized
+        if limit >= 5:
+            random_target = max(1, min(random_target, max(0, limit - 1)))
         else:
-            # Fallback: general recommendations
-            videos = getRecommendedVideos(limit)
+            random_target = min(random_target, limit)
+
+        base_target = max(0, limit - random_target)
+
+        # Coverage: try to include at least one video per tendency (in order), up to base_target
+        selected_ids = set()
+        coverage = []
+        if tendency_keywords and base_target > 0:
+            for kw in tendency_keywords:
+                if len(coverage) >= base_target:
+                    break
+                vids = kw_to_vids.get(kw) or []
+                # pick the highest scored video for this keyword that isn't selected
+                vids_sorted = sorted(
+                    [v for v in vids if v.id not in selected_ids],
+                    key=lambda v: score_map.get(v.id, 0),
+                    reverse=True
+                )
+                if vids_sorted:
+                    v = vids_sorted[0]
+                    coverage.append(v)
+                    selected_ids.add(v.id)
+
+        # Fill remaining personalized slots with top scored videos
+        remaining_personal_needed = max(0, base_target - len(coverage))
+        top_personalized = coverage[:]
+        if remaining_personal_needed > 0:
+            for _, v in scored:
+                if len(top_personalized) >= base_target:
+                    break
+                if v.id in selected_ids:
+                    continue
+                top_personalized.append(v)
+                selected_ids.add(v.id)
+
+        # Pick random candidates excluding watched and already selected
+        selected_ids.update(watched_video_ids)
+        random_needed = max(0, limit - len(top_personalized)) if random_target == 0 else min(random_target, max(0, limit - len(top_personalized)))
+
+        random_picks = []
+        if random_needed > 0:
+            pool = getRecommendedVideos(random_needed * 3)
+            for v in pool:
+                if v.id in selected_ids:
+                    continue
+                random_picks.append(v)
+                selected_ids.add(v.id)
+                if len(random_picks) >= random_needed:
+                    break
+
+        videos = top_personalized + random_picks
+
+        # If still short, fill with remaining personalized results, then general randoms
+        if len(videos) < limit:
+            remaining_needed = limit - len(videos)
+            remaining_personalized = [vid for _, vid in scored[base_target:base_target + remaining_needed] if vid.id not in {v.id for v in videos} and vid.id not in watched_video_ids]
+            videos += remaining_personalized
+        if len(videos) < limit:
+            extra = getRecommendedVideos(limit - len(videos))
+            videos += [v for v in extra if v.id not in {x.id for x in videos} and v.id not in watched_video_ids]
     else:
         videos = getRecommendedVideos(limit)
 
+    # Mix final order to interleave personalized and random picks
+    try:
+        random.shuffle(videos)
+    except Exception:
+        pass
     return jsonify([{
         'id': v.id,
         'title': v.title,

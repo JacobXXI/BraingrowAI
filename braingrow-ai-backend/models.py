@@ -245,11 +245,23 @@ def userLogin(email, password):
 
 def userRegister(username, password, email=None):
     try:
-        # Check if user already exists
-        existing_user = User.query.filter_by(username=username).first()
+        # If username already exists, generate a unique variant by appending a numeric suffix
+        base_username = (username or '').strip()
+        if not base_username:
+            base_username = (email.split('@')[0] if email else 'user')
+        max_len = 80  # matches schema length
+        candidate = base_username[:max_len]
+        existing_user = User.query.filter_by(username=candidate).first()
         if existing_user:
-            return None
-        
+            suffix = 1
+            # Reserve space for suffix like _2, _3, ...
+            while True:
+                suffix_str = f"_{suffix}"
+                candidate = f"{base_username[:max_len - len(suffix_str)]}{suffix_str}"
+                if not User.query.filter_by(username=candidate).first():
+                    break
+                suffix += 1
+
         # Check if email already exists (if provided)
         if email:
             existing_email = User.query.filter_by(email=email).first()
@@ -259,7 +271,7 @@ def userRegister(username, password, email=None):
         # Create new user with hashed password
         hashed_password = generate_password_hash(password)
         user = User(
-            username=username,
+            username=candidate,
             password=hashed_password,
             email=email
         )

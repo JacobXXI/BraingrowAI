@@ -4,8 +4,7 @@ import { video } from './structures/video';
 // Use same-origin base in dev so Vite proxy forwards /api to backend (no CORS/preflight)
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.DEV)
   ? ''
-  // : 'https://braingrow-ai-backend-75904341630.australia-southeast1.run.app';
-  : 'http://localhost:8080';
+  : 'https://braingrow-ai-backend-75904341630.australia-southeast1.run.app';
 const ABS_BASE = (typeof window !== 'undefined') ? window.location.origin : API_BASE;
 
 // Ensure a backend-relative URL like "/static/uploads/x.png" becomes absolute in production builds
@@ -286,6 +285,7 @@ export const signup = async (
       Cookies.set('authToken', data.token, { expires: 7, secure: true, sameSite: 'strict' });
       return { success: true, token: data.token };
     } else {
+      console.error('Signup failed:', data?.error || 'Unknown error');
       return { success: false };
     }
   } catch (error) {
